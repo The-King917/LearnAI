@@ -105,8 +105,7 @@ export default function LandingPage() {
           className="mt-6 text-base text-muted leading-relaxed max-w-lg"
           style={{ animation: "fadeSlideUp 0.5s ease-out 0.32s both" }}
         >
-          Master competitions, AP courses, and academic challenges through
-          Socratic dialogue. Real understanding, not copied answers.
+          Every expert you need, in one conversation.
         </p>
 
         <div
