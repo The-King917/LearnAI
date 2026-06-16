@@ -91,8 +91,10 @@ export default function ChatInterface({ subject, difficulty, mode, initialMessag
         });
 
         if (!res.ok) {
-          const err = await res.json().catch(() => ({ error: "Request failed" }));
-          throw new Error(err.error ?? "Request failed");
+          const body = await res.text().catch(() => "");
+          let errMsg = `Request failed (${res.status})`;
+          try { errMsg = JSON.parse(body).error ?? errMsg; } catch { errMsg = body || errMsg; }
+          throw new Error(errMsg);
         }
 
         const reader = res.body!.getReader();

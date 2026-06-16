@@ -51,6 +51,7 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (err: unknown) {
+    console.error("[api/chat]", err);
     const message = err instanceof Error ? err.message : "Unknown error";
     return new Response(JSON.stringify({ error: message }), {
       status: 500,
