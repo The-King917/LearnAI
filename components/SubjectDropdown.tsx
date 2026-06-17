@@ -48,9 +48,9 @@ export default function SubjectDropdown({ value, onChange }: SubjectDropdownProp
     <div ref={containerRef} className="relative w-full">
       <button
         onClick={() => setOpen((o) => !o)}
-        className={`w-full flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-md text-sm text-left transition-colors duration-100 border ${
+        className={`w-full flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-md text-sm text-left transition-all duration-100 border ${
           open
-            ? "bg-surface-2 border-border-2 text-text"
+            ? "bg-surface-2 border-accent/40 text-text shadow-glow"
             : "bg-surface-2 border-border text-muted hover:border-border-2 hover:text-text-2"
         }`}
       >
@@ -64,7 +64,7 @@ export default function SubjectDropdown({ value, onChange }: SubjectDropdownProp
       </button>
 
       {open && (
-        <div className="absolute top-full mt-1 left-0 right-0 z-50 bg-surface-2 border border-border-2 rounded-lg shadow-[0_8px_40px_rgba(0,0,0,0.8)] overflow-hidden animate-in">
+        <div className="absolute top-full mt-1 left-0 right-0 z-50 bg-surface-2 border border-border-2 rounded-lg shadow-panel overflow-hidden animate-in">
           <div className="flex items-center gap-2 px-3 py-2 border-b border-border">
             <svg className="w-3 h-3 text-muted shrink-0" fill="none" viewBox="0 0 14 14" stroke="currentColor" strokeWidth="1.5">
               <circle cx="6" cy="6" r="4.5"/>

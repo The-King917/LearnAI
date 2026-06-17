@@ -68,12 +68,15 @@ export default function CoachPage() {
       />
 
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-        <header className="h-11 shrink-0 border-b border-border flex items-center px-5 gap-2">
+        <header className="h-11 shrink-0 border-b border-border flex items-center px-5 gap-2 bg-gradient-to-b from-surface/40 to-transparent">
+          <span className="w-1.5 h-1.5 rounded-full bg-accent-2 shrink-0" />
           <span className="text-sm font-medium text-text">{MODE_LABELS[mode]}</span>
           {subject && (
             <>
               <span className="text-subtle">/</span>
               <span className="text-sm text-muted">{subject.name}</span>
+              <span className="text-subtle">·</span>
+              <span className="text-2xs text-muted capitalize px-1.5 py-0.5 rounded-full border border-border">{difficulty}</span>
             </>
           )}
         </header>

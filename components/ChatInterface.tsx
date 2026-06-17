@@ -27,7 +27,7 @@ const QUICK_PROMPTS = [
 function UserMessage({ content }: { content: string }) {
   return (
     <div className="flex justify-end animate-in">
-      <div className="max-w-[72%] px-3.5 py-2.5 rounded-xl rounded-br-sm bg-surface-2 border border-border-2 text-sm text-text leading-relaxed">
+      <div className="max-w-[72%] px-3.5 py-2.5 rounded-xl rounded-br-sm bg-surface-2 border border-border-2 shadow-panel text-sm text-text leading-relaxed">
         <span style={{ whiteSpace: "pre-wrap" }}>{content}</span>
       </div>
     </div>
@@ -37,8 +37,11 @@ function UserMessage({ content }: { content: string }) {
 function AssistantMessage({ content, streaming }: { content: string; streaming?: boolean }) {
   return (
     <div className="flex gap-3 animate-in">
-      <div className="w-5 h-5 rounded-md bg-surface-3 border border-border-2 flex items-center justify-center shrink-0 mt-0.5">
-        <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="text-text-2">
+      <div
+        className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 mt-0.5"
+        style={{ background: "linear-gradient(135deg, #5E6AD2, #8B5CF6)" }}
+      >
+        <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
           <path d="M1 5.5L3.5 8 9 2"/>
         </svg>
       </div>
@@ -187,8 +190,11 @@ export default function ChatInterface({ subject, difficulty, mode, initialMessag
 
         {loading && !streamingText && (
           <div className="flex gap-3 animate-in">
-            <div className="w-5 h-5 rounded-full bg-accent-muted border border-accent-border flex items-center justify-center shrink-0 mt-0.5">
-              <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#5E6AD2" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <div
+              className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 mt-0.5"
+              style={{ background: "linear-gradient(135deg, #5E6AD2, #8B5CF6)" }}
+            >
+              <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 5.5L3.5 8 9 2"/>
               </svg>
             </div>
@@ -214,15 +220,18 @@ export default function ChatInterface({ subject, difficulty, mode, initialMessag
             placeholder={subject ? `Ask about ${subject.name}…` : "Select a subject first…"}
             disabled={!subject || loading}
             rows={1}
-            className="flex-1 resize-none bg-surface border border-border rounded-lg px-3.5 py-2.5 text-sm text-text placeholder-muted outline-none focus:border-border-2 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="flex-1 resize-none bg-surface border border-border rounded-lg px-3.5 py-2.5 text-sm text-text placeholder-muted outline-none focus:border-accent/50 focus:shadow-glow transition-all disabled:opacity-40 disabled:cursor-not-allowed"
             style={{ minHeight: "40px", maxHeight: "160px" }}
           />
           <button
             onClick={() => sendMessage(input)}
             disabled={!input.trim() || loading || !subject}
-            className="shrink-0 w-8 h-8 rounded-md bg-text hover:bg-text-2 disabled:opacity-20 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+            className={`shrink-0 w-8 h-8 rounded-md disabled:opacity-20 disabled:cursor-not-allowed transition-all hover:brightness-110 flex items-center justify-center ${
+              input.trim() && subject && !loading ? "" : "bg-text"
+            }`}
+            style={input.trim() && subject && !loading ? { background: "linear-gradient(135deg, #5E6AD2, #8B5CF6)" } : undefined}
           >
-            <svg className="w-3.5 h-3.5 text-background" fill="none" viewBox="0 0 14 14" stroke="currentColor" strokeWidth="2">
+            <svg className={`w-3.5 h-3.5 ${input.trim() && subject && !loading ? "text-white" : "text-background"}`} fill="none" viewBox="0 0 14 14" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M7 2l5 5-5 5M2 7h10" />
             </svg>
           </button>

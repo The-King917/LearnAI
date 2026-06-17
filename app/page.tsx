@@ -58,21 +58,28 @@ export default function LandingPage() {
       <div
         className="fixed inset-0 pointer-events-none"
         style={{
-          backgroundImage: "radial-gradient(rgba(255,255,255,0.028) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px)",
           backgroundSize: "28px 28px",
         }}
       />
       <div
         className="fixed inset-0 pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse 80% 60% at 50% -5%, rgba(94,106,210,0.12) 0%, transparent 65%)",
+          background: "radial-gradient(ellipse 80% 55% at 50% -5%, rgba(255,255,255,0.08) 0%, transparent 65%)",
+        }}
+      />
+      <div
+        className="fixed inset-0 pointer-events-none"
+        style={{
+          background: "radial-gradient(ellipse 60% 40% at 50% 105%, rgba(255,255,255,0.04) 0%, transparent 70%)",
         }}
       />
 
       {/* Nav */}
       <nav className="relative z-10 flex items-center justify-between px-8 py-5 border-b border-border/60 backdrop-blur-sm bg-background/70">
-        <span className="text-sm font-semibold tracking-[-0.01em]">
-          Learn<span style={{ color: "#5E6AD2" }}>AI</span>
+        <span className="flex items-center text-sm font-semibold tracking-[-0.01em]">
+          Learn
+          <span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-white text-background text-2xs font-bold tracking-[0.02em]">AI</span>
         </span>
         <Link
           href="/coach"
@@ -88,7 +95,7 @@ export default function LandingPage() {
           className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-surface text-2xs font-medium text-muted uppercase tracking-[0.08em] mb-10"
           style={{ animation: "fadeSlideUp 0.5s ease-out 0.1s both" }}
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block" />
+          <span className="w-1.5 h-1.5 rounded-full bg-white inline-block" />
           AI study companion
         </div>
 
@@ -98,7 +105,13 @@ export default function LandingPage() {
         >
           The AI coach that
           <br />
-          <span style={{ color: "#5E6AD2" }}>teaches</span>, not tells.
+          <span
+            className="italic"
+            style={{ textShadow: "0 0 30px rgba(255,255,255,0.35)" }}
+          >
+            teaches
+          </span>
+          <span className="text-muted">, not tells.</span>
         </h1>
 
         <p
@@ -114,10 +127,7 @@ export default function LandingPage() {
         >
           <Link
             href="/coach"
-            className="px-5 py-2.5 rounded-lg text-sm font-medium text-white transition-all duration-150"
-            style={{ background: "#5E6AD2" }}
-            onMouseOver={(e) => (e.currentTarget.style.background = "#6872D8")}
-            onMouseOut={(e) => (e.currentTarget.style.background = "#5E6AD2")}
+            className="px-5 py-2.5 rounded-lg text-sm font-semibold bg-white text-background hover:bg-white/85 transition-all duration-150"
           >
             Start learning
           </Link>
@@ -198,8 +208,7 @@ export default function LandingPage() {
             ].map((item) => (
               <div key={item.step} className="flex gap-8">
                 <span
-                  className="text-2xl font-semibold tracking-[-0.04em] shrink-0 w-10 text-right"
-                  style={{ color: "rgba(94,106,210,0.25)" }}
+                  className="text-2xl font-semibold tracking-[-0.04em] shrink-0 w-10 text-right text-white/15"
                 >
                   {item.step}
                 </span>
@@ -223,10 +232,7 @@ export default function LandingPage() {
         </p>
         <Link
           href="/coach"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium text-white transition-all duration-150"
-          style={{ background: "#5E6AD2" }}
-          onMouseOver={(e) => (e.currentTarget.style.background = "#6872D8")}
-          onMouseOut={(e) => (e.currentTarget.style.background = "#5E6AD2")}
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold bg-white text-background hover:bg-white/85 transition-all duration-150"
         >
           Start learning
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -237,10 +243,11 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-border px-8 py-6 flex items-center justify-between">
-        <span className="text-sm font-semibold tracking-[-0.01em]">
-          Learn<span style={{ color: "#5E6AD2" }}>AI</span>
+        <span className="flex items-center text-sm font-semibold tracking-[-0.01em]">
+          Learn
+          <span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-white text-background text-2xs font-bold tracking-[0.02em]">AI</span>
         </span>
-        <span className="text-xs text-subtle">© 2025</span>
+        <span className="text-xs text-subtle">© 2026</span>
       </footer>
 
     </div>

@@ -20,6 +20,15 @@ const config: Config = {
         "text-2": "#9B9B9B",
         muted: "#4F4F4F",
         subtle: "#2C2C2C",
+        accent: "#5E6AD2",
+        "accent-2": "#6872D8",
+      },
+      boxShadow: {
+        glow: "0 0 0 1px rgba(94,106,210,0.4), 0 0 24px rgba(94,106,210,0.18)",
+        panel: "0 12px 40px rgba(0,0,0,0.55)",
+      },
+      backgroundImage: {
+        "grain": "radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)",
       },
       fontFamily: {
         sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "system-ui", "sans-serif"],
