@@ -113,6 +113,21 @@ export default function Sidebar({
 
         <div className="h-px bg-border mx-3 my-1" />
 
+        {/* Tools */}
+        <div className="px-3 py-2">
+          <Link
+            href="/counselor"
+            className="w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-sm text-muted hover:text-text-2 hover:bg-surface-2 transition-all duration-150 border border-transparent"
+          >
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M8 1.333 13.333 4v4c0 3.5-2.333 5.833-5.333 6.667C5 13.833 2.667 11.5 2.667 8V4L8 1.333Z"/>
+            </svg>
+            <span>College Counselor</span>
+          </Link>
+        </div>
+
+        <div className="h-px bg-border mx-3 my-1" />
+
         {/* Difficulty */}
         <div className="px-3 py-2">
           <p className="text-2xs font-medium text-muted uppercase tracking-[0.07em] mb-1 px-1">Difficulty</p>

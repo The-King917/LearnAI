@@ -12,9 +12,14 @@ interface Message {
 
 interface ChatInterfaceProps {
   subject: Subject | null;
-  difficulty: Difficulty;
-  mode: "chat" | "practice" | "diagnose";
+  difficulty?: Difficulty;
+  mode?: "chat" | "practice" | "diagnose";
   initialMessage?: string;
+  systemPrompt?: string;
+  emptyTitle?: string;
+  emptySubtitle?: string;
+  quickPrompts?: string[];
+  placeholder?: string;
 }
 
 const QUICK_PROMPTS = [
@@ -49,7 +54,10 @@ function AssistantMessage({ content, streaming }: { content: string; streaming?:
   );
 }
 
-export default function ChatInterface({ subject, difficulty, mode, initialMessage }: ChatInterfaceProps) {
+export default function ChatInterface({
+  subject, difficulty, mode, initialMessage, systemPrompt: systemPromptOverride,
+  emptyTitle, emptySubtitle, quickPrompts, placeholder,
+}: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -58,7 +66,7 @@ export default function ChatInterface({ subject, difficulty, mode, initialMessag
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
-  const systemPrompt = buildSystemPrompt(subject ?? undefined, mode, difficulty);
+  const systemPrompt = systemPromptOverride ?? buildSystemPrompt(subject ?? undefined, mode ?? "chat", difficulty ?? "intermediate");
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -141,6 +149,8 @@ export default function ChatInterface({ subject, difficulty, mode, initialMessag
   };
 
   const isEmpty = messages.length === 0 && !loading;
+  const active = !!subject || !!systemPromptOverride;
+  const prompts = quickPrompts ?? QUICK_PROMPTS;
 
   return (
     <div className="flex flex-col h-full">
@@ -149,17 +159,17 @@ export default function ChatInterface({ subject, difficulty, mode, initialMessag
           <div className="flex flex-col items-center justify-center h-full gap-5 text-center">
             <div>
               <p className="text-lg font-semibold tracking-[-0.02em] text-text">
-                {subject ? `${subject.name} coach` : "Select a subject to begin"}
+                {emptyTitle ?? (subject ? `${subject.name} coach` : "Select a subject to begin")}
               </p>
               <p className="text-sm text-muted mt-1.5">
-                {subject
+                {emptySubtitle ?? (subject
                   ? "Ask anything. I'll guide you through it — never just give you the answer."
-                  : "Choose from the sidebar to get started."}
+                  : "Choose from the sidebar to get started.")}
               </p>
             </div>
-            {subject && (
+            {active && (
               <div className="flex flex-wrap gap-2 justify-center">
-                {QUICK_PROMPTS.map((p) => (
+                {prompts.map((p) => (
                   <button
                     key={p}
                     onClick={() => sendMessage(p)}
@@ -211,15 +221,15 @@ export default function ChatInterface({ subject, difficulty, mode, initialMessag
             value={input}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
-            placeholder={subject ? `Ask about ${subject.name}…` : "Select a subject first…"}
-            disabled={!subject || loading}
+            placeholder={placeholder ?? (subject ? `Ask about ${subject.name}…` : "Select a subject first…")}
+            disabled={!active || loading}
             rows={1}
             className="flex-1 resize-none bg-surface border border-border rounded-xl px-3.5 py-2.5 text-sm text-text placeholder-muted outline-none focus:border-white/25 focus:shadow-glow transition-all disabled:opacity-40 disabled:cursor-not-allowed"
             style={{ minHeight: "40px", maxHeight: "160px" }}
           />
           <button
             onClick={() => sendMessage(input)}
-            disabled={!input.trim() || loading || !subject}
+            disabled={!input.trim() || loading || !active}
             className="shrink-0 w-8 h-8 rounded-lg bg-white hover:bg-white/85 disabled:opacity-20 disabled:cursor-not-allowed transition-all flex items-center justify-center"
           >
             <svg className="w-3.5 h-3.5 text-background" fill="none" viewBox="0 0 14 14" stroke="currentColor" strokeWidth="2">

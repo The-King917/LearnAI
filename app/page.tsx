@@ -40,6 +40,15 @@ const FEATURES = [
       </svg>
     ),
   },
+  {
+    title: "College Counselor",
+    desc: "An AI admissions officer for 40+ top universities — reviews your essays and activities, names what's weak, and gives a calibrated chance estimate.",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 1.5 15 4.5v4.5c0 3.94-2.625 6.563-6 7.5-3.375-.937-6-3.56-6-7.5V4.5L9 1.5Z"/>
+      </svg>
+    ),
+  },
 ];
 
 const SUBJECTS_MARQUEE = [

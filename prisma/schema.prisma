@@ -8,12 +8,13 @@ datasource db {
 }
 
 model User {
-  id           String           @id @default(cuid())
-  email        String           @unique
-  name         String?
-  passwordHash String
-  createdAt    DateTime         @default(now())
-  masteries    SubjectMastery[]
+  id                 String              @id @default(cuid())
+  email              String              @unique
+  name               String?
+  passwordHash       String
+  createdAt          DateTime            @default(now())
+  masteries          SubjectMastery[]
+  applicationProfile ApplicationProfile?
 }
 
 model SubjectMastery {
@@ -30,4 +31,22 @@ model SubjectMastery {
   updatedAt       DateTime  @updatedAt
 
   @@unique([userId, subjectId])
+}
+
+model ApplicationProfile {
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gpa              Float?
+  gpaScale         String?
+  satScore         Int?
+  actScore         Int?
+  intendedMajor    String?
+  courseRigor      String?
+  extracurriculars String?
+  awards           String?
+  essay            String?
+  demographics     String?
+  schoolProfile    String?
+  updatedAt        DateTime @updatedAt
 }

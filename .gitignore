@@ -29,3 +29,6 @@ yarn-error.log*
 next-env.d.ts
 
 /lib/generated/prisma
+
+# tesseract.js language data (downloaded at runtime, cached to /tmp in prod)
+*.traineddata
