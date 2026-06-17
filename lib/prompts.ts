@@ -367,6 +367,7 @@ Generate ONE LSAT-style Reading Comprehension passage at ${difficulty} level in 
 Output ONLY the passage and questions — no answer key, no explanation.
 
 When the student answers:
+- Begin your reply with a line containing exactly \`RESULT: CORRECT\` or \`RESULT: INCORRECT\` (nothing else on that line), then a blank line, then your explanation.
 - If correct: confirm, then explain why the wrong choices fail
 - If incorrect: ask "Where in the passage does it say that?" to redirect
 - Never reveal the answer — guide them to find textual evidence`;
@@ -422,6 +423,7 @@ Generate ONE authentic LSAT Logical Reasoning question at ${difficulty} level in
 Output ONLY the question — no answer, no explanation, no question type label.
 
 When the student answers:
+- Begin your reply with a line containing exactly \`RESULT: CORRECT\` or \`RESULT: INCORRECT\` (nothing else on that line), then a blank line, then your explanation.
 - If correct: confirm, explain why the correct choice works, then explain why each distractor fails
 - If incorrect: ask "What is the conclusion of the argument?" to rebuild their analysis
 - Never state the correct letter until they arrive there themselves`;
@@ -489,6 +491,7 @@ Generate ONE MCAT CARS passage at ${difficulty} level in EXACTLY this format:
 Output ONLY the passage and questions — no answer key.
 
 When the student answers:
+- Begin your reply with a line containing exactly \`RESULT: CORRECT\` or \`RESULT: INCORRECT\` (nothing else on that line), then a blank line, then your explanation.
 - If correct: confirm and explain why the wrong choices fail
 - If incorrect: ask "Which sentence(s) in the passage are most relevant to this question?" — never reveal the answer`;
       }
@@ -559,6 +562,7 @@ Generate ONE MCAT-style practice set at ${difficulty} level. Use this format:
 Output ONLY the passage and questions — no answer key, no explanations.
 
 When the student answers:
+- Begin your reply with a line containing exactly \`RESULT: CORRECT\` or \`RESULT: INCORRECT\` (nothing else on that line), then a blank line, then your explanation.
 - If correct: confirm, explain the science, explain why each wrong choice fails
 - If incorrect: ask a guiding question about the underlying concept or passage reference
 - Never reveal the answer until they reason to it`;
@@ -670,6 +674,7 @@ Rules:
 - Use LaTeX for any math: $...$ inline, $$...$$ display
 
 When the student submits an answer:
+- Begin your reply with a line containing exactly \`RESULT: CORRECT\` or \`RESULT: INCORRECT\` (nothing else on that line), then a blank line, then your explanation.
 - If correct: confirm briefly, then explain WHY it's correct and why each distractor fails
 - If incorrect: do NOT reveal the answer — ask a guiding question that leads them toward reconsidering
 - Never simply state the correct letter until the student arrives there themselves`;
@@ -698,6 +703,7 @@ Rules:
 - Do NOT include a scoring rubric or answer in the generation step
 
 When the student submits a response to any part:
+- Begin your reply with a line containing exactly \`RESULT: CORRECT\`, \`RESULT: PARTIAL\`, or \`RESULT: INCORRECT\` (nothing else on that line), then a blank line, then your evaluation.
 - Evaluate their reasoning Socratically — identify what's strong, then ask the question that reveals the gap
 - Never give the answer; guide them to self-correct`;
     }
@@ -709,12 +715,16 @@ You are in Practice Problem mode for ${subject?.name ?? "the selected subject"}.
 
 Generate one well-crafted problem appropriate for ${difficulty} level. Output ONLY the problem — no hints, no solution.
 
-When the student responds:
-- Guide Socratically
-- For Hint 1: identify only the key concept or theorem needed
-- For Hint 2: describe the approach and first concrete step
-- For Hint 3: give a near-complete outline without computing the final answer
-- Reveal full solution only when explicitly requested after all hints`;
+When the student submits their answer in response to "What is your answer?" (grading, not a hint request):
+- ALWAYS begin your reply with exactly one line — \`RESULT: CORRECT\`, \`RESULT: PARTIAL\`, or \`RESULT: INCORRECT\` — with nothing else on that line, even if the answer is blank, a joke, or off-topic (grade those INCORRECT). Then a blank line, then your feedback.
+- If correct: confirm briefly and explain why.
+- If partial or incorrect: do NOT reveal the final answer — give the single guiding question or smallest hint that moves them forward.
+
+When the student instead asks for Hint 1, Hint 2, Hint 3, or the full solution, respond directly to that request (no RESULT line needed):
+- Hint 1: identify only the key concept or theorem needed
+- Hint 2: describe the approach and first concrete step
+- Hint 3: give a near-complete outline without computing the final answer
+- Full solution: only when explicitly requested, after all hints`;
   }
 
   return basePersonality;

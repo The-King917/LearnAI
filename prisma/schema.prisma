@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String           @id @default(cuid())
+  email        String           @unique
+  name         String?
+  passwordHash String
+  createdAt    DateTime         @default(now())
+  masteries    SubjectMastery[]
+}
+
+model SubjectMastery {
+  id              String    @id @default(cuid())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subjectId       String
+  mastery         Float     @default(0)
+  attempts        Int       @default(0)
+  correct         Int       @default(0)
+  diagnosedLevel  String?
+  lastPracticedAt DateTime?
+  lastDiagnosedAt DateTime?
+  updatedAt       DateTime  @updatedAt
+
+  @@unique([userId, subjectId])
+}

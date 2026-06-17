@@ -1,12 +1,22 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import Sidebar from "@/components/Sidebar";
 import ChatInterface from "@/components/ChatInterface";
 import PracticeMode from "@/components/PracticeMode";
 import DiagnoseMode from "@/components/DiagnoseMode";
+import ProgressIndicator from "@/components/ProgressIndicator";
 import { Subject } from "@/lib/subjects";
 import { Difficulty } from "@/lib/prompts";
+import { ResultTag, applyPracticeResult, applyDiagnoseResult } from "@/lib/mastery";
+
+interface MasteryRecord {
+  mastery: number;
+  attempts: number;
+  correct: number;
+  diagnosedLevel?: string | null;
+}
 
 type Mode = "chat" | "practice" | "diagnose";
 
@@ -25,13 +35,72 @@ const MODE_LABELS: Record<Mode, string> = {
 };
 
 export default function CoachPage() {
+  const { data: session, status } = useSession();
   const [subject, setSubject] = useState<Subject | null>(null);
   const [difficulty, setDifficulty] = useState<Difficulty>("intermediate");
   const [mode, setMode] = useState<Mode>("chat");
   const [recentSessions, setRecentSessions] = useState<Session[]>([]);
   const [key, setKey] = useState(0);
+  const [mastery, setMastery] = useState<Record<string, MasteryRecord>>({});
+
+  const signedIn = status === "authenticated" && !!session;
+
+  useEffect(() => {
+    if (!signedIn) { setMastery({}); return; }
+    fetch("/api/progress")
+      .then((r) => r.json())
+      .then((data) => {
+        const next: Record<string, MasteryRecord> = {};
+        for (const m of data.masteries ?? []) {
+          next[m.subjectId] = { mastery: m.mastery, attempts: m.attempts, correct: m.correct, diagnosedLevel: m.diagnosedLevel };
+        }
+        setMastery(next);
+      })
+      .catch(() => {});
+  }, [signedIn]);
 
   const reset = useCallback(() => setKey((k) => k + 1), []);
+
+  const recordPracticeResult = useCallback((result: ResultTag) => {
+    if (!signedIn || !subject) return;
+    const subjectId = subject.id;
+    setMastery((prev) => {
+      const current = prev[subjectId]?.mastery ?? 0;
+      return { ...prev, [subjectId]: { ...prev[subjectId], mastery: applyPracticeResult(current, result), attempts: (prev[subjectId]?.attempts ?? 0) + 1, correct: (prev[subjectId]?.correct ?? 0) + (result === "correct" ? 1 : 0) } };
+    });
+    fetch("/api/progress/practice", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ subjectId, result }),
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.mastery) {
+          setMastery((prev) => ({ ...prev, [subjectId]: { mastery: data.mastery.mastery, attempts: data.mastery.attempts, correct: data.mastery.correct, diagnosedLevel: data.mastery.diagnosedLevel } }));
+        }
+      })
+      .catch(() => {});
+  }, [signedIn, subject]);
+
+  const recordDiagnoseResult = useCallback((subjectId: string, level: Difficulty) => {
+    if (!signedIn) return;
+    setMastery((prev) => {
+      const current = prev[subjectId];
+      return { ...prev, [subjectId]: { ...current, mastery: applyDiagnoseResult(current?.mastery ?? 0, !!current, level), diagnosedLevel: level, attempts: current?.attempts ?? 0, correct: current?.correct ?? 0 } };
+    });
+    fetch("/api/progress/diagnose", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ subjectId, level }),
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.mastery) {
+          setMastery((prev) => ({ ...prev, [subjectId]: { mastery: data.mastery.mastery, attempts: data.mastery.attempts, correct: data.mastery.correct, diagnosedLevel: data.mastery.diagnosedLevel } }));
+        }
+      })
+      .catch(() => {});
+  }, [signedIn]);
 
   const handleSubjectChange = useCallback((s: Subject) => {
     setSubject(s);
@@ -51,8 +120,9 @@ export default function CoachPage() {
 
   const handleDiagnoseComplete = useCallback((level: Difficulty) => {
     setDifficulty(level);
+    if (subject) recordDiagnoseResult(subject.id, level);
     setTimeout(() => { setMode("chat"); reset(); }, 1800);
-  }, [reset]);
+  }, [reset, subject, recordDiagnoseResult]);
 
   return (
     <div className="relative flex h-screen overflow-hidden bg-background">
@@ -95,6 +165,7 @@ export default function CoachPage() {
               <span className="text-2xs text-muted capitalize px-1.5 py-0.5 rounded-full border border-border">{difficulty}</span>
             </>
           )}
+          <ProgressIndicator mastery={subject ? mastery[subject.id]?.mastery ?? null : null} signedIn={signedIn} />
         </header>
 
         <div className="flex-1 overflow-hidden">
@@ -102,7 +173,7 @@ export default function CoachPage() {
             <ChatInterface key={key} subject={subject} difficulty={difficulty} mode="chat" />
           )}
           {mode === "practice" && (
-            <PracticeMode key={key} subject={subject} difficulty={difficulty} />
+            <PracticeMode key={key} subject={subject} difficulty={difficulty} onResult={recordPracticeResult} />
           )}
           {mode === "diagnose" && (
             <DiagnoseMode key={key} subject={subject} onLevelFound={handleDiagnoseComplete} />

@@ -3,12 +3,16 @@
 import { useState, useCallback } from "react";
 import { Subject } from "@/lib/subjects";
 import { Difficulty, APQuestionType, buildSystemPrompt, isAPSubject } from "@/lib/prompts";
+import { parseResultTag, ResultTag } from "@/lib/mastery";
 import Markdown from "./Markdown";
 
 interface PracticeModeProps {
   subject: Subject | null;
   difficulty: Difficulty;
+  onResult?: (result: ResultTag) => void;
 }
+
+const display = (text: string) => parseResultTag(text).clean;
 
 type Stage = "idle" | "problem" | "hint1" | "hint2" | "hint3" | "solution";
 
@@ -66,7 +70,7 @@ const HINT_META = [
 ];
 
 // ── MCQ Mode ────────────────────────────────────────────────────────────────
-function MCQPractice({ subject, difficulty }: { subject: Subject; difficulty: Difficulty }) {
+function MCQPractice({ subject, difficulty, onResult }: { subject: Subject; difficulty: Difficulty; onResult?: (result: ResultTag) => void }) {
   const [state, setState] = useState<MCQState>({
     problem: "", selected: null, feedback: "", loadingFeedback: false, feedbackStream: "", revealed: false,
   });
@@ -100,9 +104,11 @@ function MCQPractice({ subject, difficulty }: { subject: Subject; difficulty: Di
           { role: "user", content: `I choose (${letter}).` },
         ],
       }, (s) => setState((prev) => ({ ...prev, feedbackStream: s })));
-      setState((s) => ({ ...s, feedback, loadingFeedback: false, feedbackStream: "" }));
+      const { result, clean } = parseResultTag(feedback);
+      setState((s) => ({ ...s, feedback: clean, loadingFeedback: false, feedbackStream: "" }));
+      if (result) onResult?.(result);
     } catch { setState((s) => ({ ...s, loadingFeedback: false })); }
-  }, [state, systemPrompt]);
+  }, [state, systemPrompt, onResult]);
 
   const reset = () => setState({ problem: "", selected: null, feedback: "", loadingFeedback: false, feedbackStream: "", revealed: false });
 
@@ -113,7 +119,7 @@ function MCQPractice({ subject, difficulty }: { subject: Subject; difficulty: Di
           <p className="text-lg font-semibold tracking-[-0.02em] text-text">{subject.name} — MCQ</p>
           <p className="text-sm text-text-2 mt-1">AP-style multiple choice · {difficulty}</p>
         </div>
-        <button onClick={generate} className="px-4 py-2 rounded-md text-background font-semibold text-sm bg-white hover:bg-white/85 shadow-glow transition-all">
+        <button onClick={generate} className="px-4 py-2 rounded-lg text-background font-semibold text-sm bg-white hover:bg-white/85 shadow-glow transition-all">
           Generate question
         </button>
       </div>
@@ -123,7 +129,7 @@ function MCQPractice({ subject, difficulty }: { subject: Subject; difficulty: Di
   return (
     <div className="h-full overflow-y-auto px-6 py-6 max-w-2xl mx-auto w-full space-y-4">
       {/* Question */}
-      <div className="bg-surface border border-border rounded-lg p-5">
+      <div className="bg-surface border border-border rounded-xl p-5">
         <div className="flex items-center gap-2 mb-4">
           <span className="text-2xs font-medium text-muted uppercase tracking-[0.07em]">MCQ</span>
           <span className="text-subtle">·</span>
@@ -148,7 +154,7 @@ function MCQPractice({ subject, difficulty }: { subject: Subject; difficulty: Di
                 key={letter}
                 onClick={() => selectOption(letter)}
                 disabled={!!state.selected || state.loadingFeedback}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg border text-sm text-left transition-all duration-100 ${
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border text-sm text-left transition-all duration-100 ${
                   isSelected
                     ? "border-white/25 bg-white/10 text-text shadow-glow"
                     : !state.selected
@@ -156,7 +162,7 @@ function MCQPractice({ subject, difficulty }: { subject: Subject; difficulty: Di
                     : "border-border bg-surface text-muted opacity-50"
                 }`}
               >
-                <span className={`w-6 h-6 rounded-md border flex items-center justify-center text-xs font-mono shrink-0 transition-colors ${
+                <span className={`w-6 h-6 rounded-lg border flex items-center justify-center text-xs font-mono shrink-0 transition-colors ${
                   isSelected ? "border-white/25 bg-white/15 text-text" : "border-border text-muted"
                 }`}>
                   {letter}
@@ -171,12 +177,12 @@ function MCQPractice({ subject, difficulty }: { subject: Subject; difficulty: Di
 
       {/* Feedback */}
       {(state.feedback || state.feedbackStream || state.loadingFeedback) && (
-        <div className="bg-surface border border-border rounded-lg p-4 animate-in">
+        <div className="bg-surface border border-border rounded-xl p-4 animate-in">
           <p className="text-2xs font-medium text-muted uppercase tracking-[0.07em] mb-3">Feedback</p>
           {state.loadingFeedback && !state.feedbackStream ? (
             <div className="flex gap-1"><div className="typing-dot"/><div className="typing-dot"/><div className="typing-dot"/></div>
           ) : (
-            <Markdown streaming={state.loadingFeedback}>{state.feedback || state.feedbackStream}</Markdown>
+            <Markdown streaming={state.loadingFeedback}>{display(state.feedback || state.feedbackStream)}</Markdown>
           )}
         </div>
       )}
@@ -191,7 +197,7 @@ function MCQPractice({ subject, difficulty }: { subject: Subject; difficulty: Di
 // ── FRQ Mode ────────────────────────────────────────────────────────────────
 const FRQ_PARTS_RE = /\*\*\(([a-z])\)\*\*/gi;
 
-function FRQPractice({ subject, difficulty }: { subject: Subject; difficulty: Difficulty }) {
+function FRQPractice({ subject, difficulty, onResult }: { subject: Subject; difficulty: Difficulty; onResult?: (result: ResultTag) => void }) {
   const [state, setState] = useState<FRQState>({
     problem: "", answers: {}, feedback: {}, feedbackStream: {}, loading: {},
   });
@@ -226,14 +232,16 @@ function FRQPractice({ subject, difficulty }: { subject: Subject; difficulty: Di
           { role: "user", content: `My answer to part (${part}): ${answer}` },
         ],
       }, (s) => setState((prev) => ({ ...prev, feedbackStream: { ...prev.feedbackStream, [part]: s } })));
+      const { result, clean } = parseResultTag(feedback);
       setState((s) => ({
         ...s,
-        feedback: { ...s.feedback, [part]: feedback },
+        feedback: { ...s.feedback, [part]: clean },
         loading: { ...s.loading, [part]: false },
         feedbackStream: { ...s.feedbackStream, [part]: "" },
       }));
+      if (result) onResult?.(result);
     } catch { setState((s) => ({ ...s, loading: { ...s.loading, [part]: false } })); }
-  }, [state, systemPrompt]);
+  }, [state, systemPrompt, onResult]);
 
   // Extract part letters from problem text
   const parts = state.problem
@@ -249,7 +257,7 @@ function FRQPractice({ subject, difficulty }: { subject: Subject; difficulty: Di
           <p className="text-lg font-semibold tracking-[-0.02em] text-text">{subject.name} — FRQ</p>
           <p className="text-sm text-text-2 mt-1">AP-style free response · {difficulty}</p>
         </div>
-        <button onClick={generate} className="px-4 py-2 rounded-md text-background font-semibold text-sm bg-white hover:bg-white/85 shadow-glow transition-all">
+        <button onClick={generate} className="px-4 py-2 rounded-lg text-background font-semibold text-sm bg-white hover:bg-white/85 shadow-glow transition-all">
           Generate question
         </button>
       </div>
@@ -259,7 +267,7 @@ function FRQPractice({ subject, difficulty }: { subject: Subject; difficulty: Di
   return (
     <div className="h-full overflow-y-auto px-6 py-6 max-w-2xl mx-auto w-full space-y-4">
       {/* Question */}
-      <div className="bg-surface border border-border rounded-lg p-5">
+      <div className="bg-surface border border-border rounded-xl p-5">
         <div className="flex items-center gap-2 mb-4">
           <span className="text-2xs font-medium text-muted uppercase tracking-[0.07em]">FRQ</span>
           <span className="text-subtle">·</span>
@@ -272,19 +280,19 @@ function FRQPractice({ subject, difficulty }: { subject: Subject; difficulty: Di
 
       {/* Per-part response boxes */}
       {!generating && parts.length > 0 && parts.map((part) => (
-        <div key={part} className="bg-surface border border-border rounded-lg p-4 space-y-3">
+        <div key={part} className="bg-surface border border-border rounded-xl p-4 space-y-3">
           <label className="text-2xs font-medium text-muted uppercase tracking-[0.07em]">Part ({part})</label>
           <textarea
             value={state.answers[part] ?? ""}
             onChange={(e) => setState((s) => ({ ...s, answers: { ...s.answers, [part]: e.target.value }, feedback: { ...s.feedback, [part]: "" } }))}
             placeholder={`Your response to part (${part})…`}
             rows={3}
-            className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-text placeholder-muted outline-none focus:border-border-2 transition-colors resize-none"
+            className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-text placeholder-muted outline-none focus:border-border-2 transition-colors resize-none"
           />
           <button
             onClick={() => submitPart(part)}
             disabled={!state.answers[part]?.trim() || state.loading[part]}
-            className="px-3 py-1.5 rounded-md border border-border text-sm text-muted hover:border-white/25 hover:text-text-2 disabled:opacity-40 transition-colors"
+            className="px-3 py-1.5 rounded-lg border border-border text-sm text-muted hover:border-white/25 hover:text-text-2 disabled:opacity-40 transition-colors"
           >
             {state.loading[part] ? "Checking…" : "Submit"}
           </button>
@@ -293,7 +301,7 @@ function FRQPractice({ subject, difficulty }: { subject: Subject; difficulty: Di
               {state.loading[part] && !state.feedbackStream[part] ? (
                 <div className="flex gap-1"><div className="typing-dot"/><div className="typing-dot"/><div className="typing-dot"/></div>
               ) : (
-                <Markdown streaming={state.loading[part]}>{state.feedback[part] || state.feedbackStream[part]}</Markdown>
+                <Markdown streaming={state.loading[part]}>{display(state.feedback[part] || state.feedbackStream[part])}</Markdown>
               )}
             </div>
           )}
@@ -302,22 +310,22 @@ function FRQPractice({ subject, difficulty }: { subject: Subject; difficulty: Di
 
       {/* Fallback if no parts parsed but question is ready */}
       {!generating && parts.length === 0 && state.problem && (
-        <div className="bg-surface border border-border rounded-lg p-4 space-y-3">
+        <div className="bg-surface border border-border rounded-xl p-4 space-y-3">
           <label className="text-2xs font-medium text-muted uppercase tracking-[0.07em]">Your response</label>
           <textarea
             value={state.answers["a"] ?? ""}
             onChange={(e) => setState((s) => ({ ...s, answers: { a: e.target.value } }))}
             placeholder="Write your response here…"
             rows={5}
-            className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-text placeholder-muted outline-none focus:border-border-2 transition-colors resize-none"
+            className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-text placeholder-muted outline-none focus:border-border-2 transition-colors resize-none"
           />
           <button onClick={() => submitPart("a")} disabled={!state.answers["a"]?.trim() || state.loading["a"]}
-            className="px-3 py-1.5 rounded-md border border-border text-sm text-muted hover:border-white/25 hover:text-text-2 disabled:opacity-40 transition-colors">
+            className="px-3 py-1.5 rounded-lg border border-border text-sm text-muted hover:border-white/25 hover:text-text-2 disabled:opacity-40 transition-colors">
             {state.loading["a"] ? "Checking…" : "Submit"}
           </button>
           {(state.feedback["a"] || state.feedbackStream["a"]) && (
             <div className="pt-3 border-t border-border animate-in">
-              <Markdown streaming={state.loading["a"]}>{state.feedback["a"] || state.feedbackStream["a"]}</Markdown>
+              <Markdown streaming={state.loading["a"]}>{display(state.feedback["a"] || state.feedbackStream["a"])}</Markdown>
             </div>
           )}
         </div>
@@ -336,7 +344,7 @@ function FRQPractice({ subject, difficulty }: { subject: Subject; difficulty: Di
 }
 
 // ── Open Practice ────────────────────────────────────────────────────────────
-function OpenPractice({ subject, difficulty }: { subject: Subject; difficulty: Difficulty }) {
+function OpenPractice({ subject, difficulty, onResult }: { subject: Subject; difficulty: Difficulty; onResult?: (result: ResultTag) => void }) {
   const [stage, setStage] = useState<Stage>("idle");
   const [loading, setLoading] = useState(false);
   const [loadingWhat, setLoadingWhat] = useState("");
@@ -413,9 +421,11 @@ function OpenPractice({ subject, difficulty }: { subject: Subject; difficulty: D
           { role: "user", content: state.userAnswer },
         ],
       }, setStream);
-      setState((s) => ({ ...s, feedback }));
+      const { result, clean } = parseResultTag(feedback);
+      setState((s) => ({ ...s, feedback: clean }));
+      if (result) onResult?.(result);
     } finally { setLoading(false); setStream(""); setLoadingWhat(""); }
-  }, [state, systemPrompt]);
+  }, [state, systemPrompt, onResult]);
 
   if (stage === "idle") {
     return (
@@ -425,7 +435,7 @@ function OpenPractice({ subject, difficulty }: { subject: Subject; difficulty: D
           <p className="text-sm text-text-2 mt-1 capitalize">{difficulty} · 3 progressive hints</p>
         </div>
         <button onClick={generateProblem} disabled={loading}
-          className="px-4 py-2 rounded-md text-background font-semibold text-sm bg-white hover:bg-white/85 disabled:opacity-50 shadow-glow transition-all">
+          className="px-4 py-2 rounded-lg text-background font-semibold text-sm bg-white hover:bg-white/85 disabled:opacity-50 shadow-glow transition-all">
           {loading ? "Generating…" : "Generate problem"}
         </button>
       </div>
@@ -436,7 +446,7 @@ function OpenPractice({ subject, difficulty }: { subject: Subject; difficulty: D
 
   return (
     <div className="h-full overflow-y-auto px-6 py-6 max-w-2xl mx-auto w-full space-y-4">
-      <div className="bg-surface border border-border rounded-lg p-5">
+      <div className="bg-surface border border-border rounded-xl p-5">
         <div className="flex items-center gap-2 mb-4">
           <span className="text-2xs font-medium text-muted uppercase tracking-[0.07em]">Problem</span>
           <span className="text-subtle">·</span>
@@ -447,29 +457,29 @@ function OpenPractice({ subject, difficulty }: { subject: Subject; difficulty: D
         <Markdown streaming={loading && loadingWhat === "problem"}>{state.problem || stream}</Markdown>
       </div>
 
-      <div className="bg-surface border border-border rounded-lg p-4 space-y-3">
+      <div className="bg-surface border border-border rounded-xl p-4 space-y-3">
         <label className="text-2xs font-medium text-muted uppercase tracking-[0.07em]">Your answer</label>
         <textarea
           value={state.userAnswer}
           onChange={(e) => setState((s) => ({ ...s, userAnswer: e.target.value, feedback: "" }))}
           placeholder="Write your working here…"
           rows={3}
-          className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-text placeholder-muted outline-none focus:border-border-2 transition-colors resize-none"
+          className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-text placeholder-muted outline-none focus:border-border-2 transition-colors resize-none"
         />
         <button onClick={checkAnswer} disabled={!state.userAnswer.trim() || loading}
-          className="px-3 py-1.5 rounded-md border border-border text-sm text-muted hover:border-white/25 hover:text-text-2 disabled:opacity-40 transition-colors">
+          className="px-3 py-1.5 rounded-lg border border-border text-sm text-muted hover:border-white/25 hover:text-text-2 disabled:opacity-40 transition-colors">
           {loadingWhat === "feedback" ? "Checking…" : "Submit"}
         </button>
         {(state.feedback || (loadingWhat === "feedback" && stream)) && (
           <div className="pt-3 border-t border-border animate-in">
-            <Markdown streaming={loadingWhat === "feedback" && !state.feedback}>{state.feedback || stream}</Markdown>
+            <Markdown streaming={loadingWhat === "feedback" && !state.feedback}>{display(state.feedback || stream)}</Markdown>
           </div>
         )}
       </div>
 
       <div>
         <p className="text-2xs font-medium text-muted uppercase tracking-[0.07em] mb-2">Hints</p>
-        <div className="border border-border rounded-lg divide-y divide-border overflow-hidden">
+        <div className="border border-border rounded-xl divide-y divide-border overflow-hidden">
           {HINT_META.map((meta, i) => {
             const n = (i + 1) as 1 | 2 | 3;
             const hintKey = `hint${n}` as keyof PracticeState;
@@ -503,7 +513,7 @@ function OpenPractice({ subject, difficulty }: { subject: Subject; difficulty: D
         </div>
       </div>
 
-      <div className="border border-border rounded-lg overflow-hidden">
+      <div className="border border-border rounded-xl overflow-hidden">
         <button onClick={revealSolution} disabled={loading && loadingWhat !== "solution"}
           className={`w-full flex items-center justify-between px-4 py-3 text-sm transition-colors ${stage === "solution" ? "text-text" : "text-muted hover:text-text hover:bg-surface-2"}`}>
           <div className="flex items-center gap-3">
@@ -531,7 +541,7 @@ function OpenPractice({ subject, difficulty }: { subject: Subject; difficulty: D
 }
 
 // ── Main PracticeMode ────────────────────────────────────────────────────────
-export default function PracticeMode({ subject, difficulty }: PracticeModeProps) {
+export default function PracticeMode({ subject, difficulty, onResult }: PracticeModeProps) {
   const isAP = isAPSubject(subject);
   const [qType, setQType] = useState<APQuestionType>(isAP ? "mcq" : "open");
   const [modeKey, setModeKey] = useState(0);
@@ -555,7 +565,7 @@ export default function PracticeMode({ subject, difficulty }: PracticeModeProps)
             <button
               key={t}
               onClick={() => handleTypeChange(t)}
-              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors duration-100 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors duration-100 ${
                 qType === t ? "bg-surface-3 text-text" : "text-muted hover:text-text-2 hover:bg-surface-2"
               }`}
             >
@@ -570,11 +580,11 @@ export default function PracticeMode({ subject, difficulty }: PracticeModeProps)
 
       <div className="flex-1 overflow-hidden">
         {qType === "mcq" && isAP ? (
-          <MCQPractice key={modeKey} subject={subject} difficulty={difficulty} />
+          <MCQPractice key={modeKey} subject={subject} difficulty={difficulty} onResult={onResult} />
         ) : qType === "frq" && isAP ? (
-          <FRQPractice key={modeKey} subject={subject} difficulty={difficulty} />
+          <FRQPractice key={modeKey} subject={subject} difficulty={difficulty} onResult={onResult} />
         ) : (
-          <OpenPractice key={modeKey} subject={subject} difficulty={difficulty} />
+          <OpenPractice key={modeKey} subject={subject} difficulty={difficulty} onResult={onResult} />
         )}
       </div>
     </div>

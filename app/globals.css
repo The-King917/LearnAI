@@ -46,7 +46,7 @@ body {
 .prose-md code {
   background: #161616;
   border: 1px solid #2C2C2C;
-  border-radius: 4px;
+  border-radius: 6px;
   padding: 1px 5px;
   font-family: ui-monospace, monospace;
   font-size: 0.83em;
@@ -55,7 +55,7 @@ body {
 .prose-md pre {
   background: #0E0E0E;
   border: 1px solid #1F1F1F;
-  border-radius: 6px;
+  border-radius: 10px;
   padding: 14px 16px;
   overflow-x: auto;
   margin: 0.75em 0;
