@@ -126,7 +126,7 @@ export default function DiagnoseMode({ subject, onLevelFound }: DiagnoseModeProp
     return (
       <div className="flex flex-col items-center justify-center h-full gap-6 text-center px-6 max-w-sm mx-auto">
         <div>
-          <p className="text-base font-medium text-text">{subject.name}</p>
+          <p className="text-lg font-semibold tracking-[-0.02em] text-text">{subject.name}</p>
           <p className="text-sm text-muted mt-2 leading-relaxed">
             An adaptive 8–10 question diagnostic that adjusts difficulty in real time.
             You&apos;ll get a detailed level assessment and a personalized study plan at the end.
@@ -135,7 +135,7 @@ export default function DiagnoseMode({ subject, onLevelFound }: DiagnoseModeProp
         <div className="grid grid-cols-2 gap-2 text-xs text-muted w-full">
           {["Adaptive difficulty", "5–7 topic areas", "Honest assessment", "Study roadmap"].map((f) => (
             <div key={f} className="flex items-center gap-2 bg-surface border border-border rounded-md px-3 py-2">
-              <svg className="w-3 h-3 text-accent shrink-0" fill="none" viewBox="0 0 12 12" stroke="currentColor" strokeWidth="2">
+              <svg className="w-3 h-3 text-text-2 shrink-0" fill="none" viewBox="0 0 12 12" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M1.5 6.5l3 3 6-6"/>
               </svg>
               {f}
@@ -144,8 +144,7 @@ export default function DiagnoseMode({ subject, onLevelFound }: DiagnoseModeProp
         </div>
         <button
           onClick={startDiagnostic}
-          className="px-4 py-2 rounded-md text-sm text-white font-medium transition-all hover:brightness-110 shadow-glow"
-          style={{ background: "linear-gradient(135deg, #5E6AD2, #8B5CF6)" }}
+          className="px-4 py-2 rounded-md text-sm text-background font-semibold bg-white hover:bg-white/85 transition-all shadow-glow"
         >
           Begin diagnostic
         </button>
@@ -167,11 +166,8 @@ export default function DiagnoseMode({ subject, onLevelFound }: DiagnoseModeProp
             </div>
           ) : (
             <div key={i} className="flex gap-3 animate-in">
-              <div
-                className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 mt-0.5"
-                style={{ background: "linear-gradient(135deg, #5E6AD2, #8B5CF6)" }}
-              >
-                <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <div className="w-5 h-5 rounded-md bg-white shadow-glow flex items-center justify-center shrink-0 mt-0.5">
+                <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="black" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M1 5.5L3.5 8 9 2"/>
                 </svg>
               </div>
@@ -184,11 +180,8 @@ export default function DiagnoseMode({ subject, onLevelFound }: DiagnoseModeProp
 
         {loading && streamText && (
           <div className="flex gap-3 animate-in">
-            <div
-              className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 mt-0.5"
-              style={{ background: "linear-gradient(135deg, #5E6AD2, #8B5CF6)" }}
-            >
-              <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <div className="w-5 h-5 rounded-md bg-white shadow-glow flex items-center justify-center shrink-0 mt-0.5">
+              <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="black" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 5.5L3.5 8 9 2"/>
               </svg>
             </div>
@@ -200,11 +193,8 @@ export default function DiagnoseMode({ subject, onLevelFound }: DiagnoseModeProp
 
         {loading && !streamText && (
           <div className="flex gap-3 animate-in">
-            <div
-              className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 mt-0.5"
-              style={{ background: "linear-gradient(135deg, #5E6AD2, #8B5CF6)" }}
-            >
-              <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <div className="w-5 h-5 rounded-md bg-white shadow-glow flex items-center justify-center shrink-0 mt-0.5">
+              <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="black" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 5.5L3.5 8 9 2"/>
               </svg>
             </div>
@@ -215,9 +205,9 @@ export default function DiagnoseMode({ subject, onLevelFound }: DiagnoseModeProp
         )}
 
         {complete && (
-          <div className="bg-surface border border-accent/25 rounded-lg p-4 animate-in shadow-glow">
+          <div className="bg-surface border border-white/20 rounded-lg p-4 animate-in shadow-glow">
             <p className="text-sm font-medium text-text flex items-center gap-2">
-              <svg className="w-3.5 h-3.5 text-accent-2" fill="none" viewBox="0 0 14 14" stroke="currentColor" strokeWidth="2">
+              <svg className="w-3.5 h-3.5 text-text" fill="none" viewBox="0 0 14 14" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M2 7.5L5 10.5 12 3.5"/>
               </svg>
               Diagnostic complete
@@ -239,16 +229,15 @@ export default function DiagnoseMode({ subject, onLevelFound }: DiagnoseModeProp
               placeholder="Type your answer…"
               disabled={loading}
               rows={1}
-              className="flex-1 resize-none bg-surface border border-border rounded-lg px-3.5 py-2.5 text-sm text-text placeholder-muted outline-none focus:border-accent/50 focus:shadow-glow transition-all disabled:opacity-40"
+              className="flex-1 resize-none bg-surface border border-border rounded-lg px-3.5 py-2.5 text-sm text-text placeholder-muted outline-none focus:border-white/25 focus:shadow-glow transition-all disabled:opacity-40"
               style={{ minHeight: "40px", maxHeight: "120px" }}
             />
             <button
               onClick={() => sendMessage(input)}
               disabled={!input.trim() || loading}
-              className="shrink-0 w-8 h-8 rounded-md disabled:opacity-30 transition-all hover:brightness-110 flex items-center justify-center"
-              style={{ background: "linear-gradient(135deg, #5E6AD2, #8B5CF6)" }}
+              className="shrink-0 w-8 h-8 rounded-md bg-white hover:bg-white/85 disabled:opacity-30 transition-all flex items-center justify-center"
             >
-              <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 14 14" stroke="currentColor" strokeWidth="2">
+              <svg className="w-3.5 h-3.5 text-background" fill="none" viewBox="0 0 14 14" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M7 2l5 5-5 5M2 7h10" />
               </svg>
             </button>

@@ -37,11 +37,8 @@ function UserMessage({ content }: { content: string }) {
 function AssistantMessage({ content, streaming }: { content: string; streaming?: boolean }) {
   return (
     <div className="flex gap-3 animate-in">
-      <div
-        className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 mt-0.5"
-        style={{ background: "linear-gradient(135deg, #5E6AD2, #8B5CF6)" }}
-      >
-        <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <div className="w-5 h-5 rounded-md bg-white shadow-glow flex items-center justify-center shrink-0 mt-0.5">
+        <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="black" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <path d="M1 5.5L3.5 8 9 2"/>
         </svg>
       </div>
@@ -151,10 +148,10 @@ export default function ChatInterface({ subject, difficulty, mode, initialMessag
         {isEmpty && (
           <div className="flex flex-col items-center justify-center h-full gap-5 text-center">
             <div>
-              <p className="text-base font-medium text-text">
+              <p className="text-lg font-semibold tracking-[-0.02em] text-text">
                 {subject ? `${subject.name} coach` : "Select a subject to begin"}
               </p>
-              <p className="text-sm text-muted mt-1">
+              <p className="text-sm text-muted mt-1.5">
                 {subject
                   ? "Ask anything. I'll guide you through it — never just give you the answer."
                   : "Choose from the sidebar to get started."}
@@ -166,7 +163,7 @@ export default function ChatInterface({ subject, difficulty, mode, initialMessag
                   <button
                     key={p}
                     onClick={() => sendMessage(p)}
-                    className="text-xs px-3 py-1.5 rounded-md border border-border text-muted hover:border-border-2 hover:text-text-2 transition-colors duration-100 bg-surface"
+                    className="text-xs px-3 py-1.5 rounded-md border border-border text-muted hover:border-white/25 hover:text-text-2 transition-all duration-100 bg-surface"
                   >
                     {p}
                   </button>
@@ -190,11 +187,8 @@ export default function ChatInterface({ subject, difficulty, mode, initialMessag
 
         {loading && !streamingText && (
           <div className="flex gap-3 animate-in">
-            <div
-              className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 mt-0.5"
-              style={{ background: "linear-gradient(135deg, #5E6AD2, #8B5CF6)" }}
-            >
-              <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <div className="w-5 h-5 rounded-md bg-white shadow-glow flex items-center justify-center shrink-0 mt-0.5">
+              <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="black" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 5.5L3.5 8 9 2"/>
               </svg>
             </div>
@@ -220,18 +214,15 @@ export default function ChatInterface({ subject, difficulty, mode, initialMessag
             placeholder={subject ? `Ask about ${subject.name}…` : "Select a subject first…"}
             disabled={!subject || loading}
             rows={1}
-            className="flex-1 resize-none bg-surface border border-border rounded-lg px-3.5 py-2.5 text-sm text-text placeholder-muted outline-none focus:border-accent/50 focus:shadow-glow transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+            className="flex-1 resize-none bg-surface border border-border rounded-lg px-3.5 py-2.5 text-sm text-text placeholder-muted outline-none focus:border-white/25 focus:shadow-glow transition-all disabled:opacity-40 disabled:cursor-not-allowed"
             style={{ minHeight: "40px", maxHeight: "160px" }}
           />
           <button
             onClick={() => sendMessage(input)}
             disabled={!input.trim() || loading || !subject}
-            className={`shrink-0 w-8 h-8 rounded-md disabled:opacity-20 disabled:cursor-not-allowed transition-all hover:brightness-110 flex items-center justify-center ${
-              input.trim() && subject && !loading ? "" : "bg-text"
-            }`}
-            style={input.trim() && subject && !loading ? { background: "linear-gradient(135deg, #5E6AD2, #8B5CF6)" } : undefined}
+            className="shrink-0 w-8 h-8 rounded-md bg-white hover:bg-white/85 disabled:opacity-20 disabled:cursor-not-allowed transition-all flex items-center justify-center"
           >
-            <svg className={`w-3.5 h-3.5 ${input.trim() && subject && !loading ? "text-white" : "text-background"}`} fill="none" viewBox="0 0 14 14" stroke="currentColor" strokeWidth="2">
+            <svg className="w-3.5 h-3.5 text-background" fill="none" viewBox="0 0 14 14" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M7 2l5 5-5 5M2 7h10" />
             </svg>
           </button>

@@ -64,12 +64,11 @@ export default function Sidebar({
   return (
     <aside className="w-[216px] shrink-0 h-full flex flex-col border-r border-border bg-surface">
       {/* Wordmark */}
-      <div className="h-11 flex items-center gap-2 px-4 border-b border-border shrink-0">
-        <span
-          className="w-5 h-5 rounded-md shrink-0"
-          style={{ background: "linear-gradient(135deg, #5E6AD2, #8B5CF6)" }}
-        />
-        <span className="text-sm font-semibold tracking-[-0.02em] text-text">LearnAI</span>
+      <div className="h-11 flex items-center px-4 border-b border-border shrink-0">
+        <span className="flex items-center text-sm font-semibold tracking-[-0.01em] text-text">
+          Learn
+          <span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-white text-background text-2xs font-bold tracking-[0.02em]">AI</span>
+        </span>
       </div>
 
       <div className="flex-1 overflow-y-auto overflow-x-hidden py-2">
@@ -91,11 +90,11 @@ export default function Sidebar({
                 onClick={() => onModeChange(m.id)}
                 className={`w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-sm transition-all duration-150 ${
                   mode === m.id
-                    ? "bg-accent/12 text-text border border-accent/25"
+                    ? "bg-white text-background shadow-glow"
                     : "text-muted hover:text-text-2 hover:bg-surface-2 border border-transparent"
                 }`}
               >
-                <span className={mode === m.id ? "text-accent-2" : ""}>{m.icon}</span>
+                {m.icon}
                 <span className={mode === m.id ? "font-medium" : ""}>{m.label}</span>
               </button>
             ))}
@@ -119,7 +118,7 @@ export default function Sidebar({
                 }`}
               >
                 <span className={`w-1.5 h-1.5 rounded-full shrink-0 transition-colors ${
-                  difficulty === d ? "bg-accent-2" : "bg-subtle"
+                  difficulty === d ? "bg-white" : "bg-subtle"
                 }`} />
                 <span className={difficulty === d ? "font-medium" : ""}>{DIFFICULTY_LABELS[d]}</span>
               </button>

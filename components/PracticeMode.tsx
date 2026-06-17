@@ -110,10 +110,10 @@ function MCQPractice({ subject, difficulty }: { subject: Subject; difficulty: Di
     return (
       <div className="flex flex-col items-center justify-center h-full gap-4 text-center">
         <div>
-          <p className="text-base font-medium text-text">{subject.name} — MCQ</p>
+          <p className="text-lg font-semibold tracking-[-0.02em] text-text">{subject.name} — MCQ</p>
           <p className="text-sm text-text-2 mt-1">AP-style multiple choice · {difficulty}</p>
         </div>
-        <button onClick={generate} className="px-4 py-2 rounded-md text-white text-sm font-medium hover:brightness-110 shadow-glow transition-all" style={{ background: "linear-gradient(135deg, #5E6AD2, #8B5CF6)" }}>
+        <button onClick={generate} className="px-4 py-2 rounded-md text-background font-semibold text-sm bg-white hover:bg-white/85 shadow-glow transition-all">
           Generate question
         </button>
       </div>
@@ -150,14 +150,14 @@ function MCQPractice({ subject, difficulty }: { subject: Subject; difficulty: Di
                 disabled={!!state.selected || state.loadingFeedback}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg border text-sm text-left transition-all duration-100 ${
                   isSelected
-                    ? "border-accent/40 bg-accent/10 text-text shadow-glow"
+                    ? "border-white/25 bg-white/10 text-text shadow-glow"
                     : !state.selected
                     ? "border-border bg-surface hover:border-border-2 hover:bg-surface-2 text-text-2 hover:text-text"
                     : "border-border bg-surface text-muted opacity-50"
                 }`}
               >
                 <span className={`w-6 h-6 rounded-md border flex items-center justify-center text-xs font-mono shrink-0 transition-colors ${
-                  isSelected ? "border-accent/40 bg-accent/15 text-accent-2" : "border-border text-muted"
+                  isSelected ? "border-white/25 bg-white/15 text-text" : "border-border text-muted"
                 }`}>
                   {letter}
                 </span>
@@ -246,10 +246,10 @@ function FRQPractice({ subject, difficulty }: { subject: Subject; difficulty: Di
     return (
       <div className="flex flex-col items-center justify-center h-full gap-4 text-center">
         <div>
-          <p className="text-base font-medium text-text">{subject.name} — FRQ</p>
+          <p className="text-lg font-semibold tracking-[-0.02em] text-text">{subject.name} — FRQ</p>
           <p className="text-sm text-text-2 mt-1">AP-style free response · {difficulty}</p>
         </div>
-        <button onClick={generate} className="px-4 py-2 rounded-md text-white text-sm font-medium hover:brightness-110 shadow-glow transition-all" style={{ background: "linear-gradient(135deg, #5E6AD2, #8B5CF6)" }}>
+        <button onClick={generate} className="px-4 py-2 rounded-md text-background font-semibold text-sm bg-white hover:bg-white/85 shadow-glow transition-all">
           Generate question
         </button>
       </div>
@@ -284,7 +284,7 @@ function FRQPractice({ subject, difficulty }: { subject: Subject; difficulty: Di
           <button
             onClick={() => submitPart(part)}
             disabled={!state.answers[part]?.trim() || state.loading[part]}
-            className="px-3 py-1.5 rounded-md border border-border text-sm text-muted hover:border-accent/40 hover:text-text-2 disabled:opacity-40 transition-colors"
+            className="px-3 py-1.5 rounded-md border border-border text-sm text-muted hover:border-white/25 hover:text-text-2 disabled:opacity-40 transition-colors"
           >
             {state.loading[part] ? "Checking…" : "Submit"}
           </button>
@@ -312,7 +312,7 @@ function FRQPractice({ subject, difficulty }: { subject: Subject; difficulty: Di
             className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-text placeholder-muted outline-none focus:border-border-2 transition-colors resize-none"
           />
           <button onClick={() => submitPart("a")} disabled={!state.answers["a"]?.trim() || state.loading["a"]}
-            className="px-3 py-1.5 rounded-md border border-border text-sm text-muted hover:border-accent/40 hover:text-text-2 disabled:opacity-40 transition-colors">
+            className="px-3 py-1.5 rounded-md border border-border text-sm text-muted hover:border-white/25 hover:text-text-2 disabled:opacity-40 transition-colors">
             {state.loading["a"] ? "Checking…" : "Submit"}
           </button>
           {(state.feedback["a"] || state.feedbackStream["a"]) && (
@@ -421,11 +421,11 @@ function OpenPractice({ subject, difficulty }: { subject: Subject; difficulty: D
     return (
       <div className="flex flex-col items-center justify-center h-full gap-4 text-center">
         <div>
-          <p className="text-base font-medium text-text">{subject.name}</p>
+          <p className="text-lg font-semibold tracking-[-0.02em] text-text">{subject.name}</p>
           <p className="text-sm text-text-2 mt-1 capitalize">{difficulty} · 3 progressive hints</p>
         </div>
         <button onClick={generateProblem} disabled={loading}
-          className="px-4 py-2 rounded-md text-white text-sm font-medium hover:brightness-110 disabled:opacity-50 shadow-glow transition-all" style={{ background: "linear-gradient(135deg, #5E6AD2, #8B5CF6)" }}>
+          className="px-4 py-2 rounded-md text-background font-semibold text-sm bg-white hover:bg-white/85 disabled:opacity-50 shadow-glow transition-all">
           {loading ? "Generating…" : "Generate problem"}
         </button>
       </div>
@@ -457,7 +457,7 @@ function OpenPractice({ subject, difficulty }: { subject: Subject; difficulty: D
           className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-text placeholder-muted outline-none focus:border-border-2 transition-colors resize-none"
         />
         <button onClick={checkAnswer} disabled={!state.userAnswer.trim() || loading}
-          className="px-3 py-1.5 rounded-md border border-border text-sm text-muted hover:border-accent/40 hover:text-text-2 disabled:opacity-40 transition-colors">
+          className="px-3 py-1.5 rounded-md border border-border text-sm text-muted hover:border-white/25 hover:text-text-2 disabled:opacity-40 transition-colors">
           {loadingWhat === "feedback" ? "Checking…" : "Submit"}
         </button>
         {(state.feedback || (loadingWhat === "feedback" && stream)) && (

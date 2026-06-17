@@ -55,21 +55,37 @@ export default function CoachPage() {
   }, [reset]);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      <Sidebar
-        subject={subject}
-        onSubjectChange={handleSubjectChange}
-        difficulty={difficulty}
-        onDifficultyChange={setDifficulty}
-        mode={mode}
-        onModeChange={handleModeChange}
-        recentSessions={recentSessions}
-        onSessionClick={(s) => { handleModeChange(s.mode); }}
+    <div className="relative flex h-screen overflow-hidden bg-background">
+      <div
+        className="fixed inset-0 pointer-events-none z-0"
+        style={{
+          backgroundImage: "radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+        }}
+      />
+      <div
+        className="fixed inset-0 pointer-events-none z-0"
+        style={{
+          background: "radial-gradient(ellipse 70% 50% at 50% -10%, rgba(255,255,255,0.05) 0%, transparent 65%)",
+        }}
       />
 
-      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-        <header className="h-11 shrink-0 border-b border-border flex items-center px-5 gap-2 bg-gradient-to-b from-surface/40 to-transparent">
-          <span className="w-1.5 h-1.5 rounded-full bg-accent-2 shrink-0" />
+      <div className="relative z-10 h-full shrink-0">
+        <Sidebar
+          subject={subject}
+          onSubjectChange={handleSubjectChange}
+          difficulty={difficulty}
+          onDifficultyChange={setDifficulty}
+          mode={mode}
+          onModeChange={handleModeChange}
+          recentSessions={recentSessions}
+          onSessionClick={(s) => { handleModeChange(s.mode); }}
+        />
+      </div>
+
+      <div className="relative z-10 flex-1 flex flex-col overflow-hidden min-w-0">
+        <header className="h-11 shrink-0 border-b border-border flex items-center px-5 gap-2 bg-gradient-to-b from-surface/40 to-transparent backdrop-blur-sm">
+          <span className="w-1.5 h-1.5 rounded-full bg-white shrink-0" />
           <span className="text-sm font-medium text-text">{MODE_LABELS[mode]}</span>
           {subject && (
             <>
