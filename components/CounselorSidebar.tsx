@@ -62,7 +62,7 @@ export default function CounselorSidebar({
                 onClick={() => onViewChange(v.id)}
                 className={`w-full flex items-center px-2.5 py-1.5 rounded-lg text-sm text-left transition-all duration-150 ${
                   view === v.id
-                    ? "bg-white text-background shadow-glow font-medium"
+                    ? "bg-white/80 backdrop-blur-sm text-background shadow-glow font-medium"
                     : "text-muted hover:text-text-2 hover:bg-surface-2 border border-transparent"
                 }`}
               >

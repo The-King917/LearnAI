@@ -101,7 +101,7 @@ export default function Sidebar({
                 onClick={() => onModeChange(m.id)}
                 className={`w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-sm transition-all duration-150 ${
                   mode === m.id
-                    ? "bg-white text-background shadow-glow"
+                    ? "bg-white/80 backdrop-blur-sm text-background shadow-glow"
                     : "text-muted hover:text-text-2 hover:bg-surface-2 border border-transparent"
                 }`}
               >
