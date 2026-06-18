@@ -17,8 +17,15 @@ export default function PricingPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(kind === "team" ? { kind, seats } : { kind }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Something went wrong");
+      const raw = await res.text();
+      let data: { error?: string; url?: string };
+      try {
+        data = JSON.parse(raw);
+      } catch {
+        throw new Error(`Server returned ${res.status}: ${raw.slice(0, 200)}`);
+      }
+      if (!res.ok) throw new Error(data.error ?? `Server returned ${res.status}`);
+      if (!data.url) throw new Error("Server did not return a checkout URL");
       window.location.href = data.url;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
