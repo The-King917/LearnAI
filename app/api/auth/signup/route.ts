@@ -31,6 +31,9 @@ export async function POST(req: NextRequest) {
       select: { id: true, email: true, name: true },
     });
 
+    const totalAccounts = await prisma.user.count();
+    console.log(`[api/auth/signup] new account created (${normalizedEmail}) — total accounts: ${totalAccounts}`);
+
     return Response.json({ user });
   } catch (err: unknown) {
     console.error("[api/auth/signup]", err);
