@@ -5,11 +5,13 @@ export const FREE_MESSAGE_LIMIT = 30;
 export const TEAM_MIN_SEATS = 10;
 export const TEAM_SEAT_PRICE = 50;
 export const PRO_PRICE = 20;
+export const FOUNDER_SEAT_LIMIT = 5;
 
 export type EffectivePlan = "FREE" | "PRO" | "TEAM";
 
 export function getEffectivePlan(user: User & { organization: Organization | null }): EffectivePlan {
   if (user.organization?.subscriptionStatus === "active") return "TEAM";
+  if (user.isFounder) return "PRO";
   if (user.plan === "PRO" && user.subscriptionStatus === "active") return "PRO";
   return "FREE";
 }

@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 
 interface AccountData {
   plan: "FREE" | "PRO" | "TEAM";
+  isFounder: boolean;
   monthlyMessageCount: number;
   freeMessageLimit: number;
   organization: { name: string; seatLimit: number; memberCount: number; isOwner: boolean } | null;
@@ -123,7 +124,12 @@ export default function AccountPage() {
           <div className="space-y-6">
             <div className="p-5 rounded-xl border border-border bg-surface">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-text">{data.plan} plan</span>
+                <span className="text-sm font-semibold text-text">
+                  {data.plan} plan
+                  {data.isFounder && (
+                    <span className="ml-2 px-1.5 py-0.5 rounded-[3px] bg-white text-background text-2xs font-bold tracking-[0.02em]">FOUNDER · FREE FOREVER</span>
+                  )}
+                </span>
                 {data.plan === "FREE" && (
                   <Link href="/pricing" className="text-xs text-muted hover:text-text-2 underline">Upgrade</Link>
                 )}
@@ -141,7 +147,7 @@ export default function AccountPage() {
                 </div>
               )}
 
-              {(data.plan === "PRO" || data.organization?.isOwner) && (
+              {!data.isFounder && (data.plan === "PRO" || data.organization?.isOwner) && (
                 <button
                   onClick={openPortal}
                   disabled={portalLoading}

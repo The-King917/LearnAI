@@ -18,6 +18,7 @@ model User {
   chatSessions       ChatSession[]
 
   plan                 String        @default("FREE") // "FREE" | "PRO"
+  isFounder            Boolean       @default(false) // first 5 signups: free PRO access forever
   stripeCustomerId     String?       @unique
   stripeSubscriptionId String?       @unique
   subscriptionStatus   String?

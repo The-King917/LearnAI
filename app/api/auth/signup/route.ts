@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { FOUNDER_SEAT_LIMIT } from "@/lib/billing";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -22,16 +23,23 @@ export async function POST(req: NextRequest) {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    const user = await prisma.user.create({
-      data: {
-        email: normalizedEmail,
-        name: typeof name === "string" && name.trim() ? name.trim() : null,
-        passwordHash,
-      },
-      select: { id: true, email: true, name: true },
+    const { user, totalAccounts } = await prisma.$transaction(async (tx) => {
+      const existingCount = await tx.user.count();
+      const isFounder = existingCount < FOUNDER_SEAT_LIMIT;
+
+      const created = await tx.user.create({
+        data: {
+          email: normalizedEmail,
+          name: typeof name === "string" && name.trim() ? name.trim() : null,
+          passwordHash,
+          ...(isFounder ? { isFounder: true, plan: "PRO" } : {}),
+        },
+        select: { id: true, email: true, name: true },
+      });
+
+      return { user: created, totalAccounts: existingCount + 1 };
     });
 
-    const totalAccounts = await prisma.user.count();
     console.log(`[api/auth/signup] new account created (${normalizedEmail}) — total accounts: ${totalAccounts}`);
 
     return Response.json({ user });

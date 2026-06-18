@@ -21,6 +21,7 @@ export async function GET() {
 
   return Response.json({
     plan: getEffectivePlan(user),
+    isFounder: user.isFounder,
     monthlyMessageCount: user.monthlyMessageCount,
     freeMessageLimit: FREE_MESSAGE_LIMIT,
     organization: user.organization
