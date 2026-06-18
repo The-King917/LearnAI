@@ -123,12 +123,20 @@ export default function LandingPage() {
           Poly
           <span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-white text-background text-2xs font-bold tracking-[0.02em]">Teach</span>
         </span>
-        <Link
-          href="/coach"
-          className="text-sm font-medium text-muted hover:text-text transition-colors duration-150"
-        >
-          Open app →
-        </Link>
+        <div className="flex items-center gap-6">
+          <Link
+            href="/pricing"
+            className="text-sm font-medium text-muted hover:text-text transition-colors duration-150"
+          >
+            Pricing
+          </Link>
+          <Link
+            href="/coach"
+            className="text-sm font-medium text-muted hover:text-text transition-colors duration-150"
+          >
+            Open app →
+          </Link>
+        </div>
       </nav>
 
       {/* Hero */}

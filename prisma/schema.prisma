@@ -16,6 +16,28 @@ model User {
   masteries          SubjectMastery[]
   applicationProfile ApplicationProfile?
   chatSessions       ChatSession[]
+
+  plan                 String        @default("FREE") // "FREE" | "PRO"
+  stripeCustomerId     String?       @unique
+  stripeSubscriptionId String?       @unique
+  subscriptionStatus   String?
+  monthlyMessageCount  Int           @default(0)
+  usagePeriodStart     DateTime      @default(now())
+  organizationId       String?
+  organization         Organization? @relation(fields: [organizationId], references: [id])
+}
+
+model Organization {
+  id                   String   @id @default(cuid())
+  name                 String
+  ownerId              String
+  stripeCustomerId     String?  @unique
+  stripeSubscriptionId String?  @unique
+  subscriptionStatus   String?
+  seatLimit            Int      @default(10)
+  inviteCode           String   @unique @default(cuid())
+  createdAt            DateTime @default(now())
+  members              User[]
 }
 
 model SubjectMastery {

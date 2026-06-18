@@ -183,9 +183,15 @@ export default function Sidebar({
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm text-text truncate">{session.user.name ?? session.user.email}</p>
-              <button onClick={() => signOut()} className="text-2xs text-muted hover:text-text-2 transition-colors">
-                Sign out
-              </button>
+              <div className="flex items-center gap-2">
+                <Link href="/account" className="text-2xs text-muted hover:text-text-2 transition-colors">
+                  Account
+                </Link>
+                <span className="text-2xs text-subtle">·</span>
+                <button onClick={() => signOut()} className="text-2xs text-muted hover:text-text-2 transition-colors">
+                  Sign out
+                </button>
+              </div>
             </div>
           </div>
         ) : (

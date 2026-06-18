@@ -1,10 +1,46 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { checkAndConsumeFreeMessage, getEffectivePlan } from "@/lib/billing";
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 export async function POST(req: NextRequest) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return new Response(JSON.stringify({ error: "Sign in to use the coach." }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      include: { organization: true },
+    });
+    if (!user) {
+      return new Response(JSON.stringify({ error: "Sign in to use the coach." }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    if (getEffectivePlan(user) === "FREE") {
+      const allowed = await checkAndConsumeFreeMessage(user.id);
+      if (!allowed) {
+        return new Response(
+          JSON.stringify({
+            error: "You've used your 30 free messages this month. Upgrade to Pro for unlimited coaching.",
+            code: "LIMIT_REACHED",
+          }),
+          { status: 403, headers: { "Content-Type": "application/json" } }
+        );
+      }
+    }
+
     const { messages, systemPrompt } = await req.json();
 
     if (!messages || !Array.isArray(messages)) {

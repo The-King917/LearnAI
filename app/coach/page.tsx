@@ -7,6 +7,7 @@ import ChatInterface from "@/components/ChatInterface";
 import PracticeMode from "@/components/PracticeMode";
 import DiagnoseMode from "@/components/DiagnoseMode";
 import ProgressIndicator from "@/components/ProgressIndicator";
+import AuthModal from "@/components/AuthModal";
 import { Subject, getSubjectById } from "@/lib/subjects";
 import { Difficulty } from "@/lib/prompts";
 import { ResultTag, applyPracticeResult, applyDiagnoseResult } from "@/lib/mastery";
@@ -54,6 +55,7 @@ export default function CoachPage() {
   const [mastery, setMastery] = useState<Record<string, MasteryRecord>>({});
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [chatInitialMessages, setChatInitialMessages] = useState<ChatMessage[] | undefined>(undefined);
+  const [authOpen, setAuthOpen] = useState(false);
 
   const signedIn = status === "authenticated" && !!session;
 
@@ -252,24 +254,43 @@ export default function CoachPage() {
         </header>
 
         <div className="flex-1 overflow-hidden">
-          {mode === "chat" && (
-            <ChatInterface
-              key={key}
-              subject={subject}
-              difficulty={difficulty}
-              mode="chat"
-              initialMessages={chatInitialMessages}
-              onNewMessage={persistMessage}
-            />
-          )}
-          {mode === "practice" && (
-            <PracticeMode key={key} subject={subject} difficulty={difficulty} onResult={recordPracticeResult} />
-          )}
-          {mode === "diagnose" && (
-            <DiagnoseMode key={key} subject={subject} onLevelFound={handleDiagnoseComplete} />
+          {status === "loading" ? null : !signedIn ? (
+            <div className="flex flex-col items-center justify-center h-full gap-4 text-center px-6">
+              <div>
+                <p className="text-lg font-semibold tracking-[-0.02em] text-text">Sign in to start coaching</p>
+                <p className="text-sm text-muted mt-1.5">Create a free account to chat with the coach, track progress, and save sessions.</p>
+              </div>
+              <button
+                onClick={() => setAuthOpen(true)}
+                className="px-5 py-2.5 rounded-lg text-sm font-semibold bg-white text-background hover:bg-white/85 transition-all duration-150"
+              >
+                Sign in / Sign up
+              </button>
+            </div>
+          ) : (
+            <>
+              {mode === "chat" && (
+                <ChatInterface
+                  key={key}
+                  subject={subject}
+                  difficulty={difficulty}
+                  mode="chat"
+                  initialMessages={chatInitialMessages}
+                  onNewMessage={persistMessage}
+                />
+              )}
+              {mode === "practice" && (
+                <PracticeMode key={key} subject={subject} difficulty={difficulty} onResult={recordPracticeResult} />
+              )}
+              {mode === "diagnose" && (
+                <DiagnoseMode key={key} subject={subject} onLevelFound={handleDiagnoseComplete} />
+              )}
+            </>
           )}
         </div>
       </div>
+
+      {authOpen && <AuthModal onClose={() => setAuthOpen(false)} />}
     </div>
   );
 }
