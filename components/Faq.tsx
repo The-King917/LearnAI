@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Reveal from "./Reveal";
+import TypeText from "./TypeText";
 
 const FAQ_ITEMS = [
   {
@@ -41,7 +42,9 @@ function FaqRow({ q, a, delay }: { q: string; a: string; delay: number }) {
           aria-expanded={open}
           className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left"
         >
-          <span className="text-sm font-medium text-text">{q}</span>
+          <span className="text-sm font-medium text-text">
+            <TypeText text={q} delay={delay} />
+          </span>
           <svg
             width="14"
             height="14"
@@ -76,7 +79,9 @@ export default function Faq() {
       <div className="max-w-2xl mx-auto">
         <Reveal transition={{ duration: 0.5, delay: 0.1 }}>
           <div className="text-center mb-12">
-            <h2 className="text-xl font-semibold tracking-[-0.025em]">Frequently asked questions</h2>
+            <h2 className="text-xl font-semibold tracking-[-0.025em]">
+              <TypeText text="Frequently asked questions" delay={0.1} />
+            </h2>
           </div>
         </Reveal>
         <div className="space-y-3">

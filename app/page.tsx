@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import LandingDemo from "@/components/LandingDemo";
 import Reveal from "@/components/Reveal";
 import Faq from "@/components/Faq";
+import TypeText from "@/components/TypeText";
 
 const FEATURES = [
   {
@@ -145,18 +146,13 @@ export default function LandingPage() {
       {/* Hero */}
       <section className="relative z-10 flex flex-col items-center text-center px-6 pt-28 pb-24">
         <h1
-          className="text-[clamp(36px,7vw,80px)] font-semibold tracking-[-0.035em] leading-[1.06] max-w-3xl"
+          className="text-[clamp(36px,7vw,80px)] font-semibold tracking-[-0.035em] leading-[1.06] max-w-3xl text-text-2"
           style={{ animation: "fadeSlideUp 0.5s ease-out 0.2s both" }}
         >
           {typedPlain}
           <br />
-          <span
-            className="italic"
-            style={{ textShadow: "0 0 30px rgba(255,255,255,0.35)" }}
-          >
-            {typedItalic}
-          </span>
-          <span className="text-muted">{typedMuted}</span>
+          {typedItalic}
+          {typedMuted}
         </h1>
 
         <p
@@ -218,31 +214,42 @@ export default function LandingPage() {
       >
         <div className="text-center mb-16">
           <Reveal transition={{ duration: 0.5, delay: 0.1 }}>
-            <h2 className="text-2xl font-semibold tracking-[-0.025em]">Everything you need to level up</h2>
+            <h2 className="text-2xl font-semibold tracking-[-0.025em]">
+              <TypeText text="Everything you need to level up" delay={0.1} />
+            </h2>
           </Reveal>
           <Reveal transition={{ duration: 0.5, delay: 0.2 }}>
-            <p className="text-sm text-muted mt-3">Built around one principle: understanding beats memorization.</p>
+            <p className="text-sm text-muted mt-3">
+              <TypeText text="Built around one principle: understanding beats memorization." delay={0.2} />
+            </p>
           </Reveal>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {FEATURES.map((f, i) => (
-            <Reveal
-              key={f.title}
-              y={32}
-              transition={{ type: "spring", stiffness: 400, damping: 30, delay: 0.1 + i * 0.08 }}
-            >
-              <div
-                className="group p-6 rounded-xl border border-border bg-surface hover:border-border-2 hover:bg-surface-2 transition-all duration-200"
+          {FEATURES.map((f, i) => {
+            const d = 0.1 + i * 0.08;
+            return (
+              <Reveal
+                key={f.title}
+                y={32}
+                transition={{ type: "spring", stiffness: 400, damping: 30, delay: d }}
               >
-                <div className="w-9 h-9 rounded-lg border border-border bg-surface-2 group-hover:border-border-2 flex items-center justify-center text-muted group-hover:text-text-2 mb-4 transition-colors duration-200">
-                  {f.icon}
+                <div
+                  className="group p-6 rounded-xl border border-border bg-surface hover:border-border-2 hover:bg-surface-2 transition-all duration-200"
+                >
+                  <div className="w-9 h-9 rounded-lg border border-border bg-surface-2 group-hover:border-border-2 flex items-center justify-center text-muted group-hover:text-text-2 mb-4 transition-colors duration-200">
+                    {f.icon}
+                  </div>
+                  <h3 className="text-sm font-semibold text-text mb-2">
+                    <TypeText text={f.title} delay={d} />
+                  </h3>
+                  <p className="text-sm text-muted leading-relaxed">
+                    <TypeText text={f.desc} delay={d + 0.2} />
+                  </p>
                 </div>
-                <h3 className="text-sm font-semibold text-text mb-2">{f.title}</h3>
-                <p className="text-sm text-muted leading-relaxed">{f.desc}</p>
-              </div>
-            </Reveal>
-          ))}
+              </Reveal>
+            );
+          })}
         </div>
       </section>
 
@@ -250,7 +257,9 @@ export default function LandingPage() {
       <section className="relative z-10 px-8 py-20 border-t border-border">
         <div className="max-w-5xl mx-auto">
           <Reveal transition={{ duration: 0.5, delay: 0.1 }}>
-            <h2 className="text-xl font-semibold tracking-[-0.025em] text-center mb-12">How it works</h2>
+            <h2 className="text-xl font-semibold tracking-[-0.025em] text-center mb-12">
+              <TypeText text="How it works" delay={0.1} />
+            </h2>
           </Reveal>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-10">
@@ -270,21 +279,28 @@ export default function LandingPage() {
                   title: "Work through problems together",
                   desc: "PolyTeach never gives direct answers. It asks the question that moves you forward — building genuine mastery.",
                 },
-              ].map((item, i) => (
-                <Reveal key={item.step} transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}>
-                  <div className="flex gap-8">
-                    <span
-                      className="text-2xl font-semibold tracking-[-0.04em] shrink-0 w-10 text-right text-white/15"
-                    >
-                      {item.step}
-                    </span>
-                    <div>
-                      <h3 className="text-sm font-semibold text-text mb-1.5">{item.title}</h3>
-                      <p className="text-sm text-muted leading-relaxed">{item.desc}</p>
+              ].map((item, i) => {
+                const d = 0.1 + i * 0.1;
+                return (
+                  <Reveal key={item.step} transition={{ duration: 0.5, delay: d }}>
+                    <div className="flex gap-8">
+                      <span
+                        className="text-2xl font-semibold tracking-[-0.04em] shrink-0 w-10 text-right text-white/15"
+                      >
+                        {item.step}
+                      </span>
+                      <div>
+                        <h3 className="text-sm font-semibold text-text mb-1.5">
+                          <TypeText text={item.title} delay={d} />
+                        </h3>
+                        <p className="text-sm text-muted leading-relaxed">
+                          <TypeText text={item.desc} delay={d + 0.2} />
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </Reveal>
-              ))}
+                  </Reveal>
+                );
+              })}
             </div>
             <Reveal y={40} transition={{ type: "spring", stiffness: 400, damping: 30, delay: 0.1 }}>
               <LandingDemo />
@@ -300,10 +316,10 @@ export default function LandingPage() {
       <section className="relative z-10 px-8 py-28 text-center border-t border-border">
         <Reveal transition={{ duration: 0.6, ease: "easeOut" }}>
           <h2 className="text-[clamp(24px,4vw,44px)] font-semibold tracking-[-0.03em] mb-5">
-            Ready to actually understand?
+            <TypeText text="Ready to actually understand?" />
           </h2>
           <p className="text-sm text-muted mb-8 max-w-sm mx-auto">
-            Stop looking up answers. Start building the intuition that wins competitions.
+            <TypeText text="Stop looking up answers. Start building the intuition that wins competitions." delay={0.3} />
           </p>
         </Reveal>
         <Reveal transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}>
