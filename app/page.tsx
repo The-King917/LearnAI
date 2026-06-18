@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const FEATURES = [
   {
@@ -61,6 +62,15 @@ const SUBJECTS_MARQUEE = [
 ];
 
 export default function LandingPage() {
+  const [accountCount, setAccountCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch("/api/stats")
+      .then((res) => res.json())
+      .then((data) => setAccountCount(data.totalAccounts))
+      .catch(() => {});
+  }, []);
+
   return (
     <div className="min-h-screen bg-background text-text">
       {/* Background */}
@@ -147,6 +157,15 @@ export default function LandingPage() {
             See how it works
           </Link>
         </div>
+
+        {accountCount !== null && (
+          <p
+            className="mt-8 text-xs text-subtle"
+            style={{ animation: "fadeSlideUp 0.5s ease-out 0.5s both" }}
+          >
+            Joined by {accountCount.toLocaleString()} students
+          </p>
+        )}
       </section>
 
       {/* Subjects marquee */}
