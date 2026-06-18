@@ -15,6 +15,8 @@ interface ChatInterfaceProps {
   difficulty?: Difficulty;
   mode?: "chat" | "practice" | "diagnose";
   initialMessage?: string;
+  initialMessages?: Message[];
+  onNewMessage?: (message: Message) => void;
   systemPrompt?: string;
   emptyTitle?: string;
   emptySubtitle?: string;
@@ -55,10 +57,10 @@ function AssistantMessage({ content, streaming }: { content: string; streaming?:
 }
 
 export default function ChatInterface({
-  subject, difficulty, mode, initialMessage, systemPrompt: systemPromptOverride,
+  subject, difficulty, mode, initialMessage, initialMessages, onNewMessage, systemPrompt: systemPromptOverride,
   emptyTitle, emptySubtitle, quickPrompts, placeholder,
 }: ChatInterfaceProps) {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>(initialMessages ?? []);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [streamingText, setStreamingText] = useState("");
@@ -79,6 +81,7 @@ export default function ChatInterface({
       const userMsg: Message = { role: "user", content: text.trim() };
       const newMessages = [...messages, userMsg];
       setMessages(newMessages);
+      onNewMessage?.(userMsg);
       setInput("");
       setLoading(true);
       setStreamingText("");
@@ -118,6 +121,7 @@ export default function ChatInterface({
 
         setMessages((prev) => [...prev, { role: "assistant", content: full }]);
         setStreamingText("");
+        onNewMessage?.({ role: "assistant", content: full });
       } catch (err: unknown) {
         if ((err as Error).name === "AbortError") return;
         const msg = err instanceof Error ? err.message : "Something went wrong";
@@ -127,7 +131,7 @@ export default function ChatInterface({
         setLoading(false);
       }
     },
-    [loading, messages, systemPrompt]
+    [loading, messages, systemPrompt, onNewMessage]
   );
 
   useEffect(() => {

@@ -12,6 +12,7 @@ type Mode = "chat" | "practice" | "diagnose";
 
 interface Session {
   id: string;
+  subjectId: string;
   subject: string;
   mode: Mode;
   preview: string;

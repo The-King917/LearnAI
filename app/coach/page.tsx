@@ -7,7 +7,7 @@ import ChatInterface from "@/components/ChatInterface";
 import PracticeMode from "@/components/PracticeMode";
 import DiagnoseMode from "@/components/DiagnoseMode";
 import ProgressIndicator from "@/components/ProgressIndicator";
-import { Subject } from "@/lib/subjects";
+import { Subject, getSubjectById } from "@/lib/subjects";
 import { Difficulty } from "@/lib/prompts";
 import { ResultTag, applyPracticeResult, applyDiagnoseResult } from "@/lib/mastery";
 
@@ -18,10 +18,16 @@ interface MasteryRecord {
   diagnosedLevel?: string | null;
 }
 
+interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
 type Mode = "chat" | "practice" | "diagnose";
 
 interface Session {
   id: string;
+  subjectId: string;
   subject: string;
   mode: Mode;
   preview: string;
@@ -34,6 +40,10 @@ const MODE_LABELS: Record<Mode, string> = {
   diagnose: "Diagnose",
 };
 
+function formatTime(d: Date): string {
+  return `${d.getHours() % 12 || 12}:${d.getMinutes().toString().padStart(2, "0")}${d.getHours() >= 12 ? "pm" : "am"}`;
+}
+
 export default function CoachPage() {
   const { data: session, status } = useSession();
   const [subject, setSubject] = useState<Subject | null>(null);
@@ -42,6 +52,8 @@ export default function CoachPage() {
   const [recentSessions, setRecentSessions] = useState<Session[]>([]);
   const [key, setKey] = useState(0);
   const [mastery, setMastery] = useState<Record<string, MasteryRecord>>({});
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [chatInitialMessages, setChatInitialMessages] = useState<ChatMessage[] | undefined>(undefined);
 
   const signedIn = status === "authenticated" && !!session;
 
@@ -55,6 +67,24 @@ export default function CoachPage() {
           next[m.subjectId] = { mastery: m.mastery, attempts: m.attempts, correct: m.correct, diagnosedLevel: m.diagnosedLevel };
         }
         setMastery(next);
+      })
+      .catch(() => {});
+  }, [signedIn]);
+
+  useEffect(() => {
+    if (!signedIn) { setRecentSessions([]); return; }
+    fetch("/api/sessions")
+      .then((r) => r.json())
+      .then((data) => {
+        const sessions: Session[] = (data.sessions ?? []).map((s: { id: string; subjectId: string; mode: Mode; updatedAt: string }) => ({
+          id: s.id,
+          subjectId: s.subjectId,
+          subject: getSubjectById(s.subjectId)?.name ?? s.subjectId,
+          mode: s.mode,
+          preview: `${MODE_LABELS[s.mode]} session`,
+          time: formatTime(new Date(s.updatedAt)),
+        }));
+        setRecentSessions(sessions);
       })
       .catch(() => {});
   }, [signedIn]);
@@ -102,27 +132,80 @@ export default function CoachPage() {
       .catch(() => {});
   }, [signedIn]);
 
+  const startSession = useCallback((subjectId: string, subjectName: string, m: Mode) => {
+    setChatInitialMessages(undefined);
+    if (signedIn) {
+      setSessionId(null);
+      fetch("/api/sessions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ subjectId, mode: m }),
+      })
+        .then((r) => r.json())
+        .then((data) => {
+          if (!data.session) return;
+          setSessionId(data.session.id);
+          setRecentSessions((prev) => [
+            { id: data.session.id, subjectId, subject: subjectName, mode: m, preview: `${MODE_LABELS[m]} session`, time: formatTime(new Date(data.session.updatedAt)) },
+            ...prev.filter((p) => p.id !== data.session.id).slice(0, 9),
+          ]);
+        })
+        .catch(() => {});
+    } else {
+      setSessionId(null);
+      setRecentSessions((prev) => [
+        { id: `${Date.now()}`, subjectId, subject: subjectName, mode: m, preview: `${MODE_LABELS[m]} session`, time: formatTime(new Date()) },
+        ...prev.slice(0, 9),
+      ]);
+    }
+  }, [signedIn]);
+
   const handleSubjectChange = useCallback((s: Subject) => {
     setSubject(s);
     reset();
-    const now = new Date();
-    const time = `${now.getHours() % 12 || 12}:${now.getMinutes().toString().padStart(2, "0")}${now.getHours() >= 12 ? "pm" : "am"}`;
-    setRecentSessions((prev) => [
-      { id: `${Date.now()}`, subject: s.name, mode, preview: `${MODE_LABELS[mode]} session`, time },
-      ...prev.slice(0, 9),
-    ]);
-  }, [mode, reset]);
+    startSession(s.id, s.name, mode);
+  }, [mode, reset, startSession]);
 
   const handleModeChange = useCallback((m: Mode) => {
     setMode(m);
     reset();
-  }, [reset]);
+    if (subject) startSession(subject.id, subject.name, m);
+  }, [reset, subject, startSession]);
+
+  const handleSessionClick = useCallback((s: Session) => {
+    const subj = getSubjectById(s.subjectId);
+    if (subj) setSubject(subj);
+    setMode(s.mode);
+    setSessionId(s.id);
+    if (s.mode === "chat" && signedIn) {
+      fetch(`/api/sessions/${s.id}`)
+        .then((r) => r.json())
+        .then((data) => { setChatInitialMessages(data.session?.messages ?? []); reset(); })
+        .catch(() => { setChatInitialMessages(undefined); reset(); });
+    } else {
+      setChatInitialMessages(undefined);
+      reset();
+    }
+  }, [signedIn, reset]);
+
+  const persistMessage = useCallback((message: ChatMessage) => {
+    if (!signedIn || !sessionId) return;
+    fetch(`/api/sessions/${sessionId}/messages`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(message),
+    }).catch(() => {});
+  }, [signedIn, sessionId]);
 
   const handleDiagnoseComplete = useCallback((level: Difficulty) => {
     setDifficulty(level);
     if (subject) recordDiagnoseResult(subject.id, level);
-    setTimeout(() => { setMode("chat"); reset(); }, 1800);
-  }, [reset, subject, recordDiagnoseResult]);
+    setTimeout(() => {
+      setMode("chat");
+      reset();
+      if (subject) startSession(subject.id, subject.name, "chat");
+    }, 1800);
+  }, [reset, subject, recordDiagnoseResult, startSession]);
 
   return (
     <div className="relative flex h-screen overflow-hidden bg-background">
@@ -149,7 +232,7 @@ export default function CoachPage() {
           mode={mode}
           onModeChange={handleModeChange}
           recentSessions={recentSessions}
-          onSessionClick={(s) => { handleModeChange(s.mode); }}
+          onSessionClick={handleSessionClick}
         />
       </div>
 
@@ -170,7 +253,14 @@ export default function CoachPage() {
 
         <div className="flex-1 overflow-hidden">
           {mode === "chat" && (
-            <ChatInterface key={key} subject={subject} difficulty={difficulty} mode="chat" />
+            <ChatInterface
+              key={key}
+              subject={subject}
+              difficulty={difficulty}
+              mode="chat"
+              initialMessages={chatInitialMessages}
+              onNewMessage={persistMessage}
+            />
           )}
           {mode === "practice" && (
             <PracticeMode key={key} subject={subject} difficulty={difficulty} onResult={recordPracticeResult} />
