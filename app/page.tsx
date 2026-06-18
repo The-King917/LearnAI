@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import LandingDemo from "@/components/LandingDemo";
 
 const FEATURES = [
   {
@@ -237,38 +238,41 @@ export default function LandingPage() {
 
       {/* How it works */}
       <section className="relative z-10 px-8 py-20 border-t border-border">
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <h2 className="text-xl font-semibold tracking-[-0.025em] text-center mb-12">How it works</h2>
-          <div className="space-y-10">
-            {[
-              {
-                step: "01",
-                title: "Pick your subject",
-                desc: "Choose from 60+ subjects — math competitions, science olympiads, AP courses, debate, business, and more.",
-              },
-              {
-                step: "02",
-                title: "Choose a mode",
-                desc: "Open-ended Socratic coaching, practice problem generation, or a full adaptive diagnostic.",
-              },
-              {
-                step: "03",
-                title: "Work through problems together",
-                desc: "PolyTeach never gives direct answers. It asks the question that moves you forward — building genuine mastery.",
-              },
-            ].map((item) => (
-              <div key={item.step} className="flex gap-8">
-                <span
-                  className="text-2xl font-semibold tracking-[-0.04em] shrink-0 w-10 text-right text-white/15"
-                >
-                  {item.step}
-                </span>
-                <div>
-                  <h3 className="text-sm font-semibold text-text mb-1.5">{item.title}</h3>
-                  <p className="text-sm text-muted leading-relaxed">{item.desc}</p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-10">
+              {[
+                {
+                  step: "01",
+                  title: "Pick your subject",
+                  desc: "Choose from 60+ subjects — math competitions, science olympiads, AP courses, debate, business, and more.",
+                },
+                {
+                  step: "02",
+                  title: "Choose a mode",
+                  desc: "Open-ended Socratic coaching, practice problem generation, or a full adaptive diagnostic.",
+                },
+                {
+                  step: "03",
+                  title: "Work through problems together",
+                  desc: "PolyTeach never gives direct answers. It asks the question that moves you forward — building genuine mastery.",
+                },
+              ].map((item) => (
+                <div key={item.step} className="flex gap-8">
+                  <span
+                    className="text-2xl font-semibold tracking-[-0.04em] shrink-0 w-10 text-right text-white/15"
+                  >
+                    {item.step}
+                  </span>
+                  <div>
+                    <h3 className="text-sm font-semibold text-text mb-1.5">{item.title}</h3>
+                    <p className="text-sm text-muted leading-relaxed">{item.desc}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            <LandingDemo />
           </div>
         </div>
       </section>
