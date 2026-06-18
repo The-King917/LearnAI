@@ -87,8 +87,8 @@ export default function LandingPage() {
       {/* Nav */}
       <nav className="relative z-10 flex items-center justify-between px-8 py-5 border-b border-border/60 backdrop-blur-sm bg-background/70">
         <span className="flex items-center text-sm font-semibold tracking-[-0.01em]">
-          Learn
-          <span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-white text-background text-2xs font-bold tracking-[0.02em]">AI</span>
+          Poly
+          <span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-white text-background text-2xs font-bold tracking-[0.02em]">Teach</span>
         </span>
         <Link
           href="/coach"
@@ -212,7 +212,7 @@ export default function LandingPage() {
               {
                 step: "03",
                 title: "Work through problems together",
-                desc: "LearnAI never gives direct answers. It asks the question that moves you forward — building genuine mastery.",
+                desc: "PolyTeach never gives direct answers. It asks the question that moves you forward — building genuine mastery.",
               },
             ].map((item) => (
               <div key={item.step} className="flex gap-8">
@@ -253,8 +253,8 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="relative z-10 border-t border-border px-8 py-6 flex items-center justify-between">
         <span className="flex items-center text-sm font-semibold tracking-[-0.01em]">
-          Learn
-          <span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-white text-background text-2xs font-bold tracking-[0.02em]">AI</span>
+          Poly
+          <span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-white text-background text-2xs font-bold tracking-[0.02em]">Teach</span>
         </span>
         <span className="text-xs text-subtle">© 2026</span>
       </footer>

@@ -55,7 +55,7 @@ function buildCodingPrompt(subject: Subject, mode: Mode, difficulty: Difficulty)
   const isSystemDesign = subject.id === "system-design";
   const ctx = codingDifficultyContext(difficulty);
 
-  const base = `You are LearnAI, an elite coding interview coach. You have deep expertise in algorithms, data structures, and system design, and you coach in the style of the best FAANG interviewers.
+  const base = `You are PolyTeach, an elite coding interview coach. You have deep expertise in algorithms, data structures, and system design, and you coach in the style of the best FAANG interviewers.
 
 Subject: **${subject.name}**
 Difficulty: ${difficulty} — ${ctx}
@@ -177,7 +177,7 @@ Begin immediately with a concrete warm-up problem — no preamble.`;
 function buildQuantPrompt(subject: Subject, mode: Mode, difficulty: Difficulty): string {
   const ctx = quantDifficultyContext(difficulty);
 
-  const base = `You are LearnAI, an elite quantitative interview coach. You have deep expertise in probability theory, mental arithmetic, combinatorics, expected value, and the style of quant trading firm interviews (Jane Street, Citadel, Two Sigma, D.E. Shaw).
+  const base = `You are PolyTeach, an elite quantitative interview coach. You have deep expertise in probability theory, mental arithmetic, combinatorics, expected value, and the style of quant trading firm interviews (Jane Street, Citadel, Two Sigma, D.E. Shaw).
 
 Subject: **${subject.name}**
 Difficulty: ${difficulty} — ${ctx}
@@ -267,7 +267,7 @@ function buildTestPrepPrompt(subject: Subject, mode: Mode, difficulty: Difficult
   }[subject.id] ?? subject.name;
 
   if (isLSAT) {
-    const base = `You are LearnAI, an elite LSAT coach. You have deep expertise in formal logic, argument analysis, and all LSAT question types. You coach at a ${difficulty} level (${ctx}).
+    const base = `You are PolyTeach, an elite LSAT coach. You have deep expertise in formal logic, argument analysis, and all LSAT question types. You coach at a ${difficulty} level (${ctx}).
 
 Section: **${lsatSection}**
 
@@ -450,7 +450,7 @@ Begin immediately with a Weaken question at moderate difficulty — no preamble.
   if (isMCAT) {
     const isCARs = subject.id === "mcat-cars";
 
-    const base = `You are LearnAI, an elite MCAT coach. You have deep expertise in MCAT content and test strategy. You coach at a ${difficulty} level (${ctx}).
+    const base = `You are PolyTeach, an elite MCAT coach. You have deep expertise in MCAT content and test strategy. You coach at a ${difficulty} level (${ctx}).
 
 Section: **${mcatSection}**
 
@@ -585,7 +585,7 @@ Begin immediately with a moderate-difficulty question — no preamble.`;
   }
 
   // Fallback
-  return `You are LearnAI, an elite test prep coach for ${subject.name}. Guide the student Socratically. Never give direct answers.`;
+  return `You are PolyTeach, an elite test prep coach for ${subject.name}. Guide the student Socratically. Never give direct answers.`;
 }
 
 export function buildSystemPrompt(
@@ -611,7 +611,7 @@ export function buildSystemPrompt(
     olympiad: "assumes mastery of fundamentals, targeting top national/international performance",
   }[difficulty];
 
-  const basePersonality = `You are LearnAI, an elite AI study coach for high school students. You are brilliant, precise, and pedagogically rigorous. Your entire approach is Socratic — you guide students to discover answers themselves through targeted questions and hints. You never give direct answers unless the student has genuinely exhausted all attempts.
+  const basePersonality = `You are PolyTeach, an elite AI study coach for high school students. You are brilliant, precise, and pedagogically rigorous. Your entire approach is Socratic — you guide students to discover answers themselves through targeted questions and hints. You never give direct answers unless the student has genuinely exhausted all attempts.
 
 ${subjectContext}
 Difficulty level: ${difficulty} (${difficultyContext})
