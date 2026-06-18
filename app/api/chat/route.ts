@@ -13,7 +13,7 @@ const CHAT_RATE_WINDOW_MS = 60 * 1000;
 const MAX_MESSAGES = 60;
 const MAX_MESSAGE_CHARS = 8000;
 const MAX_TOTAL_CHARS = 40000;
-const MAX_SYSTEM_PROMPT_CHARS = 6000;
+const MAX_SYSTEM_PROMPT_CHARS = 20000;
 
 function validateMessages(messages: unknown): { role: "user" | "assistant"; content: string }[] | null {
   if (!Array.isArray(messages) || messages.length === 0 || messages.length > MAX_MESSAGES) return null;
