@@ -61,8 +61,14 @@ const SUBJECTS_MARQUEE = [
   "AP Statistics", "AP Economics", "AP Psychology", "AP English Lit",
 ];
 
+const HEADLINE_PLAIN = "The AI coach that";
+const HEADLINE_ITALIC = "teaches";
+const HEADLINE_MUTED = ", not tells.";
+const HEADLINE_TOTAL = HEADLINE_PLAIN.length + HEADLINE_ITALIC.length + HEADLINE_MUTED.length;
+
 export default function LandingPage() {
   const [accountCount, setAccountCount] = useState<number | null>(null);
+  const [typedChars, setTypedChars] = useState(0);
 
   useEffect(() => {
     fetch("/api/stats")
@@ -70,6 +76,23 @@ export default function LandingPage() {
       .then((data) => setAccountCount(data.totalAccounts))
       .catch(() => {});
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTypedChars((c) => {
+        if (c >= HEADLINE_TOTAL) {
+          clearInterval(interval);
+          return c;
+        }
+        return c + 1;
+      });
+    }, 35);
+    return () => clearInterval(interval);
+  }, []);
+
+  const typedPlain = HEADLINE_PLAIN.slice(0, Math.max(0, Math.min(typedChars, HEADLINE_PLAIN.length)));
+  const typedItalic = HEADLINE_ITALIC.slice(0, Math.max(0, Math.min(typedChars - HEADLINE_PLAIN.length, HEADLINE_ITALIC.length)));
+  const typedMuted = HEADLINE_MUTED.slice(0, Math.max(0, Math.min(typedChars - HEADLINE_PLAIN.length - HEADLINE_ITALIC.length, HEADLINE_MUTED.length)));
 
   return (
     <div className="min-h-screen bg-background text-text">
@@ -110,27 +133,19 @@ export default function LandingPage() {
 
       {/* Hero */}
       <section className="relative z-10 flex flex-col items-center text-center px-6 pt-28 pb-24">
-        <div
-          className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-surface text-2xs font-medium text-muted uppercase tracking-[0.08em] mb-10"
-          style={{ animation: "fadeSlideUp 0.5s ease-out 0.1s both" }}
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-white inline-block" />
-          AI study companion
-        </div>
-
         <h1
           className="text-[clamp(36px,7vw,80px)] font-semibold tracking-[-0.035em] leading-[1.06] max-w-3xl"
           style={{ animation: "fadeSlideUp 0.5s ease-out 0.2s both" }}
         >
-          The AI coach that
+          {typedPlain}
           <br />
           <span
             className="italic"
             style={{ textShadow: "0 0 30px rgba(255,255,255,0.35)" }}
           >
-            teaches
+            {typedItalic}
           </span>
-          <span className="text-muted">, not tells.</span>
+          <span className="text-muted">{typedMuted}</span>
         </h1>
 
         <p
