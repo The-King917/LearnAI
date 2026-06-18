@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import LandingDemo from "@/components/LandingDemo";
+import Reveal from "@/components/Reveal";
+import Faq from "@/components/Faq";
 
 const FEATURES = [
   {
@@ -213,25 +215,27 @@ export default function LandingPage() {
       <section
         id="features"
         className="relative z-10 px-8 py-24 max-w-5xl mx-auto"
-        style={{ animation: "fadeSlideUp 0.5s ease-out 0.6s both" }}
       >
-        <div className="text-center mb-16">
-          <h2 className="text-2xl font-semibold tracking-[-0.025em]">Everything you need to level up</h2>
-          <p className="text-sm text-muted mt-3">Built around one principle: understanding beats memorization.</p>
-        </div>
+        <Reveal>
+          <div className="text-center mb-16">
+            <h2 className="text-2xl font-semibold tracking-[-0.025em]">Everything you need to level up</h2>
+            <p className="text-sm text-muted mt-3">Built around one principle: understanding beats memorization.</p>
+          </div>
+        </Reveal>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {FEATURES.map((f) => (
-            <div
-              key={f.title}
-              className="group p-6 rounded-xl border border-border bg-surface hover:border-border-2 hover:bg-surface-2 transition-all duration-200"
-            >
-              <div className="w-9 h-9 rounded-lg border border-border bg-surface-2 group-hover:border-border-2 flex items-center justify-center text-muted group-hover:text-text-2 mb-4 transition-colors duration-200">
-                {f.icon}
+          {FEATURES.map((f, i) => (
+            <Reveal key={f.title} delay={i * 0.06}>
+              <div
+                className="group p-6 rounded-xl border border-border bg-surface hover:border-border-2 hover:bg-surface-2 transition-all duration-200"
+              >
+                <div className="w-9 h-9 rounded-lg border border-border bg-surface-2 group-hover:border-border-2 flex items-center justify-center text-muted group-hover:text-text-2 mb-4 transition-colors duration-200">
+                  {f.icon}
+                </div>
+                <h3 className="text-sm font-semibold text-text mb-2">{f.title}</h3>
+                <p className="text-sm text-muted leading-relaxed">{f.desc}</p>
               </div>
-              <h3 className="text-sm font-semibold text-text mb-2">{f.title}</h3>
-              <p className="text-sm text-muted leading-relaxed">{f.desc}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -239,7 +243,9 @@ export default function LandingPage() {
       {/* How it works */}
       <section className="relative z-10 px-8 py-20 border-t border-border">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-xl font-semibold tracking-[-0.025em] text-center mb-12">How it works</h2>
+          <Reveal>
+            <h2 className="text-xl font-semibold tracking-[-0.025em] text-center mb-12">How it works</h2>
+          </Reveal>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-10">
               {[
@@ -258,42 +264,51 @@ export default function LandingPage() {
                   title: "Work through problems together",
                   desc: "PolyTeach never gives direct answers. It asks the question that moves you forward — building genuine mastery.",
                 },
-              ].map((item) => (
-                <div key={item.step} className="flex gap-8">
-                  <span
-                    className="text-2xl font-semibold tracking-[-0.04em] shrink-0 w-10 text-right text-white/15"
-                  >
-                    {item.step}
-                  </span>
-                  <div>
-                    <h3 className="text-sm font-semibold text-text mb-1.5">{item.title}</h3>
-                    <p className="text-sm text-muted leading-relaxed">{item.desc}</p>
+              ].map((item, i) => (
+                <Reveal key={item.step} delay={i * 0.1}>
+                  <div className="flex gap-8">
+                    <span
+                      className="text-2xl font-semibold tracking-[-0.04em] shrink-0 w-10 text-right text-white/15"
+                    >
+                      {item.step}
+                    </span>
+                    <div>
+                      <h3 className="text-sm font-semibold text-text mb-1.5">{item.title}</h3>
+                      <p className="text-sm text-muted leading-relaxed">{item.desc}</p>
+                    </div>
                   </div>
-                </div>
+                </Reveal>
               ))}
             </div>
-            <LandingDemo />
+            <Reveal delay={0.15}>
+              <LandingDemo />
+            </Reveal>
           </div>
         </div>
       </section>
 
+      {/* FAQ */}
+      <Faq />
+
       {/* Bottom CTA */}
       <section className="relative z-10 px-8 py-28 text-center border-t border-border">
-        <h2 className="text-[clamp(24px,4vw,44px)] font-semibold tracking-[-0.03em] mb-5">
-          Ready to actually understand?
-        </h2>
-        <p className="text-sm text-muted mb-8 max-w-sm mx-auto">
-          Stop looking up answers. Start building the intuition that wins competitions.
-        </p>
-        <Link
-          href="/coach"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold bg-white text-background hover:bg-white/85 transition-all duration-150"
-        >
-          Start learning
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M7 2l5 5-5 5M2 7h10"/>
-          </svg>
-        </Link>
+        <Reveal>
+          <h2 className="text-[clamp(24px,4vw,44px)] font-semibold tracking-[-0.03em] mb-5">
+            Ready to actually understand?
+          </h2>
+          <p className="text-sm text-muted mb-8 max-w-sm mx-auto">
+            Stop looking up answers. Start building the intuition that wins competitions.
+          </p>
+          <Link
+            href="/coach"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold bg-white text-background hover:bg-white/85 transition-all duration-150"
+          >
+            Start learning
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M7 2l5 5-5 5M2 7h10"/>
+            </svg>
+          </Link>
+        </Reveal>
       </section>
 
       {/* Footer */}
