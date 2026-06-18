@@ -160,7 +160,7 @@ export default function LandingPage() {
 
         {accountCount !== null && (
           <p
-            className="mt-8 text-xs text-subtle"
+            className="mt-8 text-sm text-muted"
             style={{ animation: "fadeSlideUp 0.5s ease-out 0.5s both" }}
           >
             Joined by {accountCount.toLocaleString()} students
