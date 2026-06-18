@@ -50,7 +50,6 @@ export async function POST(req: NextRequest) {
     return Response.json({ url: checkoutSession.url });
   } catch (err) {
     console.error("[api/billing/checkout]", err);
-    const message = err instanceof Error ? err.message : "Unknown error";
-    return Response.json({ error: `Checkout failed: ${message}` }, { status: 500 });
+    return Response.json({ error: "Checkout failed. Please try again or contact support." }, { status: 500 });
   }
 }

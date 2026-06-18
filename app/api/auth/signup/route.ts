@@ -2,17 +2,24 @@ import { NextRequest } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { FOUNDER_SEAT_LIMIT } from "@/lib/billing";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const SIGNUP_LIMIT = 8;
+const SIGNUP_WINDOW_MS = 15 * 60 * 1000;
 
 export async function POST(req: NextRequest) {
   try {
+    if (!rateLimit(`signup:${getClientIp(req)}`, SIGNUP_LIMIT, SIGNUP_WINDOW_MS)) {
+      return Response.json({ error: "Too many signup attempts. Try again later." }, { status: 429 });
+    }
+
     const { email, password, name } = await req.json();
 
-    if (typeof email !== "string" || !EMAIL_RE.test(email)) {
+    if (typeof email !== "string" || email.length > 254 || !EMAIL_RE.test(email)) {
       return Response.json({ error: "Enter a valid email address" }, { status: 400 });
     }
-    if (typeof password !== "string" || password.length < 8) {
+    if (typeof password !== "string" || password.length < 8 || password.length > 200) {
       return Response.json({ error: "Password must be at least 8 characters" }, { status: 400 });
     }
 
@@ -30,7 +37,7 @@ export async function POST(req: NextRequest) {
       const created = await tx.user.create({
         data: {
           email: normalizedEmail,
-          name: typeof name === "string" && name.trim() ? name.trim() : null,
+          name: typeof name === "string" && name.trim() ? name.trim().slice(0, 100) : null,
           passwordHash,
           ...(isFounder ? { isFounder: true, plan: "PRO" } : {}),
         },
@@ -45,7 +52,6 @@ export async function POST(req: NextRequest) {
     return Response.json({ user });
   } catch (err: unknown) {
     console.error("[api/auth/signup]", err);
-    const message = err instanceof Error ? err.message : "Unknown error";
-    return Response.json({ error: message }, { status: 500 });
+    return Response.json({ error: "Something went wrong creating your account" }, { status: 500 });
   }
 }

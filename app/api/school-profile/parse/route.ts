@@ -1,15 +1,22 @@
 import { NextRequest } from "next/server";
 import { PDFParse } from "pdf-parse";
 import { createWorker } from "tesseract.js";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
 const MAX_BYTES = 15 * 1024 * 1024;
 const MAX_TEXT_CHARS = 8000;
+const PARSE_RATE_LIMIT = 5;
+const PARSE_RATE_WINDOW_MS = 60 * 1000;
 
 export async function POST(req: NextRequest) {
   try {
+    if (!rateLimit(`school-profile-parse:${getClientIp(req)}`, PARSE_RATE_LIMIT, PARSE_RATE_WINDOW_MS)) {
+      return Response.json({ error: "Too many uploads — slow down a bit." }, { status: 429 });
+    }
+
     const form = await req.formData();
     const file = form.get("file");
 
