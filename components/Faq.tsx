@@ -34,7 +34,7 @@ function FaqRow({ q, a, delay }: { q: string; a: string; delay: number }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <Reveal delay={delay}>
+    <Reveal y={16} transition={{ duration: 0.4, delay }}>
       <div className="rounded-xl border border-border bg-surface overflow-hidden">
         <button
           onClick={() => setOpen((o) => !o)}
@@ -74,14 +74,14 @@ export default function Faq() {
   return (
     <section className="relative z-10 px-8 py-20 border-t border-border">
       <div className="max-w-2xl mx-auto">
-        <Reveal>
+        <Reveal transition={{ duration: 0.5, delay: 0.1 }}>
           <div className="text-center mb-12">
             <h2 className="text-xl font-semibold tracking-[-0.025em]">Frequently asked questions</h2>
           </div>
         </Reveal>
         <div className="space-y-3">
           {FAQ_ITEMS.map((item, i) => (
-            <FaqRow key={item.q} q={item.q} a={item.a} delay={i * 0.06} />
+            <FaqRow key={item.q} q={item.q} a={item.a} delay={i * 0.04} />
           ))}
         </div>
       </div>

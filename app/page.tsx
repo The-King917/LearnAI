@@ -216,16 +216,22 @@ export default function LandingPage() {
         id="features"
         className="relative z-10 px-8 py-24 max-w-5xl mx-auto"
       >
-        <Reveal>
-          <div className="text-center mb-16">
+        <div className="text-center mb-16">
+          <Reveal transition={{ duration: 0.5, delay: 0.1 }}>
             <h2 className="text-2xl font-semibold tracking-[-0.025em]">Everything you need to level up</h2>
+          </Reveal>
+          <Reveal transition={{ duration: 0.5, delay: 0.2 }}>
             <p className="text-sm text-muted mt-3">Built around one principle: understanding beats memorization.</p>
-          </div>
-        </Reveal>
+          </Reveal>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {FEATURES.map((f, i) => (
-            <Reveal key={f.title} delay={i * 0.06}>
+            <Reveal
+              key={f.title}
+              y={32}
+              transition={{ type: "spring", stiffness: 400, damping: 30, delay: 0.1 + i * 0.08 }}
+            >
               <div
                 className="group p-6 rounded-xl border border-border bg-surface hover:border-border-2 hover:bg-surface-2 transition-all duration-200"
               >
@@ -243,7 +249,7 @@ export default function LandingPage() {
       {/* How it works */}
       <section className="relative z-10 px-8 py-20 border-t border-border">
         <div className="max-w-5xl mx-auto">
-          <Reveal>
+          <Reveal transition={{ duration: 0.5, delay: 0.1 }}>
             <h2 className="text-xl font-semibold tracking-[-0.025em] text-center mb-12">How it works</h2>
           </Reveal>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -265,7 +271,7 @@ export default function LandingPage() {
                   desc: "PolyTeach never gives direct answers. It asks the question that moves you forward — building genuine mastery.",
                 },
               ].map((item, i) => (
-                <Reveal key={item.step} delay={i * 0.1}>
+                <Reveal key={item.step} transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}>
                   <div className="flex gap-8">
                     <span
                       className="text-2xl font-semibold tracking-[-0.04em] shrink-0 w-10 text-right text-white/15"
@@ -280,7 +286,7 @@ export default function LandingPage() {
                 </Reveal>
               ))}
             </div>
-            <Reveal delay={0.15}>
+            <Reveal y={40} transition={{ type: "spring", stiffness: 400, damping: 30, delay: 0.1 }}>
               <LandingDemo />
             </Reveal>
           </div>
@@ -292,13 +298,15 @@ export default function LandingPage() {
 
       {/* Bottom CTA */}
       <section className="relative z-10 px-8 py-28 text-center border-t border-border">
-        <Reveal>
+        <Reveal transition={{ duration: 0.6, ease: "easeOut" }}>
           <h2 className="text-[clamp(24px,4vw,44px)] font-semibold tracking-[-0.03em] mb-5">
             Ready to actually understand?
           </h2>
           <p className="text-sm text-muted mb-8 max-w-sm mx-auto">
             Stop looking up answers. Start building the intuition that wins competitions.
           </p>
+        </Reveal>
+        <Reveal transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}>
           <Link
             href="/coach"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold bg-white text-background hover:bg-white/85 transition-all duration-150"
