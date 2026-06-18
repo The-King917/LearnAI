@@ -4,6 +4,7 @@ export interface University {
   group: string;
   acceptanceRate: string;
   tier: "ultra-selective" | "highly-selective" | "selective";
+  isCustom?: boolean;
 }
 
 export const UNIVERSITIES: University[] = [
@@ -64,4 +65,17 @@ export const UNIVERSITY_GROUPS = Array.from(new Set(UNIVERSITIES.map((u) => u.gr
 
 export function getUniversityById(id: string): University | undefined {
   return UNIVERSITIES.find((u) => u.id === id);
+}
+
+export function createCustomUniversity(name: string, acceptanceRate?: string): University {
+  const trimmedName = name.trim();
+  const slug = trimmedName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  return {
+    id: `custom-${slug || Date.now()}`,
+    name: trimmedName,
+    group: "My Schools",
+    acceptanceRate: acceptanceRate?.trim() || "Not listed",
+    tier: "selective",
+    isCustom: true,
+  };
 }

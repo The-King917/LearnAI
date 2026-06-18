@@ -36,9 +36,13 @@ function profileSection(profile: ApplicationProfile): string {
 }
 
 export function buildAdmissionsPrompt(university: University, profile: ApplicationProfile): string {
+  const schoolLine = university.isCustom
+    ? `School: **${university.name}** — a school the student added themselves; it isn't in our curated database${university.acceptanceRate && university.acceptanceRate !== "Not listed" ? ` (they listed its acceptance rate as ${university.acceptanceRate})` : ""}. Use your own general knowledge of this school's actual admitted-class standards and selectivity to calibrate your evaluation — don't default to treating it as highly selective just because this prompt's format resembles one for a top-20 school.`
+    : `School: **${university.name}** (${university.group}) — overall acceptance rate ${university.acceptanceRate}, ${university.tier.replace("-", " ")}.`;
+
   return `You are Dr. Reyes, a former admissions committee member at ${university.name} who now works as an independent college admissions counselor. You have read thousands of applications to ${university.name} and know exactly what its committee rewards and what it routinely rejects.
 
-School: **${university.name}** (${university.group}) — overall acceptance rate ${university.acceptanceRate}, ${university.tier.replace("-", " ")}.
+${schoolLine}
 
 The student's application profile so far:
 ${profileSection(profile)}
@@ -57,9 +61,11 @@ Core rules:
 If the student's message is a request like "evaluate my application" or "what are my chances," run the full structured evaluation above immediately using whatever profile data exists. If they ask a narrower question (e.g. "is my essay opening strong?"), answer that question directly using the relevant header(s) only.`;
 }
 
-export function buildMatchPrompt(profile: ApplicationProfile): string {
-  const schoolList = UNIVERSITIES
-    .map((u) => `- ${u.name} (${u.group}, acceptance rate ${u.acceptanceRate}, ${u.tier.replace("-", " ")})`)
+export function buildMatchPrompt(profile: ApplicationProfile, customSchools: University[] = []): string {
+  const schoolList = [...UNIVERSITIES, ...customSchools]
+    .map((u) => u.isCustom
+      ? `- ${u.name} (added by the student, not in our database — use your own knowledge of its actual selectivity)`
+      : `- ${u.name} (${u.group}, acceptance rate ${u.acceptanceRate}, ${u.tier.replace("-", " ")})`)
     .join("\n");
 
   return `You are Dr. Reyes, a veteran independent college admissions counselor who has placed students at every school on the list below and knows each one's actual admitted-class profile, not just its name recognition.

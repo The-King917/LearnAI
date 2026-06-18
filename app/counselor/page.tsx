@@ -15,6 +15,7 @@ export default function CounselorPage() {
   const [view, setView] = useState<CounselorView>("review");
   const [university, setUniversity] = useState<University | null>(null);
   const [recentUniversities, setRecentUniversities] = useState<University[]>([]);
+  const [customUniversities, setCustomUniversities] = useState<University[]>([]);
   const [profile, setProfile] = useState<ApplicationProfile>(EMPTY_PROFILE);
   const [profileOpen, setProfileOpen] = useState(false);
   const [key, setKey] = useState(0);
@@ -38,6 +39,9 @@ export default function CounselorPage() {
     setUniversity(u);
     setKey((k) => k + 1);
     setRecentUniversities((prev) => [u, ...prev.filter((r) => r.id !== u.id)].slice(0, 8));
+    if (u.isCustom) {
+      setCustomUniversities((prev) => [u, ...prev.filter((r) => r.id !== u.id)].slice(0, 20));
+    }
   }, []);
 
   const handleProfileSave = useCallback((p: ApplicationProfile) => {
@@ -47,7 +51,7 @@ export default function CounselorPage() {
 
   const profileFilled = !isProfileEmpty(profile);
   const systemPrompt = view === "match"
-    ? buildMatchPrompt(profile)
+    ? buildMatchPrompt(profile, customUniversities)
     : university ? buildAdmissionsPrompt(university, profile) : undefined;
 
   return (
@@ -108,7 +112,11 @@ export default function CounselorPage() {
               subject={null}
               systemPrompt={systemPrompt}
               emptyTitle="Find schools that match your profile"
-              emptySubtitle="I'll sort all 40+ schools on our list into Far Reach, Reach, Target, and Likely based on your stats — then point out your best genuine matches."
+              emptySubtitle={
+                customUniversities.length > 0
+                  ? "I'll sort our 40+ schools plus the ones you've added into Far Reach, Reach, Target, and Likely based on your stats — then point out your best genuine matches."
+                  : "I'll sort all 40+ schools on our list into Far Reach, Reach, Target, and Likely based on your stats — then point out your best genuine matches. Add your own schools (like a safety school) from the University picker in Review mode."
+              }
               quickPrompts={[
                 "Show me my matches",
                 "Which schools am I a likely admit at?",
