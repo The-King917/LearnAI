@@ -2,11 +2,13 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import CounselorSidebar, { CounselorView } from "@/components/CounselorSidebar";
 import ChatInterface from "@/components/ChatInterface";
 import ProfileEditor from "@/components/ProfileEditor";
 import { University } from "@/lib/universities";
 import { ApplicationProfile, buildAdmissionsPrompt, buildMatchPrompt, isProfileEmpty } from "@/lib/admissions";
+import { usePlan } from "@/lib/use-plan";
 
 const EMPTY_PROFILE: ApplicationProfile = {};
 
@@ -21,6 +23,8 @@ export default function CounselorPage() {
   const [key, setKey] = useState(0);
 
   const signedIn = status === "authenticated" && !!session;
+  const { plan, loading: planLoading } = usePlan();
+  const locked = signedIn && !planLoading && plan === "FREE";
 
   useEffect(() => {
     if (!signedIn) { setProfile(EMPTY_PROFILE); return; }
@@ -106,11 +110,25 @@ export default function CounselorPage() {
         </header>
 
         <div className="flex-1 overflow-hidden">
-          {view === "match" ? (
+          {locked ? (
+            <div className="flex flex-col items-center justify-center h-full gap-4 text-center px-6">
+              <div>
+                <p className="text-lg font-semibold tracking-[-0.02em] text-text">College Counselor is a Pro feature</p>
+                <p className="text-sm text-muted mt-1.5">Upgrade to Pro to evaluate your chances, get essay feedback, and find your best-fit schools.</p>
+              </div>
+              <Link
+                href="/pricing"
+                className="px-5 py-2.5 rounded-lg text-sm font-semibold bg-white text-background hover:bg-white/85 transition-all duration-150"
+              >
+                Upgrade to Pro
+              </Link>
+            </div>
+          ) : view === "match" ? (
             <ChatInterface
               key={key}
               subject={null}
               systemPrompt={systemPrompt}
+              feature="counselor"
               emptyTitle="Find schools that match your profile"
               emptySubtitle={
                 customUniversities.length > 0
@@ -129,6 +147,7 @@ export default function CounselorPage() {
               key={key}
               subject={null}
               systemPrompt={systemPrompt}
+              feature="counselor"
               emptyTitle={university ? `${university.name} admissions review` : "Select a university to begin"}
               emptySubtitle={
                 university

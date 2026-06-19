@@ -86,6 +86,7 @@ function MCQPractice({ subject, difficulty, onResult }: { subject: Subject; diff
     try {
       const problem = await streamToString({
         systemPrompt,
+        subjectId: subject.id,
         messages: [{ role: "user", content: "Generate one AP MCQ now." }],
       }, setGenStream);
       setState((s) => ({ ...s, problem }));
@@ -98,6 +99,7 @@ function MCQPractice({ subject, difficulty, onResult }: { subject: Subject; diff
     try {
       const feedback = await streamToString({
         systemPrompt,
+        subjectId: subject.id,
         messages: [
           { role: "user", content: `Here is the question:\n\n${state.problem}` },
           { role: "assistant", content: "Here is your MCQ. Choose your answer." },
@@ -213,6 +215,7 @@ function FRQPractice({ subject, difficulty, onResult }: { subject: Subject; diff
     try {
       const problem = await streamToString({
         systemPrompt,
+        subjectId: subject.id,
         messages: [{ role: "user", content: "Generate one AP FRQ now." }],
       }, setGenStream);
       setState((s) => ({ ...s, problem }));
@@ -226,6 +229,7 @@ function FRQPractice({ subject, difficulty, onResult }: { subject: Subject; diff
     try {
       const feedback = await streamToString({
         systemPrompt,
+        subjectId: subject.id,
         messages: [
           { role: "user", content: `FRQ:\n\n${state.problem}` },
           { role: "assistant", content: "Here is your FRQ." },
@@ -361,6 +365,7 @@ function OpenPractice({ subject, difficulty, onResult }: { subject: Subject; dif
     try {
       const problem = await streamToString({
         systemPrompt,
+        subjectId: subject.id,
         messages: [{ role: "user", content: `Generate one ${difficulty} ${subject.name} practice problem. Output only the problem statement.` }],
       }, setStream);
       setState((s) => ({ ...s, problem }));
@@ -381,6 +386,7 @@ function OpenPractice({ subject, difficulty, onResult }: { subject: Subject; dif
     try {
       const hint = await streamToString({
         systemPrompt,
+        subjectId: subject.id,
         messages: [
           { role: "user", content: `Problem: ${state.problem}` },
           { role: "assistant", content: "Work through it and let me know if you need a hint." },
@@ -398,6 +404,7 @@ function OpenPractice({ subject, difficulty, onResult }: { subject: Subject; dif
     try {
       const solution = await streamToString({
         systemPrompt,
+        subjectId: subject.id,
         messages: [
           { role: "user", content: `Problem: ${state.problem}` },
           { role: "assistant", content: "Here is the problem." },
@@ -415,6 +422,7 @@ function OpenPractice({ subject, difficulty, onResult }: { subject: Subject; dif
     try {
       const feedback = await streamToString({
         systemPrompt,
+        subjectId: subject.id,
         messages: [
           { role: "user", content: `Problem: ${state.problem}` },
           { role: "assistant", content: "What is your answer?" },

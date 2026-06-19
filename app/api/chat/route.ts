@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { checkAndConsumeFreeMessage, getEffectivePlan } from "@/lib/billing";
+import { isRestrictedSubject } from "@/lib/subjects";
 import { rateLimit } from "@/lib/rate-limit";
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
@@ -63,6 +64,29 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    const body = await req.json();
+    const messages = validateMessages(body.messages);
+    if (!messages) {
+      return new Response(JSON.stringify({ error: "Invalid messages" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    const subjectId = typeof body.subjectId === "string" ? body.subjectId : undefined;
+    const feature = typeof body.feature === "string" ? body.feature : undefined;
+    const requiresPro = isRestrictedSubject(subjectId) || feature === "counselor";
+
+    if (requiresPro && getEffectivePlan(user) === "FREE") {
+      return new Response(
+        JSON.stringify({
+          error: "This is a Pro feature. Upgrade to unlock College Counselor and Interview Prep (LeetCode, Quant).",
+          code: "PRO_REQUIRED",
+        }),
+        { status: 403, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
     if (getEffectivePlan(user) === "FREE") {
       const allowed = await checkAndConsumeFreeMessage(user.id);
       if (!allowed) {
@@ -74,15 +98,6 @@ export async function POST(req: NextRequest) {
           { status: 403, headers: { "Content-Type": "application/json" } }
         );
       }
-    }
-
-    const body = await req.json();
-    const messages = validateMessages(body.messages);
-    if (!messages) {
-      return new Response(JSON.stringify({ error: "Invalid messages" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
     }
 
     if (typeof body.systemPrompt === "string" && body.systemPrompt.length > MAX_SYSTEM_PROMPT_CHARS) {

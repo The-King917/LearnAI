@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { SUBJECTS, SUBJECT_GROUPS, Subject } from "@/lib/subjects";
+import { usePlan } from "@/lib/use-plan";
 
 interface SubjectDropdownProps {
   value: Subject | null;
@@ -13,6 +14,8 @@ export default function SubjectDropdown({ value, onChange }: SubjectDropdownProp
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { plan } = usePlan();
+  const isFree = plan === "FREE";
 
   const filtered = query.trim()
     ? SUBJECTS.filter(
@@ -92,13 +95,16 @@ export default function SubjectDropdown({ value, onChange }: SubjectDropdownProp
                   <button
                     key={subject.id}
                     onClick={() => handleSelect(subject)}
-                    className={`w-full text-left px-3 py-1.5 text-sm transition-colors duration-75 ${
+                    className={`w-full flex items-center justify-between gap-2 text-left px-3 py-1.5 text-sm transition-colors duration-75 ${
                       value?.id === subject.id
                         ? "text-text bg-surface-3"
                         : "text-text-2 hover:bg-surface-3 hover:text-text"
                     }`}
                   >
-                    {subject.name}
+                    <span className="truncate">{subject.name}</span>
+                    {subject.restricted && isFree && (
+                      <span className="text-2xs font-semibold text-muted px-1.5 py-0.5 rounded-full border border-border-2 shrink-0">PRO</span>
+                    )}
                   </button>
                 ))}
               </div>

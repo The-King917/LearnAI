@@ -8,9 +8,11 @@ import PracticeMode from "@/components/PracticeMode";
 import DiagnoseMode from "@/components/DiagnoseMode";
 import ProgressIndicator from "@/components/ProgressIndicator";
 import AuthModal from "@/components/AuthModal";
-import { Subject, getSubjectById } from "@/lib/subjects";
+import Link from "next/link";
+import { Subject, getSubjectById, isRestrictedSubject } from "@/lib/subjects";
 import { Difficulty } from "@/lib/prompts";
 import { ResultTag, applyPracticeResult, applyDiagnoseResult } from "@/lib/mastery";
+import { usePlan } from "@/lib/use-plan";
 
 interface MasteryRecord {
   mastery: number;
@@ -58,6 +60,8 @@ export default function CoachPage() {
   const [authOpen, setAuthOpen] = useState(false);
 
   const signedIn = status === "authenticated" && !!session;
+  const { plan, loading: planLoading } = usePlan();
+  const subjectLocked = signedIn && !planLoading && plan === "FREE" && isRestrictedSubject(subject?.id);
 
   useEffect(() => {
     if (!signedIn) { setMastery({}); return; }
@@ -266,6 +270,19 @@ export default function CoachPage() {
               >
                 Sign in / Sign up
               </button>
+            </div>
+          ) : subjectLocked ? (
+            <div className="flex flex-col items-center justify-center h-full gap-4 text-center px-6">
+              <div>
+                <p className="text-lg font-semibold tracking-[-0.02em] text-text">{subject?.name} is a Pro feature</p>
+                <p className="text-sm text-muted mt-1.5">Upgrade to Pro to unlock interview prep — LeetCode, System Design, and Quant.</p>
+              </div>
+              <Link
+                href="/pricing"
+                className="px-5 py-2.5 rounded-lg text-sm font-semibold bg-white text-background hover:bg-white/85 transition-all duration-150"
+              >
+                Upgrade to Pro
+              </Link>
             </div>
           ) : (
             <>

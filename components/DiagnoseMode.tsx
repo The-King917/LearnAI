@@ -48,7 +48,7 @@ export default function DiagnoseMode({ subject, onLevelFound }: DiagnoseModeProp
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: abortRef.current.signal,
-        body: JSON.stringify({ systemPrompt, messages: newMsgs }),
+        body: JSON.stringify({ systemPrompt, subjectId: subject?.id, messages: newMsgs }),
       });
 
       const reader = res.body!.getReader();
@@ -80,7 +80,7 @@ export default function DiagnoseMode({ subject, onLevelFound }: DiagnoseModeProp
     } finally {
       setLoading(false);
     }
-  }, [loading, messages, systemPrompt, onLevelFound]);
+  }, [loading, messages, systemPrompt, onLevelFound, subject]);
 
   const startDiagnostic = useCallback(async () => {
     setStarted(true);
@@ -96,7 +96,7 @@ export default function DiagnoseMode({ subject, onLevelFound }: DiagnoseModeProp
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: abortRef.current.signal,
-        body: JSON.stringify({ systemPrompt, messages: [seed] }),
+        body: JSON.stringify({ systemPrompt, subjectId: subject?.id, messages: [seed] }),
       });
 
       const reader = res.body!.getReader();
@@ -112,7 +112,7 @@ export default function DiagnoseMode({ subject, onLevelFound }: DiagnoseModeProp
       setStreamText("");
     } catch { /* ignore */ }
     finally { setLoading(false); }
-  }, [systemPrompt]);
+  }, [systemPrompt, subject]);
 
   if (!subject) {
     return (

@@ -83,6 +83,8 @@ export default function PricingPage() {
               <li>Everything in Free</li>
               <li>Unlimited messages</li>
               <li>All 60+ subjects</li>
+              <li>Interview prep (LeetCode, Quant)</li>
+              <li>College Counselor</li>
               <li>Progress tracking</li>
               <li>Custom courses</li>
             </ul>

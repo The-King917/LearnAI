@@ -18,6 +18,8 @@ interface ChatInterfaceProps {
   initialMessages?: Message[];
   onNewMessage?: (message: Message) => void;
   systemPrompt?: string;
+  /** Non-subject feature identifier (e.g. "counselor") used for server-side Pro gating. */
+  feature?: string;
   emptyTitle?: string;
   emptySubtitle?: string;
   quickPrompts?: string[];
@@ -57,7 +59,7 @@ function AssistantMessage({ content, streaming }: { content: string; streaming?:
 }
 
 export default function ChatInterface({
-  subject, difficulty, mode, initialMessage, initialMessages, onNewMessage, systemPrompt: systemPromptOverride,
+  subject, difficulty, mode, initialMessage, initialMessages, onNewMessage, systemPrompt: systemPromptOverride, feature,
   emptyTitle, emptySubtitle, quickPrompts, placeholder,
 }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>(initialMessages ?? []);
@@ -97,6 +99,8 @@ export default function ChatInterface({
           signal: abortRef.current.signal,
           body: JSON.stringify({
             systemPrompt,
+            subjectId: subject?.id,
+            feature,
             messages: newMessages.map((m) => ({ role: m.role, content: m.content })),
           }),
         });
@@ -131,7 +135,7 @@ export default function ChatInterface({
         setLoading(false);
       }
     },
-    [loading, messages, systemPrompt, onNewMessage]
+    [loading, messages, systemPrompt, onNewMessage, subject, feature]
   );
 
   useEffect(() => {

@@ -3,6 +3,8 @@ export interface Subject {
   name: string;
   group: string;
   shortName?: string;
+  /** Requires a Pro (or Team) plan — Free users are gated off this subject. */
+  restricted?: boolean;
 }
 
 export const SUBJECTS: Subject[] = [
@@ -40,13 +42,13 @@ export const SUBJECTS: Subject[] = [
   { id: "speech", name: "Speech", group: "Speech & Debate" },
 
   // Coding Interviews
-  { id: "leetcode", name: "LeetCode / DSA", group: "Coding Interviews" },
-  { id: "system-design", name: "System Design", group: "Coding Interviews" },
+  { id: "leetcode", name: "LeetCode / DSA", group: "Coding Interviews", restricted: true },
+  { id: "system-design", name: "System Design", group: "Coding Interviews", restricted: true },
 
   // Quant Interviews
-  { id: "quant-probability", name: "Probability & Mental Math", group: "Quant Interviews" },
-  { id: "quant-market-making", name: "Market Making", group: "Quant Interviews" },
-  { id: "quant-brainteasers", name: "Brain Teasers", group: "Quant Interviews" },
+  { id: "quant-probability", name: "Probability & Mental Math", group: "Quant Interviews", restricted: true },
+  { id: "quant-market-making", name: "Market Making", group: "Quant Interviews", restricted: true },
+  { id: "quant-brainteasers", name: "Brain Teasers", group: "Quant Interviews", restricted: true },
 
   // Test Prep — LSAT
   { id: "lsat-lr", name: "LSAT — Logical Reasoning", group: "Test Prep", shortName: "LSAT LR" },
@@ -117,4 +119,9 @@ export const SUBJECT_GROUPS = Array.from(new Set(SUBJECTS.map((s) => s.group)));
 
 export function getSubjectById(id: string): Subject | undefined {
   return SUBJECTS.find((s) => s.id === id);
+}
+
+export function isRestrictedSubject(id: string | null | undefined): boolean {
+  if (!id) return false;
+  return getSubjectById(id)?.restricted === true;
 }

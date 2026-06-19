@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { Subject } from "@/lib/subjects";
 import { Difficulty, DIFFICULTY_LABELS } from "@/lib/prompts";
+import { usePlan } from "@/lib/use-plan";
 import SubjectDropdown from "./SubjectDropdown";
 import AuthModal from "./AuthModal";
 
@@ -68,6 +69,8 @@ export default function Sidebar({
 }: SidebarProps) {
   const { data: session, status } = useSession();
   const [authOpen, setAuthOpen] = useState(false);
+  const { plan } = usePlan();
+  const isFree = plan === "FREE";
 
   return (
     <aside className="w-[216px] shrink-0 h-full flex flex-col border-r border-border bg-surface">
@@ -123,7 +126,10 @@ export default function Sidebar({
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M8 1.333 13.333 4v4c0 3.5-2.333 5.833-5.333 6.667C5 13.833 2.667 11.5 2.667 8V4L8 1.333Z"/>
             </svg>
-            <span>College Counselor</span>
+            <span className="flex-1">College Counselor</span>
+            {isFree && (
+              <span className="text-2xs font-semibold text-muted px-1.5 py-0.5 rounded-full border border-border-2">PRO</span>
+            )}
           </Link>
         </div>
 
