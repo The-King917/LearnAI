@@ -2,6 +2,7 @@
 
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
+import remarkGfm from "remark-gfm";
 import rehypeKatex from "rehype-katex";
 import type { Components } from "react-markdown";
 
@@ -21,6 +22,14 @@ const components: Components = {
   code: ({ children, className }) => (
     <code className={className}>{children}</code>
   ),
+  table: ({ children }) => (
+    <div className="table-wrap"><table>{children}</table></div>
+  ),
+  thead: ({ children }) => <thead>{children}</thead>,
+  tbody: ({ children }) => <tbody>{children}</tbody>,
+  tr: ({ children }) => <tr>{children}</tr>,
+  th: ({ children }) => <th>{children}</th>,
+  td: ({ children }) => <td>{children}</td>,
 };
 
 interface MarkdownProps {
@@ -32,7 +41,7 @@ export default function Markdown({ children, streaming }: MarkdownProps) {
   return (
     <div className="prose-md">
       <ReactMarkdown
-        remarkPlugins={[remarkMath]}
+        remarkPlugins={[remarkMath, remarkGfm]}
         rehypePlugins={[rehypeKatex]}
         components={components}
       >

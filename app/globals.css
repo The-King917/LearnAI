@@ -62,6 +62,11 @@ body {
 }
 .prose-md pre code { background: none; border: none; padding: 0; font-size: 0.88em; color: #C0C0C0; }
 .prose-md blockquote { border-left: 2px solid #2C2C2C; padding-left: 1em; color: #6B6B6B; margin: 0.75em 0; }
+.prose-md .table-wrap { overflow-x: auto; margin: 0.75em 0; }
+.prose-md table { width: 100%; border-collapse: collapse; font-size: 0.95em; }
+.prose-md th, .prose-md td { border: 1px solid #2C2C2C; padding: 6px 10px; text-align: left; }
+.prose-md th { background: #161616; color: #E0E0E0; font-weight: 600; }
+.prose-md td { color: #C0C0C0; }
 
 /* Streaming cursor */
 @keyframes blink {

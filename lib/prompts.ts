@@ -652,13 +652,17 @@ Begin immediately with the first question — no preamble.`;
     const isAP = subject?.group.startsWith("AP");
 
     if (isAP && apQuestionType === "mcq") {
+      const stimulusGuidance = AP_STIMULUS_GUIDANCE[subject!.id] ?? DEFAULT_STIMULUS_GUIDANCE;
+
       return `${basePersonality}
 
 You are in AP MCQ Practice mode for ${subject!.name}.
 
 When generating a problem, produce one authentic AP-style multiple choice question in EXACTLY this format (no deviations):
 
-**Question:** [question stem — can be multiple sentences or include stimulus]
+**Stimulus:** [a passage, source excerpt, data table, graph description, or code block the question depends on — omit this entire block when the question doesn't need one]
+
+**Question:** [question stem — can be multiple sentences]
 
 **(A)** [option]
 **(B)** [option]
@@ -666,10 +670,15 @@ When generating a problem, produce one authentic AP-style multiple choice questi
 **(D)** [option]
 **(E)** [option]
 
+Stimulus guidance for ${subject!.name}: ${stimulusGuidance}
+
 Rules:
 - Mirror real AP exam style, difficulty, and phrasing for ${subject!.name}
 - Distractors should represent common misconceptions, not obviously wrong answers
 - Stem should be complete and unambiguous
+- Omit the **Stimulus:** block entirely when the question doesn't need one — never insert a stimulus just to have one
+- When a stimulus is visual by nature (an artwork, map, diagram, or chart), describe it in precise, vivid textual detail since no image will be rendered — never just say "see image" or "see graph"
+- Format tabular data as a markdown table; describe graphs in words with exact axis labels, ranges, and the trend so the student could redraw it
 - Do NOT reveal the answer or explain anything in the generation step
 - Use LaTeX for any math: $...$ inline, $$...$$ display
 
@@ -740,3 +749,32 @@ export const DIFFICULTY_LABELS: Record<Difficulty, string> = {
 export function isAPSubject(subject: Subject | null): boolean {
   return subject?.group.startsWith("AP") ?? false;
 }
+
+// Per-subject guidance on when/how real AP exams attach a stimulus (a passage,
+// source excerpt, data table, graph, image, or code block) to MCQs.
+const AP_STIMULUS_GUIDANCE: Record<string, string> = {
+  "ap-english-lang": "Nearly every question is stimulus-based. Open with a **Stimulus:** containing 100–200 words of real-world nonfiction prose (a speech, essay, or article excerpt) before the question stem.",
+  "ap-english-lit": "Nearly every question is stimulus-based. Open with a **Stimulus:** containing a short original poem or prose excerpt (100–200 words) before the question stem.",
+  "ap-us-history": "About half of all questions are stimulus-based. When appropriate, open with a **Stimulus:** — a short excerpt from a primary or secondary source (a quotation, or a precisely described political cartoon, map, or data table) — before the question stem.",
+  "ap-world-history": "About half of all questions are stimulus-based. When appropriate, open with a **Stimulus:** — a short excerpt from a primary or secondary source, or a precisely described map or chart — before the question stem.",
+  "ap-european-history": "About half of all questions are stimulus-based. When appropriate, open with a **Stimulus:** — a short excerpt from a primary or secondary source, or a precisely described map or chart — before the question stem.",
+  "ap-us-gov": "Many questions are stimulus-based, built around a court case excerpt, founding document quote, political cartoon description, or a data table/graph. When relevant, open with a **Stimulus:** before the question stem.",
+  "ap-comp-gov": "Many questions are stimulus-based, built around a source excerpt or a data table/graph comparing countries. When relevant, open with a **Stimulus:** before the question stem.",
+  "ap-human-geo": "Many questions are stimulus-based, built around a map, population pyramid, or data table — describe it precisely in words or as a markdown table. Open with a **Stimulus:** when relevant.",
+  "ap-psychology": "Occasionally open with a **Stimulus:** — a brief research-study scenario or simple data table — before the question stem, mirroring how real AP Psych frames experiment-based items.",
+  "ap-macroeconomics": "Some questions are stimulus-based, built around a data table or a graph described precisely (axis labels, curves, shifts) or a short scenario. Open with a **Stimulus:** when relevant.",
+  "ap-microeconomics": "Some questions are stimulus-based, built around a data table or a graph described precisely (axis labels, curves, shifts) or a short scenario. Open with a **Stimulus:** when relevant.",
+  "ap-statistics": "Many questions are stimulus-based, built around a data table, scatterplot, or study description — describe charts precisely in words (axis labels, trend, key values) or as a markdown table. Open with a **Stimulus:** when relevant.",
+  "ap-biology": "Many questions are data-based, built around an experimental scenario with a data table or graph. Open with a **Stimulus:** — present the experiment and any data as a markdown table or a precisely described graph — before the question stem.",
+  "ap-chemistry": "Many questions are data-based, built around a data table, graph, or lab scenario. Open with a **Stimulus:** before the question stem when relevant.",
+  "ap-environmental": "Many questions are data-based, built around a data table, graph, or case study. Open with a **Stimulus:** before the question stem when relevant.",
+  "ap-physics-1": "Some questions are built around a diagram, graph, or experimental setup — describe it precisely in words (labeled axes, values, geometry) since no image is shown. Open with a **Stimulus:** when relevant.",
+  "ap-physics-2": "Some questions are built around a diagram, graph, or experimental setup — describe it precisely in words (labeled axes, values, geometry) since no image is shown. Open with a **Stimulus:** when relevant.",
+  "ap-physics-c-mech": "Some questions are built around a diagram, graph, or experimental setup — describe it precisely in words (labeled axes, values, geometry) since no image is shown. Open with a **Stimulus:** when relevant.",
+  "ap-physics-c-em": "Some questions are built around a diagram, graph, or experimental setup — describe it precisely in words (labeled axes, values, geometry) since no image is shown. Open with a **Stimulus:** when relevant.",
+  "ap-art-history": "Every question is based on a specific artwork. Always open with a **Stimulus:** that vividly and precisely describes the work — title, artist, culture, date, medium, and the visual details the question depends on — since no image is shown.",
+  "ap-csp": "Many questions are based on a block of pseudocode. When relevant, open with a **Stimulus:** containing a fenced pseudocode block before the question stem.",
+  "ap-csa": "Some questions are based on a block of Java code. When relevant, open with a **Stimulus:** containing a fenced Java code block before the question stem.",
+};
+
+const DEFAULT_STIMULUS_GUIDANCE = "Most questions are discrete — only add a **Stimulus:** if the question genuinely depends on a passage, data set, or scenario that can't fit cleanly in the stem itself.";
