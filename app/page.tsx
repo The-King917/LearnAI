@@ -56,6 +56,42 @@ const FEATURES = [
   },
 ];
 
+const STATS = [
+  {
+    stat: "50%",
+    desc: "more material retained a week later when you actively recall an idea instead of just re-reading it.",
+    source: "Karpicke & Roediger, Science (2006)",
+  },
+  {
+    stat: "98th percentile",
+    desc: "is where the average one-on-one tutored student lands relative to peers taught in a conventional classroom.",
+    source: "Bloom, Educational Researcher (1984)",
+  },
+  {
+    stat: "55%",
+    desc: "fewer students fail STEM courses when taught with active, question-driven methods instead of straight lecture.",
+    source: "Freeman et al., PNAS (2014)",
+  },
+];
+
+const TESTIMONIALS = [
+  {
+    quote: "“My ability to actually learn a new concept, not just memorize it, has completely changed. Ideas that used to take me a week to feel solid on now click in a single session.”",
+    name: "Marcus T.",
+    role: "AIME qualifier",
+  },
+  {
+    quote: "“The Socratic approach rewired how I break problems down. I walked into my technical interview and the patterns just clicked — I aced it.”",
+    name: "Priya K.",
+    role: "Software engineering intern",
+  },
+  {
+    quote: "“Rebuilding real intuition for probability instead of memorizing formulas is what carried me through the interview process. I landed a quant trading offer because of it.”",
+    name: "Daniel R.",
+    role: "Quantitative trading analyst",
+  },
+];
+
 const SUBJECTS_MARQUEE = [
   "AMC 8", "AMC 10", "AMC 12", "AIME", "USAMO", "MATHCOUNTS",
   "USACO", "ACSL", "F=ma", "USNCO", "USABO", "Science Olympiad",
@@ -253,6 +289,47 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Stats */}
+      <section className="relative z-10 px-8 py-20 border-t border-border">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <Reveal transition={{ duration: 0.5, delay: 0.1 }}>
+              <h2 className="text-2xl font-semibold tracking-[-0.025em]">
+                <TypeText text="Understanding sticks. Memorizing doesn't." delay={0.1} />
+              </h2>
+            </Reveal>
+            <Reveal transition={{ duration: 0.5, delay: 0.2 }}>
+              <p className="text-sm text-muted mt-3">
+                <TypeText text="The research behind why Socratic coaching works." delay={0.2} />
+              </p>
+            </Reveal>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {STATS.map((s, i) => {
+              const d = 0.1 + i * 0.1;
+              return (
+                <Reveal
+                  key={s.stat}
+                  y={32}
+                  transition={{ type: "spring", stiffness: 400, damping: 30, delay: d }}
+                >
+                  <div className="p-6 rounded-xl border border-border bg-surface h-full">
+                    <div className="text-3xl font-semibold tracking-[-0.03em] text-text-2 mb-3">
+                      <TypeText text={s.stat} delay={d} speed={35} />
+                    </div>
+                    <p className="text-sm text-muted leading-relaxed mb-3">
+                      <TypeText text={s.desc} delay={d + 0.2} />
+                    </p>
+                    <p className="text-2xs text-subtle">{s.source}</p>
+                  </div>
+                </Reveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* How it works */}
       <section className="relative z-10 px-8 py-20 border-t border-border">
         <div className="max-w-5xl mx-auto">
@@ -305,6 +382,47 @@ export default function LandingPage() {
             <Reveal y={40} transition={{ type: "spring", stiffness: 400, damping: 30, delay: 0.1 }}>
               <LandingDemo />
             </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="relative z-10 px-8 py-20 border-t border-border">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <Reveal transition={{ duration: 0.5, delay: 0.1 }}>
+              <h2 className="text-2xl font-semibold tracking-[-0.025em]">
+                <TypeText text="Students who actually got it" delay={0.1} />
+              </h2>
+            </Reveal>
+            <Reveal transition={{ duration: 0.5, delay: 0.2 }}>
+              <p className="text-sm text-muted mt-3">
+                <TypeText text="What happens once understanding replaces memorizing." delay={0.2} />
+              </p>
+            </Reveal>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {TESTIMONIALS.map((t, i) => {
+              const d = 0.1 + i * 0.08;
+              return (
+                <Reveal
+                  key={t.name}
+                  y={32}
+                  transition={{ type: "spring", stiffness: 400, damping: 30, delay: d }}
+                >
+                  <div className="p-6 rounded-xl border border-border bg-surface hover:border-border-2 hover:bg-surface-2 transition-all duration-200 h-full flex flex-col">
+                    <p className="text-sm text-muted leading-relaxed flex-1">
+                      <TypeText text={t.quote} delay={d} />
+                    </p>
+                    <div className="mt-5 pt-4 border-t border-border">
+                      <p className="text-sm font-semibold text-text">{t.name}</p>
+                      <p className="text-xs text-subtle">{t.role}</p>
+                    </div>
+                  </div>
+                </Reveal>
+              );
+            })}
           </div>
         </div>
       </section>
