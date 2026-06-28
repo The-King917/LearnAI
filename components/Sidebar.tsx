@@ -118,18 +118,25 @@ export default function Sidebar({
         <div className="h-px bg-border mx-3 my-1" />
 
         {/* Tools */}
-        <div className="px-3 py-2">
+        <div className="px-3 py-2 space-y-0.5">
           <Link
-            href="/counselor"
+            href="/mock-test"
             className="w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-sm text-muted hover:text-text-2 hover:bg-surface-2 transition-all duration-150 border border-transparent"
           >
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M8 1.333 13.333 4v4c0 3.5-2.333 5.833-5.333 6.667C5 13.833 2.667 11.5 2.667 8V4L8 1.333Z"/>
+              <rect x="2" y="2" width="12" height="12" rx="2"/>
+              <path d="M5 8h6M8 5v6"/>
             </svg>
-            <span className="flex-1">College Counselor</span>
-            {isFree && (
-              <span className="text-2xs font-semibold text-muted px-1.5 py-0.5 rounded-full border border-border-2">PRO</span>
-            )}
+            <span>Mock Test</span>
+          </Link>
+          <Link
+            href="/progress"
+            className="w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-sm text-muted hover:text-text-2 hover:bg-surface-2 transition-all duration-150 border border-transparent"
+          >
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="1 11 4.5 6.5 7.5 9 11 4.5 15 9"/>
+            </svg>
+            <span>Progress</span>
           </Link>
         </div>
 

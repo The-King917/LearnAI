@@ -16,6 +16,11 @@ model User {
   masteries          SubjectMastery[]
   applicationProfile ApplicationProfile?
   chatSessions       ChatSession[]
+  studentModels      StudentModel[]
+  studyPlans         StudyPlan[]
+  essayVersions      EssayVersion[]
+  problemAttempts    ProblemAttempt[]
+  mockTests          MockTest[]
 
   plan                 String        @default("FREE") // "FREE" | "PRO"
   isFounder            Boolean       @default(false) // first 5 signups: free PRO access forever
@@ -97,4 +102,131 @@ model ApplicationProfile {
   demographics     String?
   schoolProfile    String?
   updatedAt        DateTime @updatedAt
+}
+
+// AI-generated original competition problems — stored ahead of time, never served twice to same student
+model Problem {
+  id               String   @id @default(cuid())
+  competition      String   // "amc10", "aime", "usaco", etc.
+  difficulty       String   // "easy", "medium", "hard", "very_hard"
+  topics           Json     @default("[]") // string[]
+  statement        String   @db.Text
+  answer           String
+  solution         String   @db.Text
+  format           String   // "mcq", "integer", "short_answer", "proof", "code"
+  choices          Json?    // MCQ: {"A": "...", "B": "...", "C": "...", "D": "...", "E": "..."}
+  metadata         Json?    // USACO: {sampleIO, constraints, timeLimit}
+  // Validation
+  status           String   @default("pending") // "pending" | "approved" | "rejected" | "flagged"
+  validationScore  Float?
+  validationNotes  String?  @db.Text
+  reviewedAt       DateTime?
+  reviewedBy       String?
+  // Usage
+  usedCount        Int      @default(0)
+  generatedAt      DateTime @default(now())
+  attempts         ProblemAttempt[]
+  testProblems     MockTestProblem[]
+
+  @@index([competition, status, difficulty])
+}
+
+// Per-student attempt record — prevents re-serving seen problems
+model ProblemAttempt {
+  id          String   @id @default(cuid())
+  userId      String
+  problemId   String
+  testId      String?
+  answer      String?
+  correct     Boolean?
+  timeSecs    Int?
+  debriefed   Boolean  @default(false)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problem     Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@unique([userId, problemId])
+  @@index([userId, testId])
+}
+
+// A mock test session — one per student per attempt
+model MockTest {
+  id              String    @id @default(cuid())
+  userId          String
+  competition     String
+  status          String    @default("active") // "active" | "completed"
+  timed           Boolean   @default(true)
+  timeLimitSecs   Int?
+  startedAt       DateTime  @default(now())
+  completedAt     DateTime?
+  score           Float?    // raw score
+  percentile      Float?    // estimated vs real historical cutoffs
+  topicBreakdown  Json?     // { topic: { correct, total } }
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problems        MockTestProblem[]
+
+  @@index([userId, competition])
+}
+
+model MockTestProblem {
+  id         String   @id @default(cuid())
+  testId     String
+  problemId  String
+  position   Int
+  test       MockTest @relation(fields: [testId], references: [id], onDelete: Cascade)
+  problem    Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  @@unique([testId, position])
+}
+
+// Concept-level knowledge model per student per subject, updated by diagnostic and study agents
+model StudentModel {
+  id           String   @id @default(cuid())
+  userId       String
+  subjectId    String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // { conceptName: { level: 0-1, attempts: number, correct: number, lastSeen: ISO string } }
+  concepts     Json     @default("{}")
+  // Array of { date, summary, performance } from completed sessions
+  summaries    Json     @default("[]")
+  overallLevel String?
+  confidence   Float    @default(0)
+  updatedAt    DateTime @updatedAt
+
+  @@unique([userId, subjectId])
+}
+
+// Day-by-day competition prep plan, mutated by the Competition Prep Agent after each session
+model StudyPlan {
+  id              String    @id @default(cuid())
+  userId          String
+  subjectId       String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  competitionDate DateTime?
+  // Array of { day, date, topics, completed, performance, notes }
+  days            Json      @default("[]")
+  // Array of { date, reason, changes }
+  adjustments     Json      @default("[]")
+  // Array of { week, summary, atRisk }
+  weeklyReports   Json      @default("[]")
+  currentDay      Int       @default(0)
+  status          String    @default("active")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@unique([userId, subjectId])
+}
+
+// Tracks essay revisions across college counselor sessions
+model EssayVersion {
+  id        String   @id @default(cuid())
+  userId    String
+  school    String
+  content   String   @db.Text
+  feedback  String?  @db.Text
+  version   Int      @default(1)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([userId, school])
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { SUBJECTS, SUBJECT_GROUPS, Subject } from "@/lib/subjects";
+import { VISIBLE_SUBJECTS, SUBJECT_GROUPS, Subject } from "@/lib/subjects";
 import { usePlan } from "@/lib/use-plan";
 
 interface SubjectDropdownProps {
@@ -18,13 +18,13 @@ export default function SubjectDropdown({ value, onChange }: SubjectDropdownProp
   const isFree = plan === "FREE";
 
   const filtered = query.trim()
-    ? SUBJECTS.filter(
+    ? VISIBLE_SUBJECTS.filter(
         (s) =>
           s.name.toLowerCase().includes(query.toLowerCase()) ||
           s.group.toLowerCase().includes(query.toLowerCase()) ||
           (s.shortName?.toLowerCase().includes(query.toLowerCase()) ?? false)
       )
-    : SUBJECTS;
+    : VISIBLE_SUBJECTS;
 
   const filteredGroups = SUBJECT_GROUPS.filter((g) => filtered.some((s) => s.group === g));
 

@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, Suspense } from "react";
 import { useSession } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
 import ChatInterface from "@/components/ChatInterface";
 import PracticeMode from "@/components/PracticeMode";
@@ -47,8 +48,9 @@ function formatTime(d: Date): string {
   return `${d.getHours() % 12 || 12}:${d.getMinutes().toString().padStart(2, "0")}${d.getHours() >= 12 ? "pm" : "am"}`;
 }
 
-export default function CoachPage() {
+function CoachPageInner() {
   const { data: session, status } = useSession();
+  const searchParams = useSearchParams();
   const [subject, setSubject] = useState<Subject | null>(null);
   const [difficulty, setDifficulty] = useState<Difficulty>("intermediate");
   const [mode, setMode] = useState<Mode>("chat");
@@ -57,11 +59,48 @@ export default function CoachPage() {
   const [mastery, setMastery] = useState<Record<string, MasteryRecord>>({});
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [chatInitialMessages, setChatInitialMessages] = useState<ChatMessage[] | undefined>(undefined);
+  const [debriefInitialMessage, setDebriefInitialMessage] = useState<string | undefined>(undefined);
+  const [isDebriefMode, setIsDebriefMode] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
 
   const signedIn = status === "authenticated" && !!session;
   const { plan, loading: planLoading } = usePlan();
   const subjectLocked = signedIn && !planLoading && plan === "FREE" && isRestrictedSubject(subject?.id);
+
+  // Debrief mode: auto-load a specific wrong problem from a mock test
+  useEffect(() => {
+    const debriefTestId = searchParams.get("debrief");
+    const problemId = searchParams.get("problem");
+    const competitionId = searchParams.get("subject");
+    if (!debriefTestId || !problemId || !competitionId || !signedIn) return;
+
+    const subj = getSubjectById(competitionId);
+    if (subj) {
+      setSubject(subj);
+      setMode("chat");
+      setIsDebriefMode(true);
+    }
+
+    fetch(`/api/mock-tests/${debriefTestId}/problem/${problemId}`)
+      .then((r) => r.json())
+      .then((data: { problem?: { statement: string; answer: string; choices?: Record<string, string> | null; format: string }; studentAnswer?: string; correct?: boolean; competition?: string }) => {
+        if (!data.problem) return;
+        const { statement, answer, choices, format } = data.problem;
+        const studentAnswer = data.studentAnswer ?? "(no answer given)";
+
+        let choicesText = "";
+        if (choices && format === "mcq") {
+          choicesText = "\nAnswer choices: " + Object.entries(choices).map(([k, v]) => `(${k}) ${v}`).join("  ");
+        }
+
+        setDebriefInitialMessage(
+          `I just got this problem wrong on my mock test and want to understand it.\n\nProblem:\n${statement}${choicesText}\n\nMy answer: ${studentAnswer}\nCorrect answer: ${answer}\n\nPlease walk me through this Socratically — ask me questions to help me figure out where my reasoning broke down, but don't just give me the solution.`
+        );
+        setKey((k) => k + 1);
+      })
+      .catch(() => {});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signedIn]);
 
   useEffect(() => {
     if (!signedIn) { setMastery({}); return; }
@@ -293,6 +332,12 @@ export default function CoachPage() {
                   difficulty={difficulty}
                   mode="chat"
                   initialMessages={chatInitialMessages}
+                  initialMessage={debriefInitialMessage}
+                  systemPrompt={isDebriefMode
+                    ? `You are a Socratic competition math/science coach running a post-test debrief. The student got this problem wrong. Your job is NOT to explain the solution — instead, ask targeted questions to help them discover exactly where their reasoning failed. Start by asking what approach they used. Never give the answer directly; guide them to it step by step. Keep each response to 1-2 sentences.`
+                    : undefined}
+                  emptyTitle={isDebriefMode ? "Post-test debrief" : undefined}
+                  emptySubtitle={isDebriefMode ? "Loading problem..." : undefined}
                   onNewMessage={persistMessage}
                 />
               )}
@@ -309,5 +354,13 @@ export default function CoachPage() {
 
       {authOpen && <AuthModal onClose={() => setAuthOpen(false)} />}
     </div>
+  );
+}
+
+export default function CoachPage() {
+  return (
+    <Suspense>
+      <CoachPageInner />
+    </Suspense>
   );
 }

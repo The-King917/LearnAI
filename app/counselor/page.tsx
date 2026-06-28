@@ -1,179 +1,97 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
-import CounselorSidebar, { CounselorView } from "@/components/CounselorSidebar";
-import ChatInterface from "@/components/ChatInterface";
-import ProfileEditor from "@/components/ProfileEditor";
-import { University } from "@/lib/universities";
-import { ApplicationProfile, buildAdmissionsPrompt, buildMatchPrompt, isProfileEmpty } from "@/lib/admissions";
-import { usePlan } from "@/lib/use-plan";
+import { useState } from "react";
 
-const EMPTY_PROFILE: ApplicationProfile = {};
+export default function CounselorWaitlistPage() {
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
-export default function CounselorPage() {
-  const { data: session, status } = useSession();
-  const [view, setView] = useState<CounselorView>("review");
-  const [university, setUniversity] = useState<University | null>(null);
-  const [recentUniversities, setRecentUniversities] = useState<University[]>([]);
-  const [customUniversities, setCustomUniversities] = useState<University[]>([]);
-  const [profile, setProfile] = useState<ApplicationProfile>(EMPTY_PROFILE);
-  const [profileOpen, setProfileOpen] = useState(false);
-  const [key, setKey] = useState(0);
-
-  const signedIn = status === "authenticated" && !!session;
-  const { plan, loading: planLoading } = usePlan();
-  const locked = signedIn && !planLoading && plan === "FREE";
-
-  useEffect(() => {
-    if (!signedIn) { setProfile(EMPTY_PROFILE); return; }
-    fetch("/api/profile")
-      .then((r) => r.json())
-      .then((data) => { if (data.profile) setProfile(data.profile); })
-      .catch(() => {});
-  }, [signedIn]);
-
-  const handleViewChange = useCallback((v: CounselorView) => {
-    setView(v);
-    setKey((k) => k + 1);
-  }, []);
-
-  const handleUniversityChange = useCallback((u: University) => {
-    setUniversity(u);
-    setKey((k) => k + 1);
-    setRecentUniversities((prev) => [u, ...prev.filter((r) => r.id !== u.id)].slice(0, 8));
-    if (u.isCustom) {
-      setCustomUniversities((prev) => [u, ...prev.filter((r) => r.id !== u.id)].slice(0, 20));
-    }
-  }, []);
-
-  const handleProfileSave = useCallback((p: ApplicationProfile) => {
-    setProfile(p);
-    setKey((k) => k + 1);
-  }, []);
-
-  const profileFilled = !isProfileEmpty(profile);
-  const systemPrompt = view === "match"
-    ? buildMatchPrompt(profile, customUniversities)
-    : university ? buildAdmissionsPrompt(university, profile) : undefined;
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setSubmitted(true);
+  };
 
   return (
-    <div className="relative flex h-screen overflow-hidden bg-background">
-      <div
-        className="fixed inset-0 pointer-events-none z-0"
-        style={{
-          backgroundImage: "radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
-        }}
-      />
-      <div
-        className="fixed inset-0 pointer-events-none z-0"
-        style={{
-          background: "radial-gradient(ellipse 70% 50% at 50% -10%, rgba(255,255,255,0.05) 0%, transparent 65%)",
-        }}
-      />
+    <div className="min-h-screen bg-background text-text flex flex-col">
+      <div className="fixed inset-0 pointer-events-none" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
+      <div className="fixed inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 80% 55% at 50% -5%, rgba(255,255,255,0.08) 0%, transparent 65%)" }} />
 
-      <div className="relative z-10 h-full shrink-0">
-        <CounselorSidebar
-          view={view}
-          onViewChange={handleViewChange}
-          university={university}
-          onUniversityChange={handleUniversityChange}
-          onEditProfile={() => setProfileOpen(true)}
-          profileFilled={profileFilled}
-          recentUniversities={recentUniversities}
-        />
-      </div>
+      <nav className="relative z-10 flex items-center justify-between px-8 py-5 border-b border-border/60 backdrop-blur-sm bg-background/70">
+        <Link href="/" className="flex items-center text-sm font-semibold tracking-[-0.01em]">
+          Poly
+          <span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-white text-background text-2xs font-bold tracking-[0.02em]">Teach</span>
+        </Link>
+        <Link href="/coach" className="text-sm font-medium text-muted hover:text-text transition-colors duration-150">
+          Open app →
+        </Link>
+      </nav>
 
-      <div className="relative z-10 flex-1 flex flex-col overflow-hidden min-w-0">
-        <header className="h-11 shrink-0 border-b border-border flex items-center px-5 gap-2 bg-gradient-to-b from-surface/40 to-transparent backdrop-blur-sm">
-          <span className="w-1.5 h-1.5 rounded-full bg-white shrink-0" />
-          <span className="text-sm font-medium text-text">College Counselor</span>
-          {view === "review" && university && (
-            <>
-              <span className="text-subtle">/</span>
-              <span className="text-sm text-muted">{university.name}</span>
-              <span className="text-subtle">·</span>
-              <span className="text-2xs text-muted px-1.5 py-0.5 rounded-full border border-border">{university.acceptanceRate} accepted</span>
-            </>
-          )}
-          {view === "match" && (
-            <>
-              <span className="text-subtle">/</span>
-              <span className="text-sm text-muted">Find my matches</span>
-            </>
-          )}
-          {!profileFilled && (view === "match" || university) && (
-            <span className="text-2xs text-subtle ml-auto hidden sm:inline">Fill out your profile for a real evaluation</span>
-          )}
-        </header>
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-24 text-center">
+        <div className="max-w-md w-full">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-surface text-xs text-muted mb-8">
+            <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
+            Coming soon
+          </div>
 
-        <div className="flex-1 overflow-hidden">
-          {locked ? (
-            <div className="flex flex-col items-center justify-center h-full gap-4 text-center px-6">
-              <div>
-                <p className="text-lg font-semibold tracking-[-0.02em] text-text">College Counselor is a Pro feature</p>
-                <p className="text-sm text-muted mt-1.5">Upgrade to Pro to evaluate your chances, get essay feedback, and find your best-fit schools.</p>
+          <h1 className="text-[clamp(28px,5vw,44px)] font-semibold tracking-[-0.03em] leading-[1.1] mb-4">
+            College Counselor
+          </h1>
+
+          <p className="text-sm text-muted leading-relaxed mb-10">
+            An agentic AI counselor that reads your essays and activities, researches each target school, tracks revisions across sessions, and gives you a calibrated, school-specific admission estimate — not generic feedback.
+          </p>
+
+          <div className="space-y-3 text-left mb-12">
+            {[
+              "Upload essays → agent reads all materials and researches each school",
+              "Per-school feedback that quotes your specific lines",
+              "Revision tracking — knows what it told you last time",
+              "Calibrated admission estimate with explicit uncertainty",
+            ].map((item) => (
+              <div key={item} className="flex items-start gap-3">
+                <div className="w-4 h-4 rounded border border-border bg-surface-2 flex items-center justify-center shrink-0 mt-0.5">
+                  <svg width="7" height="7" viewBox="0 0 8 8" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M1 4.5L3 6.5 7 2" />
+                  </svg>
+                </div>
+                <span className="text-sm text-muted">{item}</span>
               </div>
-              <Link
-                href="/pricing"
-                className="px-5 py-2.5 rounded-lg text-sm font-semibold bg-white text-background hover:bg-white/85 transition-all duration-150"
+            ))}
+          </div>
+
+          {!submitted ? (
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+              <input
+                type="email"
+                required
+                placeholder="your@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full bg-surface border border-border rounded-lg px-4 py-2.5 text-sm text-text placeholder-muted outline-none focus:border-white/25 transition-colors"
+              />
+              <button
+                type="submit"
+                className="w-full px-4 py-2.5 rounded-lg text-sm font-semibold bg-white text-background hover:bg-white/85 transition-all duration-150"
               >
-                Upgrade to Pro
-              </Link>
-            </div>
-          ) : view === "match" ? (
-            <ChatInterface
-              key={key}
-              subject={null}
-              systemPrompt={systemPrompt}
-              feature="counselor"
-              emptyTitle="Find schools that match your profile"
-              emptySubtitle={
-                customUniversities.length > 0
-                  ? "I'll sort our 40+ schools plus the ones you've added into Far Reach, Reach, Target, and Likely based on your stats — then point out your best genuine matches."
-                  : "I'll sort all 40+ schools on our list into Far Reach, Reach, Target, and Likely based on your stats — then point out your best genuine matches. Add your own schools (like a safety school) from the University picker in Review mode."
-              }
-              quickPrompts={[
-                "Show me my matches",
-                "Which schools am I a likely admit at?",
-                "Which schools are my best genuine fits?",
-              ]}
-              placeholder="Ask about your school list…"
-            />
+                Join the waitlist
+              </button>
+            </form>
           ) : (
-            <ChatInterface
-              key={key}
-              subject={null}
-              systemPrompt={systemPrompt}
-              feature="counselor"
-              emptyTitle={university ? `${university.name} admissions review` : "Select a university to begin"}
-              emptySubtitle={
-                university
-                  ? "I'll evaluate your application as if I were on the committee — be honest with me about what you've got."
-                  : "Choose a school from the sidebar, then ask for your chances."
-              }
-              quickPrompts={[
-                "Evaluate my full application",
-                "What are my chances?",
-                "How can I improve my essay?",
-                "What's missing from my application?",
-              ]}
-              placeholder={university ? `Ask the ${university.name} admissions officer…` : "Select a university first…"}
-            />
+            <div className="px-6 py-4 rounded-xl border border-border bg-surface text-sm text-muted">
+              You&apos;re on the list. We&apos;ll reach out when it&apos;s ready.
+            </div>
           )}
+
+          <p className="mt-8 text-xs text-subtle">
+            In the meantime →{" "}
+            <Link href="/coach" className="text-muted hover:text-text-2 underline underline-offset-2 transition-colors">
+              train for your competition
+            </Link>
+          </p>
         </div>
       </div>
-
-      {profileOpen && (
-        <ProfileEditor
-          profile={profile}
-          signedIn={signedIn}
-          onClose={() => setProfileOpen(false)}
-          onSave={handleProfileSave}
-        />
-      )}
     </div>
   );
 }
