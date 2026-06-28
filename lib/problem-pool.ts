@@ -40,10 +40,8 @@ export async function selectProblemsForTest(
     where: {
       competition,
       status: "approved",
-      id: { notIn: seenSet.size > 0 ? Array.from(seenSet) : undefined },
-      ...(topicFocus && {
-        topics: { array_contains: topicFocus },
-      }),
+      ...(seenSet.size > 0 ? { id: { notIn: Array.from(seenSet) } } : {}),
+      ...(topicFocus ? { topics: { array_contains: topicFocus } } : {}),
     },
     select: {
       id: true,

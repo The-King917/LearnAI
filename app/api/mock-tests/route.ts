@@ -68,59 +68,64 @@ export async function POST(req: NextRequest) {
   const config = getConfig(competition);
   if (!config) return Response.json({ error: "Unknown competition" }, { status: 400 });
 
-  // Select problems from pool
-  const problems = await selectProblemsForTest(userId, competition, count, topicFocus);
+  try {
+    // Select problems from pool
+    const problems = await selectProblemsForTest(userId, competition, count, topicFocus);
 
-  if (problems.length === 0) {
-    return Response.json({
-      error: "No problems available for this competition yet. Check back soon — we're building the problem bank.",
-      code: "NO_PROBLEMS",
-    }, { status: 503 });
-  }
+    if (problems.length === 0) {
+      return Response.json({
+        error: "No problems available for this competition yet. Check back soon — we're building the problem bank.",
+        code: "NO_PROBLEMS",
+      }, { status: 503 });
+    }
 
-  // Create the mock test
-  const test = await prisma.mockTest.create({
-    data: {
-      userId,
-      competition,
-      timed,
-      timeLimitSecs: timed ? config.timeLimitMins * 60 : null,
-      problems: {
-        create: problems.map((p, i) => ({
-          problemId: p.id,
-          position: i,
-        })),
+    // Create the mock test
+    const test = await prisma.mockTest.create({
+      data: {
+        userId,
+        competition,
+        timed,
+        timeLimitSecs: timed ? config.timeLimitMins * 60 : null,
+        problems: {
+          create: problems.map((p, i) => ({
+            problemId: p.id,
+            position: i,
+          })),
+        },
       },
-    },
-    include: {
-      problems: {
-        include: {
-          problem: {
-            select: {
-              id: true,
-              statement: true,
-              format: true,
-              choices: true,
-              topics: true,
-              difficulty: true,
-              // Never expose answer or solution during the test
+      include: {
+        problems: {
+          include: {
+            problem: {
+              select: {
+                id: true,
+                statement: true,
+                format: true,
+                choices: true,
+                topics: true,
+                difficulty: true,
+                // Never expose answer or solution during the test
+              },
             },
           },
+          orderBy: { position: "asc" },
         },
-        orderBy: { position: "asc" },
       },
-    },
-  });
+    });
 
-  // Record that these problems have been served to this student
-  await prisma.problemAttempt.createMany({
-    data: problems.map((p) => ({
-      userId,
-      problemId: p.id,
-      testId: test.id,
-    })),
-    skipDuplicates: true,
-  });
+    // Record that these problems have been served to this student
+    await prisma.problemAttempt.createMany({
+      data: problems.map((p) => ({
+        userId,
+        problemId: p.id,
+        testId: test.id,
+      })),
+      skipDuplicates: true,
+    });
 
-  return Response.json({ test });
+    return Response.json({ test });
+  } catch (err) {
+    console.error("[api/mock-tests POST]", err);
+    return Response.json({ error: "Failed to start test. Please try again." }, { status: 500 });
+  }
 }
