@@ -178,7 +178,7 @@ export default function CoachCanvas({
 
         {/* Subject grid */}
         <div className="mb-8">
-          <p className="text-2xs font-medium text-muted uppercase tracking-[0.07em] mb-3">Competition</p>
+          <p className="text-2xs font-medium text-accent uppercase tracking-[0.07em] mb-3">Competition</p>
 
           {/* Math row */}
           <p className="text-2xs text-subtle mb-2 tracking-wide">Math</p>
@@ -189,7 +189,7 @@ export default function CoachCanvas({
                 onClick={() => setSubject(s)}
                 className={`px-3 py-3 rounded-xl border text-left transition-all duration-100 ${
                   subject?.id === s.id
-                    ? "border-accent bg-accent-muted text-text"
+                    ? "border-accent bg-accent text-background"
                     : "border-border bg-surface text-muted hover:border-border-2 hover:text-text-2"
                 }`}
               >
@@ -207,7 +207,7 @@ export default function CoachCanvas({
                 onClick={() => setSubject(s)}
                 className={`px-3 py-3 rounded-xl border text-left transition-all duration-100 ${
                   subject?.id === s.id
-                    ? "border-accent bg-accent-muted text-text"
+                    ? "border-accent bg-accent text-background"
                     : "border-border bg-surface text-muted hover:border-border-2 hover:text-text-2"
                 }`}
               >
@@ -219,7 +219,7 @@ export default function CoachCanvas({
 
         {/* Difficulty segmented control */}
         <div className="mb-8">
-          <p className="text-2xs font-medium text-muted uppercase tracking-[0.07em] mb-3">Level</p>
+          <p className="text-2xs font-medium text-accent uppercase tracking-[0.07em] mb-3">Level</p>
           <div className="flex bg-surface-2 border border-border rounded-xl p-1 gap-1">
             {DIFFICULTY_OPTIONS.map((opt) => (
               <button
@@ -227,7 +227,7 @@ export default function CoachCanvas({
                 onClick={() => setDifficulty(opt.value)}
                 className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all duration-100 ${
                   difficulty === opt.value
-                    ? "bg-white text-background shadow-sm"
+                    ? "bg-accent text-background shadow-sm"
                     : "text-muted hover:text-text-2"
                 }`}
               >
@@ -240,7 +240,7 @@ export default function CoachCanvas({
         {/* Recent sessions */}
         {recentSessions.length > 0 && (
           <div className="mb-8">
-            <p className="text-2xs font-medium text-muted uppercase tracking-[0.07em] mb-3">Resume</p>
+            <p className="text-2xs font-medium text-accent uppercase tracking-[0.07em] mb-3">Resume</p>
             <div className="space-y-2">
               {recentSessions.map((s) => (
                 <button

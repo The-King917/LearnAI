@@ -74,7 +74,7 @@ export default function NavRail({ mode, onModeChange }: NavRailProps) {
                 onClick={() => onModeChange(item.id)}
                 title={item.label}
                 className={`relative w-full flex flex-col items-center justify-center gap-1.5 py-3 transition-colors duration-100 ${
-                  active ? "text-text" : "text-muted hover:text-text-2"
+                  active ? "text-accent" : "text-muted hover:text-text-2"
                 }`}
               >
                 {active && (
@@ -102,10 +102,10 @@ export default function NavRail({ mode, onModeChange }: NavRailProps) {
                 href="/mock-test"
                 title="Mock Test"
                 className={`relative w-full flex flex-col items-center justify-center gap-1.5 py-3 transition-colors duration-100 ${
-                  active ? "text-text" : "text-muted hover:text-text-2"
+                  active ? "text-accent" : "text-muted hover:text-text-2"
                 }`}
               >
-                {active && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-7 bg-white rounded-r" />}
+                {active && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-7 bg-accent rounded-r" />}
                 <span className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ${active ? "bg-accent-muted" : ""}`}>
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="2" y="2" width="12" height="12" rx="2" />
@@ -127,10 +127,10 @@ export default function NavRail({ mode, onModeChange }: NavRailProps) {
                 href="/progress"
                 title="Progress"
                 className={`relative w-full flex flex-col items-center justify-center gap-1.5 py-3 transition-colors duration-100 ${
-                  active ? "text-text" : "text-muted hover:text-text-2"
+                  active ? "text-accent" : "text-muted hover:text-text-2"
                 }`}
               >
-                {active && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-7 bg-white rounded-r" />}
+                {active && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-7 bg-accent rounded-r" />}
                 <span className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ${active ? "bg-accent-muted" : ""}`}>
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="1 11 4.5 6.5 7.5 9 11 4.5 15 9" />
