@@ -27,6 +27,9 @@ export default function AccountPage() {
   const [joinCode, setJoinCode] = useState("");
   const [joinError, setJoinError] = useState("");
   const [joining, setJoining] = useState(false);
+  const [confirming, setConfirming] = useState<string | null>(null);
+  const [clearing, setClearing] = useState<string | null>(null);
+  const [cleared, setCleared] = useState<string | null>(null);
 
   const refresh = useCallback(() => {
     fetch("/api/account").then((r) => r.json()).then((d) => { if (!d.error) setData(d); }).catch(() => {});
@@ -83,6 +86,24 @@ export default function AccountPage() {
       setJoinError(err instanceof Error ? err.message : "Couldn't join");
     } finally {
       setJoining(false);
+    }
+  };
+
+  const clearData = async (scope: string) => {
+    setClearing(scope);
+    setConfirming(null);
+    try {
+      await fetch("/api/account/reset", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ scope }),
+      });
+      setCleared(scope);
+      setTimeout(() => setCleared(null), 3000);
+    } catch {
+      // silent fail
+    } finally {
+      setClearing(null);
     }
   };
 
@@ -211,6 +232,86 @@ export default function AccountPage() {
                 </div>
               </div>
             )}
+            {/* Data & Privacy */}
+            <div>
+              <h2 className="text-sm font-semibold text-text mb-1">Data</h2>
+              <p className="text-xs text-muted mb-4">Clear specific activity data. All deletions are permanent and cannot be undone.</p>
+              <div className="rounded-xl border border-border overflow-hidden divide-y divide-border">
+                {[
+                  {
+                    scope: "sessions",
+                    title: "Session history",
+                    desc: "All coaching conversations across Coach, Practice, and Diagnose modes.",
+                  },
+                  {
+                    scope: "mastery",
+                    title: "Mastery & concept data",
+                    desc: "Skill assessments, concept scores, and diagnostic results.",
+                  },
+                  {
+                    scope: "tests",
+                    title: "Mock test history",
+                    desc: "Test scores, problem attempts, and the seen-problems pool. Clears this so you get fresh problems on next test.",
+                  },
+                  {
+                    scope: "plan",
+                    title: "Study plan",
+                    desc: "Your active prep campaign, schedule, and weekly reports.",
+                  },
+                  {
+                    scope: "all",
+                    title: "Erase everything",
+                    desc: "Permanently delete all activity data across all features.",
+                    danger: true,
+                  },
+                ].map(({ scope, title, desc, danger }) => (
+                  <div key={scope} className={`p-4 bg-surface ${danger ? "bg-red-500/3" : ""}`}>
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <p className={`text-sm font-medium ${danger ? "text-red-400" : "text-text-2"}`}>{title}</p>
+                        <p className="text-xs text-muted mt-0.5 leading-relaxed">{desc}</p>
+                      </div>
+                      <div className="shrink-0 flex items-center gap-2">
+                        {cleared === scope ? (
+                          <span className="text-xs text-muted">Cleared</span>
+                        ) : confirming === scope ? (
+                          <>
+                            <button
+                              onClick={() => setConfirming(null)}
+                              className="text-xs text-muted hover:text-text-2 transition-colors"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              onClick={() => clearData(scope)}
+                              disabled={clearing === scope}
+                              className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${
+                                danger
+                                  ? "bg-red-500/15 text-red-400 hover:bg-red-500/25 border border-red-500/20"
+                                  : "bg-white/8 text-text hover:bg-white/12 border border-white/10"
+                              } disabled:opacity-50`}
+                            >
+                              {clearing === scope ? "Clearing…" : "Confirm"}
+                            </button>
+                          </>
+                        ) : (
+                          <button
+                            onClick={() => setConfirming(scope)}
+                            className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${
+                              danger
+                                ? "border-red-500/20 text-red-400 hover:border-red-500/40"
+                                : "border-border text-muted hover:border-border-2 hover:text-text-2"
+                            }`}
+                          >
+                            {danger ? "Erase all" : "Clear"}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         )}
       </section>

@@ -27,11 +27,11 @@ interface CoachCanvasProps {
   initialSubjectId?: string | null;
 }
 
-const DIFFICULTY_OPTIONS: Array<{ value: Difficulty; label: string }> = [
-  { value: "beginner",     label: "AMC 8" },
-  { value: "intermediate", label: "AMC 10–12" },
-  { value: "advanced",     label: "AIME" },
-  { value: "olympiad",     label: "USAMO" },
+const DIFFICULTY_OPTIONS: Array<{ value: Difficulty; label: string; sub: string }> = [
+  { value: "beginner",     label: "Intro",    sub: "Foundational" },
+  { value: "intermediate", label: "Standard", sub: "Competition" },
+  { value: "advanced",     label: "Hard",     sub: "Qualifying" },
+  { value: "olympiad",     label: "Expert",   sub: "National" },
 ];
 
 function timeAgo(iso: string): string {

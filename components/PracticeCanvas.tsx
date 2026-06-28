@@ -11,10 +11,10 @@ interface PracticeCanvasProps {
 }
 
 const DIFFICULTY_OPTIONS: Array<{ value: Difficulty; label: string }> = [
-  { value: "beginner",     label: "AMC 8" },
-  { value: "intermediate", label: "AMC 10–12" },
-  { value: "advanced",     label: "AIME" },
-  { value: "olympiad",     label: "USAMO" },
+  { value: "beginner",     label: "Intro" },
+  { value: "intermediate", label: "Standard" },
+  { value: "advanced",     label: "Hard" },
+  { value: "olympiad",     label: "Expert" },
 ];
 
 const TOPIC_PILLS = [
@@ -69,7 +69,7 @@ export default function PracticeCanvas({ signedIn }: PracticeCanvasProps) {
         <div className="h-10 shrink-0 border-b border-border flex items-center px-5 gap-2">
           <span className="text-sm text-muted">{subject.name}</span>
           <span className="text-subtle">·</span>
-          <span className="text-2xs text-muted px-2 py-0.5 rounded-full border border-border capitalize">
+          <span className="text-2xs text-muted px-2 py-0.5 rounded-full border border-border">
             {DIFFICULTY_OPTIONS.find((d) => d.value === difficulty)?.label ?? difficulty}
           </span>
           <button
