@@ -69,7 +69,6 @@ export default function CoachCanvas({
       .then((data) => {
         const sessions: RecentSession[] = (data.sessions ?? [])
           .filter((s: { mode: string }) => s.mode === "chat")
-          .slice(0, 3)
           .map((s: { id: string; subjectId: string; updatedAt: string }) => ({
             id: s.id,
             subjectId: s.subjectId,
