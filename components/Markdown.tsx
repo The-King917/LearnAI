@@ -37,6 +37,13 @@ interface MarkdownProps {
   streaming?: boolean;
 }
 
+// Escape bare currency dollar signs (e.g. $1.20) so remark-math doesn't
+// treat them as LaTeX delimiters. Math expressions use \(...\) or $$...$$
+// from the generator, so single $ followed by a digit is always currency.
+function escapeCurrency(text: string): string {
+  return text.replace(/\$(?=\d)/g, "\\$");
+}
+
 export default function Markdown({ children, streaming }: MarkdownProps) {
   return (
     <div className="prose-md">
@@ -45,7 +52,7 @@ export default function Markdown({ children, streaming }: MarkdownProps) {
         rehypePlugins={[rehypeKatex]}
         components={components}
       >
-        {children}
+        {escapeCurrency(children)}
       </ReactMarkdown>
       {streaming && (
         <span
