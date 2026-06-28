@@ -11,7 +11,7 @@ interface ProfileEditorProps {
   onSave: (profile: ApplicationProfile) => void;
 }
 
-const FIELD_CLASS = "w-full bg-surface-2 border border-border rounded-lg px-3.5 py-2.5 text-sm text-text placeholder-muted outline-none focus:border-white/25 focus:shadow-glow transition-all";
+const FIELD_CLASS = "w-full bg-surface-2 border border-border rounded-lg px-3.5 py-2.5 text-sm text-text placeholder-muted outline-none focus:border-accent transition-all";
 
 export default function ProfileEditor({ profile, signedIn, onClose, onSave }: ProfileEditorProps) {
   const [form, setForm] = useState<ApplicationProfile>(profile);
@@ -191,7 +191,7 @@ export default function ProfileEditor({ profile, signedIn, onClose, onSave }: Pr
           <button
             type="submit"
             disabled={saving}
-            className="w-full px-4 py-2.5 rounded-lg text-sm font-semibold bg-white text-background hover:bg-white/85 disabled:opacity-50 transition-all shadow-glow"
+            className="w-full px-4 py-2.5 rounded-lg text-sm font-semibold bg-accent text-background hover:bg-accent-hover disabled:bg-disabled disabled:text-disabled-text transition-all"
           >
             {saving ? "Saving…" : "Save profile"}
           </button>

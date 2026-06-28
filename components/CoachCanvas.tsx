@@ -189,7 +189,7 @@ export default function CoachCanvas({
                 onClick={() => setSubject(s)}
                 className={`px-3 py-3 rounded-xl border text-left transition-all duration-100 ${
                   subject?.id === s.id
-                    ? "border-white/30 bg-white/6 text-text shadow-glow"
+                    ? "border-accent bg-accent-muted text-text"
                     : "border-border bg-surface text-muted hover:border-border-2 hover:text-text-2"
                 }`}
               >
@@ -207,7 +207,7 @@ export default function CoachCanvas({
                 onClick={() => setSubject(s)}
                 className={`px-3 py-3 rounded-xl border text-left transition-all duration-100 ${
                   subject?.id === s.id
-                    ? "border-white/30 bg-white/6 text-text shadow-glow"
+                    ? "border-accent bg-accent-muted text-text"
                     : "border-border bg-surface text-muted hover:border-border-2 hover:text-text-2"
                 }`}
               >
@@ -263,7 +263,7 @@ export default function CoachCanvas({
         <button
           onClick={startSession}
           disabled={!subject}
-          className="w-full py-3 rounded-xl text-sm font-semibold bg-white text-background hover:bg-white/85 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150 shadow-glow"
+          className="w-full py-3 rounded-xl text-sm font-semibold bg-accent text-background hover:bg-accent-hover disabled:bg-disabled disabled:text-disabled-text disabled:cursor-not-allowed transition-all duration-150"
         >
           {subject ? `Start ${subject.name} session` : "Select a competition to begin"}
         </button>

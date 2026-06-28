@@ -192,7 +192,7 @@ export default function MockTestPage() {
       <div className="min-h-screen bg-background text-text">
         <nav className="flex items-center justify-between px-8 py-5 border-b border-border/60">
           <Link href="/coach" className="flex items-center text-sm font-semibold tracking-[-0.01em]">
-            Poly<span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-white text-background text-2xs font-bold">Teach</span>
+            Poly<span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-accent text-background text-2xs font-bold">Teach</span>
           </Link>
           <span className="text-sm text-muted">Mock Test</span>
         </nav>
@@ -212,7 +212,7 @@ export default function MockTestPage() {
                   onClick={() => setCompetition(c.id)}
                   className={`p-3 rounded-xl border text-left transition-all duration-100 ${
                     competition === c.id
-                      ? "border-white/30 bg-surface-2 text-text"
+                      ? "border-accent bg-accent-muted text-text"
                       : "border-border bg-surface text-muted hover:border-border-2 hover:text-text-2"
                   }`}
                 >
@@ -232,7 +232,7 @@ export default function MockTestPage() {
                   onClick={() => setTimed(t)}
                   className={`px-4 py-2 rounded-lg border text-sm transition-all duration-100 ${
                     timed === t
-                      ? "border-white/30 bg-surface-2 text-text"
+                      ? "border-accent bg-accent-muted text-text"
                       : "border-border bg-surface text-muted hover:border-border-2"
                   }`}
                 >
@@ -245,7 +245,7 @@ export default function MockTestPage() {
           <button
             onClick={startTest}
             disabled={loading}
-            className="px-6 py-3 rounded-lg text-sm font-semibold bg-white text-background hover:bg-white/85 disabled:opacity-50 transition-all duration-150"
+            className="px-6 py-3 rounded-lg text-sm font-semibold bg-accent text-background hover:bg-accent-hover disabled:bg-disabled disabled:text-disabled-text transition-all duration-150"
           >
             {loading ? "Selecting problems…" : "Start test"}
           </button>
@@ -264,7 +264,7 @@ export default function MockTestPage() {
       <div className="min-h-screen bg-background text-text">
         <nav className="flex items-center justify-between px-8 py-5 border-b border-border/60">
           <Link href="/coach" className="flex items-center text-sm font-semibold tracking-[-0.01em]">
-            Poly<span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-white text-background text-2xs font-bold">Teach</span>
+            Poly<span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-accent text-background text-2xs font-bold">Teach</span>
           </Link>
           <span className="text-sm text-muted">{competition.toUpperCase()} Results</span>
         </nav>
@@ -296,7 +296,7 @@ export default function MockTestPage() {
                       <span className="text-sm text-muted w-40 truncate capitalize">{topic.replace(/_/g, " ")}</span>
                       <div className="flex-1 h-1.5 bg-surface-2 rounded-full overflow-hidden">
                         <div
-                          className="h-full rounded-full bg-white/60"
+                          className="h-full rounded-full bg-accent/60"
                           style={{ width: `${pct}%` }}
                         />
                       </div>
@@ -380,7 +380,7 @@ export default function MockTestPage() {
           <button
             onClick={handleSubmit}
             disabled={testStatus === "submitting"}
-            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-background hover:bg-white/85 disabled:opacity-50 transition-all"
+            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-accent text-background hover:bg-accent-hover disabled:bg-disabled disabled:text-disabled-text transition-all"
           >
             {testStatus === "submitting" ? "Submitting…" : "Submit test"}
           </button>
@@ -398,7 +398,7 @@ export default function MockTestPage() {
                 onClick={() => goToQuestion(i)}
                 className={`w-8 h-8 rounded-lg text-xs font-medium transition-all duration-100 ${
                   i === current
-                    ? "bg-white text-background"
+                    ? "bg-accent text-background"
                     : answered
                     ? "bg-surface-2 border border-border-2 text-text-2"
                     : "text-muted hover:text-text-2 hover:bg-surface-2"
@@ -437,7 +437,7 @@ export default function MockTestPage() {
                     onClick={() => setAnswers((a) => ({ ...a, [currentProblem.problem.id]: letter }))}
                     className={`w-full flex items-start gap-3 p-4 rounded-xl border text-left transition-all duration-100 ${
                       answers[currentProblem.problem.id] === letter
-                        ? "border-white/30 bg-surface-2 text-text"
+                        ? "border-accent bg-accent-muted text-text"
                         : "border-border bg-surface text-muted hover:border-border-2 hover:text-text-2"
                     }`}
                   >
@@ -458,7 +458,7 @@ export default function MockTestPage() {
                   value={answers[currentProblem.problem.id] ?? ""}
                   onChange={(e) => setAnswers((a) => ({ ...a, [currentProblem.problem.id]: e.target.value }))}
                   placeholder={currentProblem.problem.format === "integer" ? "000" : "Answer…"}
-                  className="w-40 bg-surface border border-border rounded-lg px-4 py-2.5 text-sm text-text outline-none focus:border-white/25 transition-colors"
+                  className="w-40 bg-surface border border-border rounded-lg px-4 py-2.5 text-sm text-text outline-none focus:border-accent transition-colors"
                 />
               </div>
             )}
@@ -471,7 +471,7 @@ export default function MockTestPage() {
                   onChange={(e) => setAnswers((a) => ({ ...a, [currentProblem.problem.id]: e.target.value }))}
                   placeholder="Write your proof here…"
                   rows={10}
-                  className="w-full bg-surface border border-border rounded-lg px-4 py-3 text-sm text-text outline-none focus:border-white/25 transition-colors resize-y font-mono"
+                  className="w-full bg-surface border border-border rounded-lg px-4 py-3 text-sm text-text outline-none focus:border-accent transition-colors resize-y font-mono"
                 />
               </div>
             )}
@@ -484,7 +484,7 @@ export default function MockTestPage() {
                   onChange={(e) => setAnswers((a) => ({ ...a, [currentProblem.problem.id]: e.target.value }))}
                   placeholder="# Write your solution here…"
                   rows={14}
-                  className="w-full bg-surface border border-border rounded-lg px-4 py-3 text-xs text-text outline-none focus:border-white/25 transition-colors resize-y font-mono"
+                  className="w-full bg-surface border border-border rounded-lg px-4 py-3 text-xs text-text outline-none focus:border-accent transition-colors resize-y font-mono"
                 />
               </div>
             )}

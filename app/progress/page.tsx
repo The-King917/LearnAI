@@ -78,7 +78,7 @@ function MiniSparkline({ values, color = "white" }: { values: number[]; color?: 
 }
 
 function levelColor(level: string) {
-  if (level === "olympiad") return "text-white";
+  if (level === "olympiad") return "text-accent";
   if (level === "advanced") return "text-blue-400";
   if (level === "intermediate") return "text-yellow-400";
   return "text-muted";
@@ -131,7 +131,7 @@ export default function ProgressPage() {
       {/* Nav */}
       <nav className="flex items-center justify-between px-8 py-4 border-b border-border/60">
         <Link href="/coach" className="flex items-center text-sm font-semibold tracking-[-0.01em]">
-          Poly<span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-white text-background text-2xs font-bold">Teach</span>
+          Poly<span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-accent text-background text-2xs font-bold">Teach</span>
         </Link>
         <div className="flex items-center gap-1">
           {(["overview", "tests", "concepts"] as const).map((t) => (
@@ -139,7 +139,7 @@ export default function ProgressPage() {
               key={t}
               onClick={() => setTab(t)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium capitalize transition-all ${
-                tab === t ? "bg-white/10 text-text" : "text-muted hover:text-text-2"
+                tab === t ? "bg-accent-muted text-text" : "text-muted hover:text-text-2"
               }`}
             >
               {t}
@@ -233,7 +233,7 @@ export default function ProgressPage() {
                           </div>
                         </div>
                         <div className="h-1.5 bg-surface-2 rounded-full overflow-hidden">
-                          <div className="h-full bg-white/50 rounded-full transition-all" style={{ width: `${pct}%` }} />
+                          <div className="h-full bg-accent/50 rounded-full transition-all" style={{ width: `${pct}%` }} />
                         </div>
                         {p.weeklyReports && Array.isArray(p.weeklyReports) && p.weeklyReports.length > 0 && (
                           <p className="text-xs text-muted mt-2 line-clamp-2">
@@ -250,7 +250,7 @@ export default function ProgressPage() {
             {competitionStats.length === 0 && studyPlans.length === 0 && (
               <div className="text-center py-16">
                 <p className="text-sm text-muted mb-4">No activity yet.</p>
-                <Link href="/mock-test" className="px-4 py-2 rounded-lg text-sm font-semibold bg-white text-background hover:bg-white/85 transition-all">
+                <Link href="/mock-test" className="px-4 py-2 rounded-lg text-sm font-semibold bg-accent text-background hover:bg-accent-hover transition-all">
                   Take your first mock test
                 </Link>
               </div>
@@ -265,7 +265,7 @@ export default function ProgressPage() {
             {mockTests.length === 0 ? (
               <div className="text-center py-16">
                 <p className="text-sm text-muted mb-4">No tests completed yet.</p>
-                <Link href="/mock-test" className="px-4 py-2 rounded-lg text-sm font-semibold bg-white text-background hover:bg-white/85 transition-all">
+                <Link href="/mock-test" className="px-4 py-2 rounded-lg text-sm font-semibold bg-accent text-background hover:bg-accent-hover transition-all">
                   Take a mock test
                 </Link>
               </div>

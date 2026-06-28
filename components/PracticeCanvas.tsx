@@ -108,7 +108,7 @@ export default function PracticeCanvas({ signedIn }: PracticeCanvasProps) {
                 onClick={() => setSubject(s)}
                 className={`px-3 py-3 rounded-xl border text-left transition-all duration-100 ${
                   subject?.id === s.id
-                    ? "border-white/30 bg-white/6 text-text shadow-glow"
+                    ? "border-accent bg-accent-muted text-text"
                     : "border-border bg-surface text-muted hover:border-border-2 hover:text-text-2"
                 }`}
               >
@@ -125,7 +125,7 @@ export default function PracticeCanvas({ signedIn }: PracticeCanvasProps) {
                 onClick={() => setSubject(s)}
                 className={`px-3 py-3 rounded-xl border text-left transition-all duration-100 ${
                   subject?.id === s.id
-                    ? "border-white/30 bg-white/6 text-text shadow-glow"
+                    ? "border-accent bg-accent-muted text-text"
                     : "border-border bg-surface text-muted hover:border-border-2 hover:text-text-2"
                 }`}
               >
@@ -167,7 +167,7 @@ export default function PracticeCanvas({ signedIn }: PracticeCanvasProps) {
                 onClick={() => toggleTopic(t)}
                 className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-all duration-100 ${
                   topics.includes(t)
-                    ? "border-white/25 bg-white/8 text-text"
+                    ? "border-accent bg-accent-muted text-text"
                     : "border-border text-muted hover:border-border-2 hover:text-text-2"
                 }`}
               >
@@ -181,7 +181,7 @@ export default function PracticeCanvas({ signedIn }: PracticeCanvasProps) {
         <button
           onClick={start}
           disabled={!subject}
-          className="w-full py-3 rounded-xl text-sm font-semibold bg-white text-background hover:bg-white/85 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150 shadow-glow"
+          className="w-full py-3 rounded-xl text-sm font-semibold bg-accent text-background hover:bg-accent-hover disabled:bg-disabled disabled:text-disabled-text disabled:cursor-not-allowed transition-all duration-150"
         >
           {subject ? `Practice ${subject.name}` : "Select a competition to begin"}
         </button>

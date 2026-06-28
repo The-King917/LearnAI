@@ -55,7 +55,7 @@ export default function DiagnoseCanvas({ signedIn, onComplete }: DiagnoseCanvasP
         <div className="h-10 shrink-0 border-b border-border flex items-center px-5 gap-2">
           <span className="text-sm text-muted">{subject.name} diagnostic</span>
           {complete && (
-            <span className="text-2xs text-muted px-2 py-0.5 rounded-full border border-white/15 text-text ml-1">Complete</span>
+            <span className="text-2xs text-muted px-2 py-0.5 rounded-full border border-border text-text-2 ml-1">Complete</span>
           )}
           {!complete && (
             <button onClick={reset} className="ml-auto text-2xs text-muted hover:text-text-2 transition-colors">
@@ -106,7 +106,7 @@ export default function DiagnoseCanvas({ signedIn, onComplete }: DiagnoseCanvasP
                 onClick={() => setSubject(s)}
                 className={`px-3 py-3 rounded-xl border text-left transition-all duration-100 ${
                   subject?.id === s.id
-                    ? "border-white/30 bg-white/6 text-text shadow-glow"
+                    ? "border-accent bg-accent-muted text-text"
                     : "border-border bg-surface text-muted hover:border-border-2 hover:text-text-2"
                 }`}
               >
@@ -123,7 +123,7 @@ export default function DiagnoseCanvas({ signedIn, onComplete }: DiagnoseCanvasP
                 onClick={() => setSubject(s)}
                 className={`px-3 py-3 rounded-xl border text-left transition-all duration-100 ${
                   subject?.id === s.id
-                    ? "border-white/30 bg-white/6 text-text shadow-glow"
+                    ? "border-accent bg-accent-muted text-text"
                     : "border-border bg-surface text-muted hover:border-border-2 hover:text-text-2"
                 }`}
               >
@@ -137,7 +137,7 @@ export default function DiagnoseCanvas({ signedIn, onComplete }: DiagnoseCanvasP
         <button
           onClick={() => subject && setActive(true)}
           disabled={!subject}
-          className="w-full py-3 rounded-xl text-sm font-semibold bg-white text-background hover:bg-white/85 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150 shadow-glow"
+          className="w-full py-3 rounded-xl text-sm font-semibold bg-accent text-background hover:bg-accent-hover disabled:bg-disabled disabled:text-disabled-text disabled:cursor-not-allowed transition-all duration-150"
         >
           {subject ? `Begin ${subject.name} diagnostic` : "Select a competition to begin"}
         </button>

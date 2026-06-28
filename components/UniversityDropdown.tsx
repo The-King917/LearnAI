@@ -70,7 +70,7 @@ export default function UniversityDropdown({ value, onChange }: UniversityDropdo
         onClick={() => setOpen((o) => !o)}
         className={`w-full flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-lg text-sm text-left transition-all duration-100 border ${
           open
-            ? "bg-surface-2 border-white/25 text-text shadow-glow"
+            ? "bg-surface-2 border-accent text-text"
             : "bg-surface-2 border-border text-muted hover:border-border-2 hover:text-text-2"
         }`}
       >
@@ -95,7 +95,7 @@ export default function UniversityDropdown({ value, onChange }: UniversityDropdo
                 value={customName}
                 onChange={(e) => setCustomName(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter") submitCustom(); if (e.key === "Escape") setAddingCustom(false); }}
-                className="w-full bg-surface border border-border rounded-lg px-2.5 py-1.5 text-sm text-text placeholder-muted outline-none focus:border-white/25"
+                className="w-full bg-surface border border-border rounded-lg px-2.5 py-1.5 text-sm text-text placeholder-muted outline-none focus:border-accent"
               />
               <input
                 type="text"
@@ -103,13 +103,13 @@ export default function UniversityDropdown({ value, onChange }: UniversityDropdo
                 value={customRate}
                 onChange={(e) => setCustomRate(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter") submitCustom(); if (e.key === "Escape") setAddingCustom(false); }}
-                className="w-full bg-surface border border-border rounded-lg px-2.5 py-1.5 text-sm text-text placeholder-muted outline-none focus:border-white/25"
+                className="w-full bg-surface border border-border rounded-lg px-2.5 py-1.5 text-sm text-text placeholder-muted outline-none focus:border-accent"
               />
               <div className="flex items-center gap-2 pt-1">
                 <button
                   onClick={submitCustom}
                   disabled={!customName.trim()}
-                  className="flex-1 px-3 py-1.5 rounded-lg text-sm font-medium bg-white text-background hover:bg-white/85 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                  className="flex-1 px-3 py-1.5 rounded-lg text-sm font-medium bg-accent text-background hover:bg-accent-hover disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                 >
                   Add school
                 </button>

@@ -58,7 +58,7 @@ export default function NavRail({ mode, onModeChange }: NavRailProps) {
         <div className="h-11 shrink-0 border-b border-border flex items-center justify-center">
           <Link
             href="/"
-            className="w-7 h-7 rounded-lg bg-white flex items-center justify-center text-background text-[11px] font-bold tracking-tight hover:bg-white/85 transition-colors"
+            className="w-7 h-7 rounded-lg bg-accent flex items-center justify-center text-background text-[11px] font-bold tracking-tight hover:bg-accent-hover transition-colors"
           >
             P
           </Link>
@@ -78,11 +78,11 @@ export default function NavRail({ mode, onModeChange }: NavRailProps) {
                 }`}
               >
                 {active && (
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-7 bg-white rounded-r" />
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-7 bg-accent rounded-r" />
                 )}
                 <span
                   className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ${
-                    active ? "bg-white/8" : "hover:bg-white/5"
+                    active ? "bg-accent-muted" : "hover:bg-white/5"
                   }`}
                 >
                   {item.icon}
@@ -106,7 +106,7 @@ export default function NavRail({ mode, onModeChange }: NavRailProps) {
                 }`}
               >
                 {active && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-7 bg-white rounded-r" />}
-                <span className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ${active ? "bg-white/8" : ""}`}>
+                <span className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ${active ? "bg-accent-muted" : ""}`}>
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="2" y="2" width="12" height="12" rx="2" />
                     <path d="M5 8h6M8 5v6" />
@@ -131,7 +131,7 @@ export default function NavRail({ mode, onModeChange }: NavRailProps) {
                 }`}
               >
                 {active && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-7 bg-white rounded-r" />}
-                <span className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ${active ? "bg-white/8" : ""}`}>
+                <span className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ${active ? "bg-accent-muted" : ""}`}>
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="1 11 4.5 6.5 7.5 9 11 4.5 15 9" />
                   </svg>
@@ -149,7 +149,7 @@ export default function NavRail({ mode, onModeChange }: NavRailProps) {
               <button
                 onClick={() => setPopoverOpen((v) => !v)}
                 title={session.user.name ?? session.user.email ?? "Account"}
-                className="w-8 h-8 rounded-full bg-surface-2 border border-border-2 flex items-center justify-center text-xs font-semibold text-text-2 hover:border-white/20 transition-colors"
+                className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-xs font-semibold text-background hover:bg-accent-hover transition-colors"
               >
                 {(session.user.name ?? session.user.email ?? "?").charAt(0).toUpperCase()}
               </button>

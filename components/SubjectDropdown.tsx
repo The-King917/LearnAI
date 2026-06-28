@@ -53,7 +53,7 @@ export default function SubjectDropdown({ value, onChange }: SubjectDropdownProp
         onClick={() => setOpen((o) => !o)}
         className={`w-full flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-lg text-sm text-left transition-all duration-100 border ${
           open
-            ? "bg-surface-2 border-white/25 text-text shadow-glow"
+            ? "bg-surface-2 border-accent text-text"
             : "bg-surface-2 border-border text-muted hover:border-border-2 hover:text-text-2"
         }`}
       >

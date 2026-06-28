@@ -38,7 +38,7 @@ export default function PricingPage() {
       <nav className="flex items-center justify-between px-8 py-5 border-b border-border/60">
         <Link href="/" className="flex items-center text-sm font-semibold tracking-[-0.01em]">
           Poly
-          <span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-white text-background text-2xs font-bold tracking-[0.02em]">Teach</span>
+          <span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-accent text-background text-2xs font-bold tracking-[0.02em]">Teach</span>
         </Link>
         <Link href="/coach" className="text-sm font-medium text-muted hover:text-text transition-colors duration-150">
           Open app →
@@ -86,7 +86,7 @@ export default function PricingPage() {
           </div>
 
           {/* Pro */}
-          <div className="p-6 rounded-xl border border-white/30 bg-surface-2 flex flex-col shadow-glow">
+          <div className="p-6 rounded-xl border border-accent bg-surface-2 flex flex-col">
             <div className="flex items-center justify-between mb-0.5">
               <h2 className="text-sm font-semibold text-text">Pro</h2>
               <span className="text-2xs text-muted px-2 py-0.5 rounded-full border border-border-2">Competition season</span>
@@ -95,30 +95,30 @@ export default function PricingPage() {
             <p className="text-xs text-muted mt-1">Cancel anytime</p>
             <ul className="text-sm text-muted mt-6 space-y-2.5 flex-1">
               <li className="flex items-start gap-2">
-                <span className="mt-1 w-1 h-1 rounded-full bg-white shrink-0" />
+                <span className="mt-1 w-1 h-1 rounded-full bg-accent shrink-0" />
                 Unlimited sessions
               </li>
               <li className="flex items-start gap-2">
-                <span className="mt-1 w-1 h-1 rounded-full bg-white shrink-0" />
+                <span className="mt-1 w-1 h-1 rounded-full bg-accent shrink-0" />
                 Full adaptive study plan from diagnostic
               </li>
               <li className="flex items-start gap-2">
-                <span className="mt-1 w-1 h-1 rounded-full bg-white shrink-0" />
+                <span className="mt-1 w-1 h-1 rounded-full bg-accent shrink-0" />
                 Competition prep campaign mode
               </li>
               <li className="flex items-start gap-2">
-                <span className="mt-1 w-1 h-1 rounded-full bg-white shrink-0" />
+                <span className="mt-1 w-1 h-1 rounded-full bg-accent shrink-0" />
                 Week-by-week progress reports
               </li>
               <li className="flex items-start gap-2">
-                <span className="mt-1 w-1 h-1 rounded-full bg-white shrink-0" />
+                <span className="mt-1 w-1 h-1 rounded-full bg-accent shrink-0" />
                 Concept-level mastery tracking
               </li>
             </ul>
             <button
               onClick={() => subscribe("pro")}
               disabled={loading !== null}
-              className="mt-6 px-4 py-2.5 rounded-lg text-sm font-semibold bg-white text-background hover:bg-white/85 disabled:opacity-50 transition-all duration-150"
+              className="mt-6 px-4 py-2.5 rounded-lg text-sm font-semibold bg-accent text-background hover:bg-accent-hover disabled:bg-disabled disabled:text-disabled-text transition-all duration-150"
             >
               {loading === "pro" ? "Redirecting…" : "Subscribe"}
             </button>
@@ -151,7 +151,7 @@ export default function PricingPage() {
                 min={TEAM_MIN_SEATS}
                 value={seats}
                 onChange={(e) => setSeats(Math.max(TEAM_MIN_SEATS, Number(e.target.value) || TEAM_MIN_SEATS))}
-                className="w-20 bg-background border border-border rounded-md px-2 py-1 text-sm text-text outline-none focus:border-white/25"
+                className="w-20 bg-background border border-border rounded-md px-2 py-1 text-sm text-text outline-none focus:border-accent"
               />
               <span className="text-xs text-muted">= ${seats * TEAM_SEAT_PRICE}/mo</span>
             </div>

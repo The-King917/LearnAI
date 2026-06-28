@@ -9,17 +9,22 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#080808",
-        surface: "#0E0E0E",
-        "surface-2": "#161616",
-        "surface-3": "#1F1F1F",
-        border: "#1F1F1F",
-        "border-2": "#2C2C2C",
-        "border-3": "#383838",
-        text: "#FFFFFF",
+        background: "#0A0A0A",
+        surface: "#141414",
+        "surface-2": "#1C1C1C",
+        "surface-3": "#242424",
+        border: "#2A2A2A",
+        "border-2": "#363636",
+        "border-3": "#404040",
+        text: "#F0F0F0",
         "text-2": "#9B9B9B",
-        muted: "#4F4F4F",
-        subtle: "#2C2C2C",
+        muted: "#666666",
+        subtle: "#333333",
+        accent: "#E8A020",
+        "accent-hover": "#F0B030",
+        "accent-muted": "rgba(232, 160, 32, 0.08)",
+        disabled: "#2A2A2A",
+        "disabled-text": "#444444",
       },
       boxShadow: {
         glow: "0 0 0 1px rgba(255,255,255,0.16), 0 0 28px rgba(255,255,255,0.10)",
@@ -30,7 +35,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "system-ui", "sans-serif"],
-        mono: ["ui-monospace", "SFMono-Regular", "SF Mono", "Menlo", "monospace"],
+        mono: ["JetBrains Mono", "ui-monospace", "SFMono-Regular", "SF Mono", "Menlo", "monospace"],
       },
       fontSize: {
         "2xs": ["11px", "16px"],

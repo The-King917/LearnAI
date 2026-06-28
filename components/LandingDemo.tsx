@@ -81,7 +81,7 @@ export default function LandingDemo() {
             </div>
           ) : (
             <div key={i} className="flex gap-3">
-              <div className="w-5 h-5 rounded-lg bg-white shadow-glow flex items-center justify-center shrink-0 mt-0.5">
+              <div className="w-5 h-5 rounded-lg bg-accent flex items-center justify-center shrink-0 mt-0.5">
                 <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="black" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M1 5.5L3.5 8 9 2" />
                 </svg>
@@ -101,7 +101,7 @@ export default function LandingDemo() {
             </div>
           ) : (
             <div className="flex gap-3">
-              <div className="w-5 h-5 rounded-lg bg-white shadow-glow flex items-center justify-center shrink-0 mt-0.5">
+              <div className="w-5 h-5 rounded-lg bg-accent flex items-center justify-center shrink-0 mt-0.5">
                 <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="black" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M1 5.5L3.5 8 9 2" />
                 </svg>
@@ -116,7 +116,7 @@ export default function LandingDemo() {
 
         {thinking && (
           <div className="flex gap-3">
-            <div className="w-5 h-5 rounded-lg bg-white shadow-glow flex items-center justify-center shrink-0 mt-0.5">
+            <div className="w-5 h-5 rounded-lg bg-accent flex items-center justify-center shrink-0 mt-0.5">
               <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="black" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 5.5L3.5 8 9 2" />
               </svg>

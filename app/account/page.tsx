@@ -129,7 +129,7 @@ export default function AccountPage() {
       <nav className="flex items-center justify-between px-8 py-5 border-b border-border/60">
         <Link href="/" className="flex items-center text-sm font-semibold tracking-[-0.01em]">
           Poly
-          <span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-white text-background text-2xs font-bold tracking-[0.02em]">Teach</span>
+          <span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-accent text-background text-2xs font-bold tracking-[0.02em]">Teach</span>
         </Link>
         <Link href="/coach" className="text-sm font-medium text-muted hover:text-text transition-colors duration-150">
           Open app →
@@ -148,7 +148,7 @@ export default function AccountPage() {
                 <span className="text-sm font-semibold text-text">
                   {data.plan} plan
                   {data.isFounder && (
-                    <span className="ml-2 px-1.5 py-0.5 rounded-[3px] bg-white text-background text-2xs font-bold tracking-[0.02em]">FOUNDER · FREE FOREVER</span>
+                    <span className="ml-2 px-1.5 py-0.5 rounded-[3px] bg-accent text-background text-2xs font-bold tracking-[0.02em]">FOUNDER · FREE FOREVER</span>
                   )}
                 </span>
                 {data.plan === "FREE" && (
@@ -160,7 +160,7 @@ export default function AccountPage() {
                 <div className="mt-4">
                   <div className="h-1.5 rounded-full bg-surface-2 overflow-hidden">
                     <div
-                      className="h-full bg-white"
+                      className="h-full bg-accent"
                       style={{ width: `${Math.min(100, (data.monthlyMessageCount / data.freeMessageLimit) * 100)}%` }}
                     />
                   </div>
@@ -192,7 +192,7 @@ export default function AccountPage() {
                     value={joinCode}
                     onChange={(e) => setJoinCode(e.target.value)}
                     placeholder="Invite code"
-                    className="flex-1 bg-background border border-border rounded-md px-2.5 py-1.5 text-sm text-text placeholder-muted outline-none focus:border-white/25"
+                    className="flex-1 bg-background border border-border rounded-md px-2.5 py-1.5 text-sm text-text placeholder-muted outline-none focus:border-accent"
                   />
                   <button
                     onClick={joinOrg}
@@ -288,7 +288,7 @@ export default function AccountPage() {
                               className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${
                                 danger
                                   ? "bg-red-500/15 text-red-400 hover:bg-red-500/25 border border-red-500/20"
-                                  : "bg-white/8 text-text hover:bg-white/12 border border-white/10"
+                                  : "bg-accent-muted text-text hover:bg-accent/15 border border-accent/20"
                               } disabled:opacity-50`}
                             >
                               {clearing === scope ? "Clearing…" : "Confirm"}

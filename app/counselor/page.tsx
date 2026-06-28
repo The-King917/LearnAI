@@ -21,7 +21,7 @@ export default function CounselorWaitlistPage() {
       <nav className="relative z-10 flex items-center justify-between px-8 py-5 border-b border-border/60 backdrop-blur-sm bg-background/70">
         <Link href="/" className="flex items-center text-sm font-semibold tracking-[-0.01em]">
           Poly
-          <span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-white text-background text-2xs font-bold tracking-[0.02em]">Teach</span>
+          <span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-accent text-background text-2xs font-bold tracking-[0.02em]">Teach</span>
         </Link>
         <Link href="/coach" className="text-sm font-medium text-muted hover:text-text transition-colors duration-150">
           Open app →
@@ -69,11 +69,11 @@ export default function CounselorWaitlistPage() {
                 placeholder="your@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-surface border border-border rounded-lg px-4 py-2.5 text-sm text-text placeholder-muted outline-none focus:border-white/25 transition-colors"
+                className="w-full bg-surface border border-border rounded-lg px-4 py-2.5 text-sm text-text placeholder-muted outline-none focus:border-accent transition-colors"
               />
               <button
                 type="submit"
-                className="w-full px-4 py-2.5 rounded-lg text-sm font-semibold bg-white text-background hover:bg-white/85 transition-all duration-150"
+                className="w-full px-4 py-2.5 rounded-lg text-sm font-semibold bg-accent text-background hover:bg-accent-hover transition-all duration-150"
               >
                 Join the waitlist
               </button>

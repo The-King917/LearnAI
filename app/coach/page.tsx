@@ -118,7 +118,7 @@ function CoachPageInner() {
       <div className="relative z-10 flex-1 flex flex-col overflow-hidden min-w-0">
         {/* Top bar */}
         <header className="h-11 shrink-0 border-b border-border flex items-center px-5 gap-2 bg-gradient-to-b from-surface/40 to-transparent backdrop-blur-sm">
-          <span className="w-1.5 h-1.5 rounded-full bg-white shrink-0" />
+          <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
           <span className="text-sm font-medium text-text">{MODE_LABELS[mode]}</span>
           {activeSubject && mode === "coach" && (
             <>

@@ -129,7 +129,7 @@ export default function LandingPage() {
       <nav className="relative z-10 flex items-center justify-between px-8 py-5 border-b border-border/60 backdrop-blur-sm bg-background/70">
         <span className="flex items-center text-sm font-semibold tracking-[-0.01em]">
           Poly
-          <span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-white text-background text-2xs font-bold tracking-[0.02em]">Teach</span>
+          <span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-accent text-background text-2xs font-bold tracking-[0.02em]">Teach</span>
         </span>
         <div className="flex items-center gap-6">
           <Link href="/pricing" className="text-sm font-medium text-muted hover:text-text transition-colors duration-150">
@@ -165,7 +165,7 @@ export default function LandingPage() {
         >
           <Link
             href="/coach"
-            className="px-5 py-2.5 rounded-lg text-sm font-semibold bg-white text-background hover:bg-white/85 transition-all duration-150"
+            className="px-5 py-2.5 rounded-lg text-sm font-semibold bg-accent text-background hover:bg-accent-hover transition-all duration-150"
           >
             Start training
           </Link>
@@ -373,7 +373,7 @@ export default function LandingPage() {
         <Reveal transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}>
           <Link
             href="/coach"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold bg-white text-background hover:bg-white/85 transition-all duration-150"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold bg-accent text-background hover:bg-accent-hover transition-all duration-150"
           >
             Start training
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -386,7 +386,7 @@ export default function LandingPage() {
       <footer className="relative z-10 border-t border-border px-8 py-6 flex items-center justify-between">
         <span className="flex items-center text-sm font-semibold tracking-[-0.01em]">
           Poly
-          <span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-white text-background text-2xs font-bold tracking-[0.02em]">Teach</span>
+          <span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-accent text-background text-2xs font-bold tracking-[0.02em]">Teach</span>
         </span>
         <span className="text-xs text-subtle">© 2026</span>
       </footer>

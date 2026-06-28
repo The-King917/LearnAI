@@ -136,7 +136,7 @@ export default function AdminProblemsPage() {
             <button
               onClick={generate}
               disabled={generating}
-              className="px-4 py-1.5 rounded-lg text-sm font-semibold bg-white text-background hover:bg-white/85 disabled:opacity-50 transition-all"
+              className="px-4 py-1.5 rounded-lg text-sm font-semibold bg-accent text-background hover:bg-accent-hover disabled:opacity-50 transition-all"
             >
               {generating ? "Generating…" : "Generate"}
             </button>
@@ -151,7 +151,7 @@ export default function AdminProblemsPage() {
               key={s}
               onClick={() => { setStatusFilter(s); setPage(0); }}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                statusFilter === s ? "bg-white text-background" : "text-muted hover:text-text-2 border border-border"
+                statusFilter === s ? "bg-accent text-background" : "text-muted hover:text-text-2 border border-border"
               }`}
             >
               {s}

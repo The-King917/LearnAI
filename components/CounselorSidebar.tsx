@@ -38,7 +38,7 @@ export default function CounselorSidebar({
       >
         <span className="flex items-center text-sm font-semibold tracking-[-0.01em] text-text">
           Poly
-          <span className="ml-1 px-1.5 py-0.5 rounded-md bg-white text-background text-2xs font-bold tracking-[0.02em]">Teach</span>
+          <span className="ml-1 px-1.5 py-0.5 rounded-md bg-accent text-background text-2xs font-bold tracking-[0.02em]">Teach</span>
         </span>
       </Link>
 
