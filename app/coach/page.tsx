@@ -3,257 +3,106 @@
 import { useState, useCallback, useEffect, Suspense } from "react";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
-import Sidebar from "@/components/Sidebar";
-import ChatInterface from "@/components/ChatInterface";
-import PracticeMode from "@/components/PracticeMode";
-import DiagnoseMode from "@/components/DiagnoseMode";
-import ProgressIndicator from "@/components/ProgressIndicator";
+import NavRail from "@/components/NavRail";
+import CoachCanvas from "@/components/CoachCanvas";
+import PracticeCanvas from "@/components/PracticeCanvas";
+import DiagnoseCanvas from "@/components/DiagnoseCanvas";
 import AuthModal from "@/components/AuthModal";
-import Link from "next/link";
-import { Subject, getSubjectById, isRestrictedSubject } from "@/lib/subjects";
-import { Difficulty } from "@/lib/prompts";
-import { ResultTag, applyPracticeResult, applyDiagnoseResult } from "@/lib/mastery";
-import { usePlan } from "@/lib/use-plan";
 
-interface MasteryRecord {
-  mastery: number;
-  attempts: number;
-  correct: number;
-  diagnosedLevel?: string | null;
-}
-
-interface ChatMessage {
-  role: "user" | "assistant";
-  content: string;
-}
-
-type Mode = "chat" | "practice" | "diagnose";
-
-interface Session {
-  id: string;
-  subjectId: string;
-  subject: string;
-  mode: Mode;
-  preview: string;
-  time: string;
-}
+type Mode = "coach" | "practice" | "diagnose";
 
 const MODE_LABELS: Record<Mode, string> = {
-  chat: "Coach",
+  coach: "Coach",
   practice: "Practice",
   diagnose: "Diagnose",
 };
 
-function formatTime(d: Date): string {
-  return `${d.getHours() % 12 || 12}:${d.getMinutes().toString().padStart(2, "0")}${d.getHours() >= 12 ? "pm" : "am"}`;
-}
-
 function CoachPageInner() {
   const { data: session, status } = useSession();
   const searchParams = useSearchParams();
-  const [subject, setSubject] = useState<Subject | null>(null);
-  const [difficulty, setDifficulty] = useState<Difficulty>("intermediate");
-  const [mode, setMode] = useState<Mode>("chat");
-  const [recentSessions, setRecentSessions] = useState<Session[]>([]);
-  const [key, setKey] = useState(0);
-  const [mastery, setMastery] = useState<Record<string, MasteryRecord>>({});
+
+  const [mode, setMode] = useState<Mode>("coach");
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [chatInitialMessages, setChatInitialMessages] = useState<ChatMessage[] | undefined>(undefined);
-  const [debriefInitialMessage, setDebriefInitialMessage] = useState<string | undefined>(undefined);
-  const [isDebriefMode, setIsDebriefMode] = useState(false);
+  const [activeSubject, setActiveSubject] = useState<string | null>(null);
+  const [postDiagnoseSubjectId, setPostDiagnoseSubjectId] = useState<string | null>(null);
   const [authOpen, setAuthOpen] = useState(false);
 
+  // Debrief: read URL params and fetch problem content
+  const debriefTestId = searchParams.get("debrief");
+  const debriefProblemId = searchParams.get("problem");
+  const debriefSubjectId = searchParams.get("subject") ?? undefined;
+  const [debriefMessage, setDebriefMessage] = useState<string | undefined>(undefined);
+
   const signedIn = status === "authenticated" && !!session;
-  const { plan, loading: planLoading } = usePlan();
-  const subjectLocked = signedIn && !planLoading && plan === "FREE" && isRestrictedSubject(subject?.id);
 
-  // Debrief mode: auto-load a specific wrong problem from a mock test
   useEffect(() => {
-    const debriefTestId = searchParams.get("debrief");
-    const problemId = searchParams.get("problem");
-    const competitionId = searchParams.get("subject");
-    if (!debriefTestId || !problemId || !competitionId || !signedIn) return;
+    if (!debriefTestId || !debriefProblemId || !signedIn) return;
+    setMode("coach");
 
-    const subj = getSubjectById(competitionId);
-    if (subj) {
-      setSubject(subj);
-      setMode("chat");
-      setIsDebriefMode(true);
-    }
-
-    fetch(`/api/mock-tests/${debriefTestId}/problem/${problemId}`)
+    fetch(`/api/mock-tests/${debriefTestId}/problem/${debriefProblemId}`)
       .then((r) => r.json())
-      .then((data: { problem?: { statement: string; answer: string; choices?: Record<string, string> | null; format: string }; studentAnswer?: string; correct?: boolean; competition?: string }) => {
+      .then((data: {
+        problem?: { statement: string; answer: string; format: string; choices?: Record<string, string> | null };
+        studentAnswer?: string;
+      }) => {
         if (!data.problem) return;
         const { statement, answer, choices, format } = data.problem;
         const studentAnswer = data.studentAnswer ?? "(no answer given)";
-
         let choicesText = "";
         if (choices && format === "mcq") {
-          choicesText = "\nAnswer choices: " + Object.entries(choices).map(([k, v]) => `(${k}) ${v}`).join("  ");
+          choicesText = "\nChoices: " + Object.entries(choices).map(([k, v]) => `(${k}) ${v}`).join("  ");
         }
-
-        setDebriefInitialMessage(
-          `I just got this problem wrong on my mock test and want to understand it.\n\nProblem:\n${statement}${choicesText}\n\nMy answer: ${studentAnswer}\nCorrect answer: ${answer}\n\nPlease walk me through this Socratically — ask me questions to help me figure out where my reasoning broke down, but don't just give me the solution.`
+        setDebriefMessage(
+          `I got this problem wrong and want to understand it.\n\nProblem:\n${statement}${choicesText}\n\nMy answer: ${studentAnswer}\nCorrect answer: ${answer}\n\nWalk me through this Socratically — ask me questions to find where my reasoning broke down, but don't just give me the solution.`
         );
-        setKey((k) => k + 1);
       })
       .catch(() => {});
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signedIn]);
 
-  useEffect(() => {
-    if (!signedIn) { setMastery({}); return; }
-    fetch("/api/progress")
-      .then((r) => r.json())
-      .then((data) => {
-        const next: Record<string, MasteryRecord> = {};
-        for (const m of data.masteries ?? []) {
-          next[m.subjectId] = { mastery: m.mastery, attempts: m.attempts, correct: m.correct, diagnosedLevel: m.diagnosedLevel };
-        }
-        setMastery(next);
-      })
-      .catch(() => {});
-  }, [signedIn]);
+  const handleModeChange = useCallback((m: Mode) => {
+    setMode(m);
+    setSessionId(null);
+    setActiveSubject(null);
+  }, []);
 
-  useEffect(() => {
-    if (!signedIn) { setRecentSessions([]); return; }
-    fetch("/api/sessions")
-      .then((r) => r.json())
-      .then((data) => {
-        const sessions: Session[] = (data.sessions ?? []).map((s: { id: string; subjectId: string; mode: Mode; updatedAt: string }) => ({
-          id: s.id,
-          subjectId: s.subjectId,
-          subject: getSubjectById(s.subjectId)?.name ?? s.subjectId,
-          mode: s.mode,
-          preview: `${MODE_LABELS[s.mode]} session`,
-          time: formatTime(new Date(s.updatedAt)),
-        }));
-        setRecentSessions(sessions);
-      })
-      .catch(() => {});
-  }, [signedIn]);
-
-  const reset = useCallback(() => setKey((k) => k + 1), []);
-
-  const recordPracticeResult = useCallback((result: ResultTag) => {
-    if (!signedIn || !subject) return;
-    const subjectId = subject.id;
-    setMastery((prev) => {
-      const current = prev[subjectId]?.mastery ?? 0;
-      return { ...prev, [subjectId]: { ...prev[subjectId], mastery: applyPracticeResult(current, result), attempts: (prev[subjectId]?.attempts ?? 0) + 1, correct: (prev[subjectId]?.correct ?? 0) + (result === "correct" ? 1 : 0) } };
-    });
-    fetch("/api/progress/practice", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ subjectId, result }),
-    })
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.mastery) {
-          setMastery((prev) => ({ ...prev, [subjectId]: { mastery: data.mastery.mastery, attempts: data.mastery.attempts, correct: data.mastery.correct, diagnosedLevel: data.mastery.diagnosedLevel } }));
-        }
-      })
-      .catch(() => {});
-  }, [signedIn, subject]);
-
-  const recordDiagnoseResult = useCallback((subjectId: string, level: Difficulty) => {
-    if (!signedIn) return;
-    setMastery((prev) => {
-      const current = prev[subjectId];
-      return { ...prev, [subjectId]: { ...current, mastery: applyDiagnoseResult(current?.mastery ?? 0, !!current, level), diagnosedLevel: level, attempts: current?.attempts ?? 0, correct: current?.correct ?? 0 } };
-    });
-    fetch("/api/progress/diagnose", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ subjectId, level }),
-    })
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.mastery) {
-          setMastery((prev) => ({ ...prev, [subjectId]: { mastery: data.mastery.mastery, attempts: data.mastery.attempts, correct: data.mastery.correct, diagnosedLevel: data.mastery.diagnosedLevel } }));
-        }
-      })
-      .catch(() => {});
-  }, [signedIn]);
-
-  const startSession = useCallback((subjectId: string, subjectName: string, m: Mode) => {
-    setChatInitialMessages(undefined);
-    if (signedIn) {
+  const handleSessionStart = useCallback(
+    (subjectId: string, subjectName: string) => {
+      setActiveSubject(subjectName);
+      if (!signedIn) return;
       setSessionId(null);
       fetch("/api/sessions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subjectId, mode: m }),
+        body: JSON.stringify({ subjectId, mode: "chat" }),
       })
         .then((r) => r.json())
-        .then((data) => {
-          if (!data.session) return;
-          setSessionId(data.session.id);
-          setRecentSessions((prev) => [
-            { id: data.session.id, subjectId, subject: subjectName, mode: m, preview: `${MODE_LABELS[m]} session`, time: formatTime(new Date(data.session.updatedAt)) },
-            ...prev.filter((p) => p.id !== data.session.id).slice(0, 9),
-          ]);
-        })
+        .then((data) => { if (data.session) setSessionId(data.session.id); })
         .catch(() => {});
-    } else {
-      setSessionId(null);
-      setRecentSessions((prev) => [
-        { id: `${Date.now()}`, subjectId, subject: subjectName, mode: m, preview: `${MODE_LABELS[m]} session`, time: formatTime(new Date()) },
-        ...prev.slice(0, 9),
-      ]);
-    }
-  }, [signedIn]);
+    },
+    [signedIn]
+  );
 
-  const handleSubjectChange = useCallback((s: Subject) => {
-    setSubject(s);
-    reset();
-    startSession(s.id, s.name, mode);
-  }, [mode, reset, startSession]);
+  const persistMessage = useCallback(
+    (message: { role: "user" | "assistant"; content: string }) => {
+      if (!signedIn || !sessionId) return;
+      fetch(`/api/sessions/${sessionId}/messages`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(message),
+      }).catch(() => {});
+    },
+    [signedIn, sessionId]
+  );
 
-  const handleModeChange = useCallback((m: Mode) => {
-    setMode(m);
-    reset();
-    if (subject) startSession(subject.id, subject.name, m);
-  }, [reset, subject, startSession]);
-
-  const handleSessionClick = useCallback((s: Session) => {
-    const subj = getSubjectById(s.subjectId);
-    if (subj) setSubject(subj);
-    setMode(s.mode);
-    setSessionId(s.id);
-    if (s.mode === "chat" && signedIn) {
-      fetch(`/api/sessions/${s.id}`)
-        .then((r) => r.json())
-        .then((data) => { setChatInitialMessages(data.session?.messages ?? []); reset(); })
-        .catch(() => { setChatInitialMessages(undefined); reset(); });
-    } else {
-      setChatInitialMessages(undefined);
-      reset();
-    }
-  }, [signedIn, reset]);
-
-  const persistMessage = useCallback((message: ChatMessage) => {
-    if (!signedIn || !sessionId) return;
-    fetch(`/api/sessions/${sessionId}/messages`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(message),
-    }).catch(() => {});
-  }, [signedIn, sessionId]);
-
-  const handleDiagnoseComplete = useCallback((level: Difficulty) => {
-    setDifficulty(level);
-    if (subject) recordDiagnoseResult(subject.id, level);
-    setTimeout(() => {
-      setMode("chat");
-      reset();
-      if (subject) startSession(subject.id, subject.name, "chat");
-    }, 1800);
-  }, [reset, subject, recordDiagnoseResult, startSession]);
+  const handleDiagnoseComplete = useCallback((subjectId: string) => {
+    setPostDiagnoseSubjectId(subjectId);
+    setMode("coach");
+  }, []);
 
   return (
     <div className="relative flex h-screen overflow-hidden bg-background">
+      {/* Subtle dot grid */}
       <div
         className="fixed inset-0 pointer-events-none z-0"
         style={{
@@ -261,93 +110,42 @@ function CoachPageInner() {
           backgroundSize: "28px 28px",
         }}
       />
-      <div
-        className="fixed inset-0 pointer-events-none z-0"
-        style={{
-          background: "radial-gradient(ellipse 70% 50% at 50% -10%, rgba(255,255,255,0.05) 0%, transparent 65%)",
-        }}
-      />
 
-      <div className="relative z-10 h-full shrink-0">
-        <Sidebar
-          subject={subject}
-          onSubjectChange={handleSubjectChange}
-          difficulty={difficulty}
-          onDifficultyChange={setDifficulty}
-          mode={mode}
-          onModeChange={handleModeChange}
-          recentSessions={recentSessions}
-          onSessionClick={handleSessionClick}
-        />
+      <div className="relative z-10 shrink-0 h-full">
+        <NavRail mode={mode} onModeChange={handleModeChange} />
       </div>
 
       <div className="relative z-10 flex-1 flex flex-col overflow-hidden min-w-0">
+        {/* Top bar */}
         <header className="h-11 shrink-0 border-b border-border flex items-center px-5 gap-2 bg-gradient-to-b from-surface/40 to-transparent backdrop-blur-sm">
           <span className="w-1.5 h-1.5 rounded-full bg-white shrink-0" />
           <span className="text-sm font-medium text-text">{MODE_LABELS[mode]}</span>
-          {subject && (
+          {activeSubject && mode === "coach" && (
             <>
               <span className="text-subtle">/</span>
-              <span className="text-sm text-muted">{subject.name}</span>
-              <span className="text-subtle">·</span>
-              <span className="text-2xs text-muted capitalize px-1.5 py-0.5 rounded-full border border-border">{difficulty}</span>
+              <span className="text-sm text-muted">{activeSubject}</span>
             </>
           )}
-          <ProgressIndicator mastery={subject ? mastery[subject.id]?.mastery ?? null : null} signedIn={signedIn} />
         </header>
 
         <div className="flex-1 overflow-hidden">
-          {status === "loading" ? null : !signedIn ? (
-            <div className="flex flex-col items-center justify-center h-full gap-4 text-center px-6">
-              <div>
-                <p className="text-lg font-semibold tracking-[-0.02em] text-text">Sign in to start coaching</p>
-                <p className="text-sm text-muted mt-1.5">Create a free account to chat with the coach, track progress, and save sessions.</p>
-              </div>
-              <button
-                onClick={() => setAuthOpen(true)}
-                className="px-5 py-2.5 rounded-lg text-sm font-semibold bg-white text-background hover:bg-white/85 transition-all duration-150"
-              >
-                Sign in / Sign up
-              </button>
-            </div>
-          ) : subjectLocked ? (
-            <div className="flex flex-col items-center justify-center h-full gap-4 text-center px-6">
-              <div>
-                <p className="text-lg font-semibold tracking-[-0.02em] text-text">{subject?.name} is a Pro feature</p>
-                <p className="text-sm text-muted mt-1.5">Upgrade to Pro to unlock interview prep — LeetCode, System Design, and Quant.</p>
-              </div>
-              <Link
-                href="/pricing"
-                className="px-5 py-2.5 rounded-lg text-sm font-semibold bg-white text-background hover:bg-white/85 transition-all duration-150"
-              >
-                Upgrade to Pro
-              </Link>
-            </div>
-          ) : (
-            <>
-              {mode === "chat" && (
-                <ChatInterface
-                  key={key}
-                  subject={subject}
-                  difficulty={difficulty}
-                  mode="chat"
-                  initialMessages={chatInitialMessages}
-                  initialMessage={debriefInitialMessage}
-                  systemPrompt={isDebriefMode
-                    ? `You are a Socratic competition math/science coach running a post-test debrief. The student got this problem wrong. Your job is NOT to explain the solution — instead, ask targeted questions to help them discover exactly where their reasoning failed. Start by asking what approach they used. Never give the answer directly; guide them to it step by step. Keep each response to 1-2 sentences.`
-                    : undefined}
-                  emptyTitle={isDebriefMode ? "Post-test debrief" : undefined}
-                  emptySubtitle={isDebriefMode ? "Loading problem..." : undefined}
-                  onNewMessage={persistMessage}
-                />
-              )}
-              {mode === "practice" && (
-                <PracticeMode key={key} subject={subject} difficulty={difficulty} onResult={recordPracticeResult} />
-              )}
-              {mode === "diagnose" && (
-                <DiagnoseMode key={key} subject={subject} onLevelFound={handleDiagnoseComplete} />
-              )}
-            </>
+          {mode === "coach" && (
+            <CoachCanvas
+              key={`coach-${postDiagnoseSubjectId ?? "fresh"}`}
+              signedIn={signedIn}
+              debriefSubjectId={debriefSubjectId}
+              debriefMessage={debriefMessage}
+              sessionId={sessionId}
+              onSessionStart={handleSessionStart}
+              onPersistMessage={persistMessage}
+              initialSubjectId={postDiagnoseSubjectId}
+            />
+          )}
+          {mode === "practice" && (
+            <PracticeCanvas key="practice" signedIn={signedIn} />
+          )}
+          {mode === "diagnose" && (
+            <DiagnoseCanvas key="diagnose" signedIn={signedIn} onComplete={handleDiagnoseComplete} />
           )}
         </div>
       </div>
