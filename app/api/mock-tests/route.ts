@@ -6,6 +6,8 @@ import { rateLimit } from "@/lib/rate-limit";
 import { selectProblemsForTest } from "@/lib/problem-pool";
 import { getConfig } from "@/lib/problem-gen-prompts";
 import { checkAndConsumeFreeMessage, getEffectivePlan } from "@/lib/billing";
+import { generateAndStore, getBufferStatus } from "@/lib/problem-generator";
+import type { CompetitionId } from "@/lib/problem-gen-prompts";
 
 const RATE_LIMIT_REQ = 5;
 const RATE_WINDOW_MS = 60_000;
@@ -122,6 +124,16 @@ export async function POST(req: NextRequest) {
       })),
       skipDuplicates: true,
     });
+
+    // Fire-and-forget: refill the pool to replace the problems just served.
+    // Each test consumes N problems from the bank; we regenerate the same
+    // number in the background so the next student isn't left with nothing.
+    getBufferStatus(competition).then(({ deficit }) => {
+      const toGenerate = Math.min(Math.max(deficit, problems.length), 10);
+      for (let i = 0; i < toGenerate; i++) {
+        generateAndStore(competition as CompetitionId).catch(() => {});
+      }
+    }).catch(() => {});
 
     return Response.json({ test });
   } catch (err) {
