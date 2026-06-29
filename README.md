@@ -1,1 +1,1 @@
-# PolyTeach.app — Competition prep that adapts to you.
+# PolyTeach — Competition prep that adapts to you.

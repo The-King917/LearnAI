@@ -128,7 +128,7 @@ export default function LandingPage() {
       {/* Nav */}
       <nav className="relative z-10 flex items-center justify-between px-8 py-5 border-b border-border/60 backdrop-blur-sm bg-background/70">
         <span className="flex items-center text-sm font-bold tracking-[-0.01em]">
-          <span className="text-text">Poly</span><span className="text-accent">Teach</span><span className="text-muted font-normal">.app</span>
+          <span className="text-text">Poly</span><span className="text-accent">Teach</span>
         </span>
         <div className="flex items-center gap-6">
           <Link href="/pricing" className="text-sm font-medium text-muted hover:text-text transition-colors duration-150">
@@ -384,7 +384,7 @@ export default function LandingPage() {
 
       <footer className="relative z-10 border-t border-border px-8 py-6 flex items-center justify-between">
         <span className="flex items-center text-sm font-bold tracking-[-0.01em]">
-          <span className="text-text">Poly</span><span className="text-accent">Teach</span><span className="text-muted font-normal">.app</span>
+          <span className="text-text">Poly</span><span className="text-accent">Teach</span>
         </span>
         <span className="text-xs text-subtle">© 2026</span>
       </footer>

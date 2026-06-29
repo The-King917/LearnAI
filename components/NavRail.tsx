@@ -59,7 +59,7 @@ export default function NavRail({ mode, onModeChange }: NavRailProps) {
           <Link
             href="/"
             className="w-7 h-7 rounded-lg bg-accent flex items-center justify-center text-background hover:bg-accent-hover transition-colors"
-            title="PolyTeach.app"
+            title="PolyTeach"
           >
             <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
               <line x1="4" y1="14" x2="4" y2="2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>

@@ -4,7 +4,7 @@ import "katex/dist/katex.min.css";
 import Providers from "./providers";
 
 export const metadata: Metadata = {
-  title: "PolyTeach.app — Competition prep that adapts to you.",
+  title: "PolyTeach — Competition prep that adapts to you.",
   description: "AI-powered Socratic coach for AMC, AIME, USAMO, USACO, USAPhO, and every major academic competition.",
 };
 
