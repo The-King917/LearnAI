@@ -75,6 +75,10 @@ export async function POST(req: NextRequest) {
     const problems = await selectProblemsForTest(userId, competition, count, topicFocus);
 
     if (problems.length === 0) {
+      // Kick off background generation so the bank grows even when pool is empty
+      for (let i = 0; i < 5; i++) {
+        generateAndStore(competition as CompetitionId).catch(() => {});
+      }
       return Response.json({
         error: "No problems available for this competition yet. Check back soon — we're building the problem bank.",
         code: "NO_PROBLEMS",

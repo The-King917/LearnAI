@@ -36,7 +36,7 @@ export async function selectProblemsForTest(
   const seenSet = new Set(seenIds.map((a) => a.problemId));
 
   // Pull available problems (approved, not seen by this student)
-  const available = await prisma.problem.findMany({
+  let available = await prisma.problem.findMany({
     where: {
       competition,
       status: "approved",
@@ -55,6 +55,29 @@ export async function selectProblemsForTest(
     },
     orderBy: { usedCount: "asc" }, // prefer less-used problems
   });
+
+  // Pool exhausted for this user — fall back to all approved problems so they
+  // can still practice (prefer least-used to avoid exact repetition).
+  if (available.length === 0 && seenSet.size > 0) {
+    available = await prisma.problem.findMany({
+      where: {
+        competition,
+        status: "approved",
+        ...(topicFocus ? { topics: { array_contains: topicFocus } } : {}),
+      },
+      select: {
+        id: true,
+        statement: true,
+        answer: true,
+        format: true,
+        choices: true,
+        topics: true,
+        difficulty: true,
+        metadata: true,
+      },
+      orderBy: { usedCount: "asc" },
+    });
+  }
 
   if (available.length === 0) return [];
 
