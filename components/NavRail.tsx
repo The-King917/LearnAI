@@ -58,9 +58,22 @@ export default function NavRail({ mode, onModeChange }: NavRailProps) {
         <div className="h-11 shrink-0 border-b border-border flex items-center justify-center">
           <Link
             href="/"
-            className="w-7 h-7 rounded-lg bg-accent flex items-center justify-center text-background text-[11px] font-bold tracking-tight hover:bg-accent-hover transition-colors"
+            className="w-7 h-7 rounded-lg bg-accent flex items-center justify-center text-background hover:bg-accent-hover transition-colors"
+            title="PolyTeach.app"
           >
-            P
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+              <line x1="4" y1="14" x2="4" y2="2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+              <line x1="4" y1="2" x2="11" y2="2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+              <line x1="11" y1="2" x2="14" y2="5.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+              <line x1="14" y1="5.5" x2="11" y2="9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+              <line x1="11" y1="9" x2="4" y2="9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+              <circle cx="4" cy="2" r="1.3" fill="currentColor"/>
+              <circle cx="4" cy="9" r="1.3" fill="currentColor"/>
+              <circle cx="4" cy="14" r="1.3" fill="currentColor"/>
+              <circle cx="11" cy="2" r="1.3" fill="currentColor"/>
+              <circle cx="14" cy="5.5" r="1.3" fill="currentColor"/>
+              <circle cx="11" cy="9" r="1.3" fill="currentColor"/>
+            </svg>
           </Link>
         </div>
 
