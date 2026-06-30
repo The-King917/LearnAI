@@ -1187,7 +1187,7 @@ export default function LandingPage() {
       <footer className="relative z-10 border-t border-white/[0.06] px-8 pt-16 pb-10">
         <div className="max-w-6xl mx-auto">
           {/* Top row */}
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-10 pb-14 border-b border-white/[0.06]">
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-10 pb-14 border-b border-white/[0.06]">
             {/* Brand col */}
             <div className="col-span-2 md:col-span-2">
               <span className="flex items-center text-sm font-bold tracking-tight mb-4">
@@ -1232,6 +1232,37 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
+            </div>
+
+            {/* Download */}
+            <div className="col-span-2 md:col-span-1">
+              <p className="text-2xs font-semibold text-[#444] uppercase tracking-[0.1em] mb-5">Download</p>
+              <div className="space-y-3">
+                <Link
+                  href="/download"
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl border border-white/[0.08] bg-surface hover:border-white/[0.18] hover:bg-surface-2 transition-all duration-150 group"
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" className="text-text-2 group-hover:text-text transition-colors shrink-0">
+                    <path d="M11.182 3C9.91 3 9.09 3.674 8 3.674c-1.044 0-2.04-.674-3.182-.674C3.07 3 1 4.948 1 7.98c0 2.01.77 4.133 1.818 5.5.876 1.168 1.636 2.02 2.727 2.02.99 0 1.416-.643 2.455-.643 1.055 0 1.447.643 2.455.643 1.09 0 1.9-.906 2.727-2.02C14.23 12.113 15 9.99 15 7.98 15 4.948 12.93 3 11.182 3ZM8 3.266c.664-.768 1.636-1.266 2.182-1.266.072.874-.19 1.752-.736 2.42C8.937 5.07 7.98 5.62 7.273 5.58 7.18 4.72 7.49 3.862 8 3.266Z"/>
+                  </svg>
+                  <div>
+                    <p className="text-2xs text-[#555]">Coming soon</p>
+                    <p className="text-xs text-text-2 font-medium group-hover:text-text transition-colors">Mac</p>
+                  </div>
+                </Link>
+                <Link
+                  href="/download"
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl border border-white/[0.08] bg-surface hover:border-white/[0.18] hover:bg-surface-2 transition-all duration-150 group"
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" className="text-text-2 group-hover:text-text transition-colors shrink-0">
+                    <path d="M6.555 1.375 0 2.237v5.45h6.555V1.375ZM0 13.795l6.555.933V8.313H0v5.482ZM7.278 1.268v6.42H16V.125L7.278 1.268ZM16 8.313H7.278V14.9L16 16V8.313Z"/>
+                  </svg>
+                  <div>
+                    <p className="text-2xs text-[#555]">Coming soon</p>
+                    <p className="text-xs text-text-2 font-medium group-hover:text-text transition-colors">Windows</p>
+                  </div>
+                </Link>
+              </div>
             </div>
 
             {/* Support + Legal */}
