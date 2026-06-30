@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import DiagnoseMode from "./DiagnoseMode";
 import { Subject, VISIBLE_SUBJECTS } from "@/lib/subjects";
+import SciOlyDropdown from "./SciOlyDropdown";
 import { Difficulty } from "@/lib/prompts";
 
 interface DiagnoseCanvasProps {
@@ -19,8 +20,11 @@ const FEATURES = [
 
 export default function DiagnoseCanvas({ signedIn, onComplete }: DiagnoseCanvasProps) {
   const [subject, setSubject] = useState<Subject | null>(null);
+  const [sciOlyEvent, setSciOlyEvent] = useState<Subject | null>(null);
   const [active, setActive] = useState(false);
   const [complete, setComplete] = useState(false);
+
+  const effectiveSubject = subject?.id === "science-olympiad" ? sciOlyEvent : subject;
 
   const handleLevelFound = useCallback(
     (level: Difficulty) => {
@@ -41,6 +45,7 @@ export default function DiagnoseCanvas({ signedIn, onComplete }: DiagnoseCanvasP
 
   const reset = () => {
     setSubject(null);
+    setSciOlyEvent(null);
     setActive(false);
     setComplete(false);
   };
@@ -54,11 +59,11 @@ export default function DiagnoseCanvas({ signedIn, onComplete }: DiagnoseCanvasP
     );
   }
 
-  if (active && subject) {
+  if (active && effectiveSubject) {
     return (
       <div className="flex flex-col h-full">
         <div className="h-10 shrink-0 border-b border-border flex items-center px-5 gap-2">
-          <span className="text-sm text-text-2">{subject.name} diagnostic</span>
+          <span className="text-sm text-text-2">{effectiveSubject.name} diagnostic</span>
           {complete && (
             <span className="text-2xs text-accent px-2 py-0.5 rounded-full border border-accent/30 ml-1">Complete</span>
           )}
@@ -69,7 +74,7 @@ export default function DiagnoseCanvas({ signedIn, onComplete }: DiagnoseCanvasP
           )}
         </div>
         <div className="flex-1 overflow-hidden">
-          <DiagnoseMode subject={subject} onLevelFound={handleLevelFound} />
+          <DiagnoseMode subject={effectiveSubject} onLevelFound={handleLevelFound} />
         </div>
       </div>
     );
@@ -102,7 +107,7 @@ export default function DiagnoseCanvas({ signedIn, onComplete }: DiagnoseCanvasP
                   return (
                     <button
                       key={s.id}
-                      onClick={() => setSubject(s)}
+                      onClick={() => { setSubject(s); if (s.id !== "science-olympiad") setSciOlyEvent(null); }}
                       className={`px-3 py-3 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
                         selected
                           ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(232,168,32,0.25)]"
@@ -125,7 +130,7 @@ export default function DiagnoseCanvas({ signedIn, onComplete }: DiagnoseCanvasP
                   return (
                     <button
                       key={s.id}
-                      onClick={() => setSubject(s)}
+                      onClick={() => { setSubject(s); if (s.id !== "science-olympiad") setSciOlyEvent(null); }}
                       className={`px-3 py-3 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
                         selected
                           ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(232,168,32,0.25)]"
@@ -140,28 +145,39 @@ export default function DiagnoseCanvas({ signedIn, onComplete }: DiagnoseCanvasP
                   );
                 })}
               </div>
+
+              {subject?.id === "science-olympiad" && (
+                <div className="mt-3">
+                  <p className="text-2xs text-text-2 mb-1.5 pl-0.5">Which event?</p>
+                  <SciOlyDropdown value={sciOlyEvent} onChange={setSciOlyEvent} />
+                </div>
+              )}
             </div>
 
             {/* CTA */}
             <button
-              onClick={() => subject && setActive(true)}
-              disabled={!subject}
+              onClick={() => effectiveSubject && setActive(true)}
+              disabled={!effectiveSubject}
               className={`w-full py-3 rounded-xl text-sm font-semibold transition-all duration-150 ${
-                subject
+                effectiveSubject
                   ? "bg-accent text-background hover:bg-accent-hover cursor-pointer"
                   : "border border-border-2 text-text-2 cursor-not-allowed"
               }`}
             >
-              {subject ? `Begin ${subject.name} diagnostic` : "Choose a competition above"}
+              {effectiveSubject
+                ? `Begin ${effectiveSubject.name} diagnostic`
+                : subject?.id === "science-olympiad"
+                ? "Choose a Science Olympiad event above"
+                : "Choose a competition above"}
             </button>
           </div>
 
           {/* ── Right column ── */}
           <div className="sticky top-10">
-            {subject ? (
+            {effectiveSubject ? (
               <div className="rounded-2xl border border-accent/30 bg-accent/5 p-5">
                 <p className="text-2xs font-medium text-accent uppercase tracking-[0.07em] mb-3">Ready</p>
-                <p className="text-base font-semibold text-text leading-tight mb-5">{subject.name} Diagnostic</p>
+                <p className="text-base font-semibold text-text leading-tight mb-5">{effectiveSubject.name} Diagnostic</p>
                 <div className="space-y-3">
                   {FEATURES.map((f) => (
                     <div key={f.label} className="flex items-start gap-2.5">

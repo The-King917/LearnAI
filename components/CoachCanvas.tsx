@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import ChatInterface from "./ChatInterface";
 import { Subject, VISIBLE_SUBJECTS, getSubjectById } from "@/lib/subjects";
+import SciOlyDropdown from "./SciOlyDropdown";
 import { Difficulty } from "@/lib/prompts";
 
 type CanvasState = "setup" | "active";
@@ -58,6 +59,7 @@ export default function CoachCanvas({
 }: CoachCanvasProps) {
   const [canvasState, setCanvasState] = useState<CanvasState>("setup");
   const [subject, setSubject] = useState<Subject | null>(null);
+  const [sciOlyEvent, setSciOlyEvent] = useState<Subject | null>(null);
   const [difficulty, setDifficulty] = useState<Difficulty>("intermediate");
   const [chatKey, setChatKey] = useState(0);
   const [chatInitialMessages, setChatInitialMessages] = useState<
@@ -102,13 +104,15 @@ export default function CoachCanvas({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debriefMessage]);
 
+  const effectiveSubject = subject?.id === "science-olympiad" ? sciOlyEvent : subject;
+
   const startSession = useCallback(() => {
-    if (!subject) return;
+    if (!effectiveSubject) return;
     setChatInitialMessages(undefined);
     setCanvasState("active");
     setChatKey((k) => k + 1);
-    onSessionStart(subject.id, subject.name);
-  }, [subject, onSessionStart]);
+    onSessionStart(effectiveSubject.id, effectiveSubject.name);
+  }, [effectiveSubject, onSessionStart]);
 
   const resumeSession = useCallback(
     (s: RecentSession) => {
@@ -177,7 +181,7 @@ export default function CoachCanvas({
     return (
       <button
         key={s.id}
-        onClick={() => setSubject(s)}
+        onClick={() => { setSubject(s); if (s.id !== "science-olympiad") setSciOlyEvent(null); }}
         className={`px-3 py-3 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
           selected
             ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(232,168,32,0.25)]"
@@ -215,6 +219,13 @@ export default function CoachCanvas({
               <div className="grid grid-cols-3 gap-2">
                 {scienceSubjects.map((s) => <CompetitionCard key={s.id} s={s} />)}
               </div>
+
+              {subject?.id === "science-olympiad" && (
+                <div className="mt-3">
+                  <p className="text-2xs text-text-2 mb-1.5 pl-0.5">Which event?</p>
+                  <SciOlyDropdown value={sciOlyEvent} onChange={setSciOlyEvent} />
+                </div>
+              )}
             </div>
 
             {/* Difficulty segmented control */}
@@ -263,25 +274,30 @@ export default function CoachCanvas({
             {/* CTA */}
             <button
               onClick={startSession}
-              disabled={!subject}
+              disabled={!effectiveSubject}
               className={`w-full py-3 rounded-xl text-sm font-semibold transition-all duration-150 ${
-                subject
+                effectiveSubject
                   ? "bg-accent text-background hover:bg-accent-hover cursor-pointer"
                   : "border border-border-2 text-text-2 cursor-not-allowed"
               }`}
             >
-              {subject
-                ? `Start ${subject.name} · ${currentDiff.label} Coach`
+              {effectiveSubject
+                ? `Start ${effectiveSubject.name} · ${currentDiff.label} Coach`
+                : subject?.id === "science-olympiad"
+                ? "Choose a Science Olympiad event above"
                 : "Choose a competition above"}
             </button>
           </div>
 
           {/* ── Right column ── */}
           <div className="sticky top-10">
-            {subject ? (
+            {effectiveSubject ? (
               <div className="rounded-2xl border border-accent/30 bg-accent/5 p-5">
                 <p className="text-2xs font-medium text-accent uppercase tracking-[0.07em] mb-3">Ready to start</p>
-                <p className="text-base font-semibold text-text leading-tight">{subject.name}</p>
+                <p className="text-base font-semibold text-text leading-tight">{effectiveSubject.name}</p>
+                {effectiveSubject.group === "Science Olympiad" && (
+                  <p className="text-2xs text-accent/70 mt-0.5">Science Olympiad</p>
+                )}
                 <p className="text-sm text-text-2 mt-0.5 mb-5">{currentDiff.label} — {currentDiff.desc}</p>
                 <div className="border-t border-accent/15 pt-4 space-y-2.5">
                   {BENEFITS.map((b) => (

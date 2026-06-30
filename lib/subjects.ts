@@ -25,6 +25,27 @@ export const SUBJECTS: Subject[] = [
   { id: "usnco", name: "USNCO (Chemistry)", group: "Science Competitions" },
   { id: "usabo", name: "USABO (Biology)", group: "Science Competitions" },
   { id: "science-olympiad", name: "Science Olympiad", group: "Science Competitions" },
+
+  // Science Olympiad events (hidden from main grid; selected via dropdown)
+  { id: "scioly-anatomy", name: "Anatomy & Physiology", group: "Science Olympiad", hidden: true },
+  { id: "scioly-astronomy", name: "Astronomy", group: "Science Olympiad", hidden: true },
+  { id: "scioly-chem-lab", name: "Chemistry Lab", group: "Science Olympiad", hidden: true },
+  { id: "scioly-circuit-lab", name: "Circuit Lab", group: "Science Olympiad", hidden: true },
+  { id: "scioly-codebusters", name: "Codebusters", group: "Science Olympiad", hidden: true },
+  { id: "scioly-disease-detectives", name: "Disease Detectives", group: "Science Olympiad", hidden: true },
+  { id: "scioly-dynamic-planet", name: "Dynamic Planet", group: "Science Olympiad", hidden: true },
+  { id: "scioly-ecology", name: "Ecology", group: "Science Olympiad", hidden: true },
+  { id: "scioly-experimental-design", name: "Experimental Design", group: "Science Olympiad", hidden: true },
+  { id: "scioly-forensics", name: "Forensics", group: "Science Olympiad", hidden: true },
+  { id: "scioly-fossils", name: "Fossils", group: "Science Olympiad", hidden: true },
+  { id: "scioly-geologic-mapping", name: "Geologic Mapping", group: "Science Olympiad", hidden: true },
+  { id: "scioly-machines", name: "Machines", group: "Science Olympiad", hidden: true },
+  { id: "scioly-meteorology", name: "Meteorology", group: "Science Olympiad", hidden: true },
+  { id: "scioly-microbe-mission", name: "Microbe Mission", group: "Science Olympiad", hidden: true },
+  { id: "scioly-ornithology", name: "Ornithology", group: "Science Olympiad", hidden: true },
+  { id: "scioly-remote-sensing", name: "Remote Sensing", group: "Science Olympiad", hidden: true },
+  { id: "scioly-sounds-of-music", name: "Sounds of Music", group: "Science Olympiad", hidden: true },
+  { id: "scioly-water-quality", name: "Water Quality", group: "Science Olympiad", hidden: true },
   { id: "science-bowl", name: "Science Bowl", group: "Science Competitions" },
 
   // Hidden from UI — preserved in DB for existing sessions
@@ -92,6 +113,8 @@ export const SUBJECTS: Subject[] = [
 ];
 
 export const VISIBLE_SUBJECTS = SUBJECTS.filter((s) => !s.hidden);
+
+export const SCIOLY_EVENTS = SUBJECTS.filter((s) => s.group === "Science Olympiad" && s.hidden);
 
 export const SUBJECT_GROUPS = Array.from(new Set(VISIBLE_SUBJECTS.map((s) => s.group)));
 

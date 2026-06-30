@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import PracticeMode from "./PracticeMode";
 import { Subject, VISIBLE_SUBJECTS } from "@/lib/subjects";
+import SciOlyDropdown from "./SciOlyDropdown";
 import { Difficulty } from "@/lib/prompts";
 import { ResultTag } from "@/lib/mastery";
 
@@ -25,6 +26,7 @@ const TOPIC_PILLS = [
 export default function PracticeCanvas({ signedIn }: PracticeCanvasProps) {
   const [active, setActive] = useState(false);
   const [subject, setSubject] = useState<Subject | null>(null);
+  const [sciOlyEvent, setSciOlyEvent] = useState<Subject | null>(null);
   const [difficulty, setDifficulty] = useState<Difficulty>("intermediate");
   const [topics, setTopics] = useState<string[]>([]);
   const [practiceKey, setPracticeKey] = useState(0);
@@ -42,8 +44,10 @@ export default function PracticeCanvas({ signedIn }: PracticeCanvasProps) {
     }).catch(() => {});
   }, [subject]);
 
+  const effectiveSubject = subject?.id === "science-olympiad" ? sciOlyEvent : subject;
+
   const start = () => {
-    if (!subject) return;
+    if (!effectiveSubject) return;
     setActive(true);
     setPracticeKey((k) => k + 1);
   };
@@ -51,6 +55,7 @@ export default function PracticeCanvas({ signedIn }: PracticeCanvasProps) {
   const reset = () => {
     setActive(false);
     setSubject(null);
+    setSciOlyEvent(null);
   };
 
   if (!signedIn) {
@@ -62,11 +67,11 @@ export default function PracticeCanvas({ signedIn }: PracticeCanvasProps) {
     );
   }
 
-  if (active && subject) {
+  if (active && effectiveSubject) {
     return (
       <div className="flex flex-col h-full">
         <div className="h-10 shrink-0 border-b border-border flex items-center px-5 gap-2">
-          <span className="text-sm text-text-2">{subject.name}</span>
+          <span className="text-sm text-text-2">{effectiveSubject.name}</span>
           <span className="text-border-3">·</span>
           <span className="text-2xs text-text-2 px-2 py-0.5 rounded-full border border-border-2">
             {DIFFICULTY_OPTIONS.find((d) => d.value === difficulty)?.label ?? difficulty}
@@ -79,7 +84,7 @@ export default function PracticeCanvas({ signedIn }: PracticeCanvasProps) {
           </button>
         </div>
         <div className="flex-1 overflow-hidden">
-          <PracticeMode key={practiceKey} subject={subject} difficulty={difficulty} onResult={handleResult} />
+          <PracticeMode key={practiceKey} subject={effectiveSubject} difficulty={difficulty} onResult={handleResult} />
         </div>
       </div>
     );
@@ -107,7 +112,7 @@ export default function PracticeCanvas({ signedIn }: PracticeCanvasProps) {
               return (
                 <button
                   key={s.id}
-                  onClick={() => setSubject(s)}
+                  onClick={() => { setSubject(s); if (s.id !== "science-olympiad") setSciOlyEvent(null); }}
                   className={`px-3 py-3 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
                     selected
                       ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(232,168,32,0.25)]"
@@ -130,7 +135,7 @@ export default function PracticeCanvas({ signedIn }: PracticeCanvasProps) {
               return (
                 <button
                   key={s.id}
-                  onClick={() => setSubject(s)}
+                  onClick={() => { setSubject(s); if (s.id !== "science-olympiad") setSciOlyEvent(null); }}
                   className={`px-3 py-3 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
                     selected
                       ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(232,168,32,0.25)]"
@@ -145,6 +150,13 @@ export default function PracticeCanvas({ signedIn }: PracticeCanvasProps) {
               );
             })}
           </div>
+
+          {subject?.id === "science-olympiad" && (
+            <div className="mt-3">
+              <p className="text-2xs text-text-2 mb-1.5 pl-0.5">Which event?</p>
+              <SciOlyDropdown value={sciOlyEvent} onChange={setSciOlyEvent} />
+            </div>
+          )}
         </div>
 
         {/* Difficulty segmented control */}
@@ -193,14 +205,18 @@ export default function PracticeCanvas({ signedIn }: PracticeCanvasProps) {
         {/* CTA */}
         <button
           onClick={start}
-          disabled={!subject}
+          disabled={!effectiveSubject}
           className={`w-full py-3 rounded-xl text-sm font-semibold transition-all duration-150 ${
-            subject
+            effectiveSubject
               ? "bg-accent text-background hover:bg-accent-hover cursor-pointer"
               : "border border-border-2 text-text-2 cursor-not-allowed"
           }`}
         >
-          {subject ? `Practice ${subject.name}` : "Choose a competition above"}
+          {effectiveSubject
+            ? `Practice ${effectiveSubject.name}`
+            : subject?.id === "science-olympiad"
+            ? "Choose a Science Olympiad event above"
+            : "Choose a competition above"}
         </button>
       </div>
     </div>
