@@ -9,6 +9,7 @@ import Markdown from "./Markdown";
 interface PracticeModeProps {
   subject: Subject | null;
   difficulty: Difficulty;
+  topics?: string[];
   onResult?: (result: ResultTag) => void;
 }
 
@@ -70,14 +71,14 @@ const HINT_META = [
 ];
 
 // ── MCQ Mode ────────────────────────────────────────────────────────────────
-function MCQPractice({ subject, difficulty, onResult }: { subject: Subject; difficulty: Difficulty; onResult?: (result: ResultTag) => void }) {
+function MCQPractice({ subject, difficulty, topics, onResult }: { subject: Subject; difficulty: Difficulty; topics?: string[]; onResult?: (result: ResultTag) => void }) {
   const [state, setState] = useState<MCQState>({
     problem: "", selected: null, feedback: "", loadingFeedback: false, feedbackStream: "", revealed: false,
   });
   const [generating, setGenerating] = useState(false);
   const [genStream, setGenStream] = useState("");
 
-  const systemPrompt = buildSystemPrompt(subject, "practice", difficulty, "mcq");
+  const systemPrompt = buildSystemPrompt(subject, "practice", difficulty, "mcq", topics);
 
   const generate = useCallback(async () => {
     setGenerating(true);
@@ -199,14 +200,14 @@ function MCQPractice({ subject, difficulty, onResult }: { subject: Subject; diff
 // ── FRQ Mode ────────────────────────────────────────────────────────────────
 const FRQ_PARTS_RE = /\*\*\(([a-z])\)\*\*/gi;
 
-function FRQPractice({ subject, difficulty, onResult }: { subject: Subject; difficulty: Difficulty; onResult?: (result: ResultTag) => void }) {
+function FRQPractice({ subject, difficulty, topics, onResult }: { subject: Subject; difficulty: Difficulty; topics?: string[]; onResult?: (result: ResultTag) => void }) {
   const [state, setState] = useState<FRQState>({
     problem: "", answers: {}, feedback: {}, feedbackStream: {}, loading: {},
   });
   const [generating, setGenerating] = useState(false);
   const [genStream, setGenStream] = useState("");
 
-  const systemPrompt = buildSystemPrompt(subject, "practice", difficulty, "frq");
+  const systemPrompt = buildSystemPrompt(subject, "practice", difficulty, "frq", topics);
 
   const generate = useCallback(async () => {
     setGenerating(true);
@@ -348,7 +349,7 @@ function FRQPractice({ subject, difficulty, onResult }: { subject: Subject; diff
 }
 
 // ── Open Practice ────────────────────────────────────────────────────────────
-function OpenPractice({ subject, difficulty, onResult }: { subject: Subject; difficulty: Difficulty; onResult?: (result: ResultTag) => void }) {
+function OpenPractice({ subject, difficulty, topics, onResult }: { subject: Subject; difficulty: Difficulty; topics?: string[]; onResult?: (result: ResultTag) => void }) {
   const [stage, setStage] = useState<Stage>("idle");
   const [loading, setLoading] = useState(false);
   const [loadingWhat, setLoadingWhat] = useState("");
@@ -357,7 +358,7 @@ function OpenPractice({ subject, difficulty, onResult }: { subject: Subject; dif
     problem: "", hint1: "", hint2: "", hint3: "", solution: "", userAnswer: "", feedback: "",
   });
 
-  const systemPrompt = buildSystemPrompt(subject, "practice", difficulty, "open");
+  const systemPrompt = buildSystemPrompt(subject, "practice", difficulty, "open", topics);
 
   const generateProblem = useCallback(async () => {
     setLoading(true); setLoadingWhat("problem"); setStream("");
@@ -549,7 +550,7 @@ function OpenPractice({ subject, difficulty, onResult }: { subject: Subject; dif
 }
 
 // ── Main PracticeMode ────────────────────────────────────────────────────────
-export default function PracticeMode({ subject, difficulty, onResult }: PracticeModeProps) {
+export default function PracticeMode({ subject, difficulty, topics, onResult }: PracticeModeProps) {
   const isAP = isAPSubject(subject);
   const [qType, setQType] = useState<APQuestionType>(isAP ? "mcq" : "open");
   const [modeKey, setModeKey] = useState(0);
@@ -588,11 +589,11 @@ export default function PracticeMode({ subject, difficulty, onResult }: Practice
 
       <div className="flex-1 overflow-hidden">
         {qType === "mcq" && isAP ? (
-          <MCQPractice key={modeKey} subject={subject} difficulty={difficulty} onResult={onResult} />
+          <MCQPractice key={modeKey} subject={subject} difficulty={difficulty} topics={topics} onResult={onResult} />
         ) : qType === "frq" && isAP ? (
-          <FRQPractice key={modeKey} subject={subject} difficulty={difficulty} onResult={onResult} />
+          <FRQPractice key={modeKey} subject={subject} difficulty={difficulty} topics={topics} onResult={onResult} />
         ) : (
-          <OpenPractice key={modeKey} subject={subject} difficulty={difficulty} onResult={onResult} />
+          <OpenPractice key={modeKey} subject={subject} difficulty={difficulty} topics={topics} onResult={onResult} />
         )}
       </div>
     </div>

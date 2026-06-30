@@ -84,7 +84,7 @@ export default function PracticeCanvas({ signedIn }: PracticeCanvasProps) {
           </button>
         </div>
         <div className="flex-1 overflow-hidden">
-          <PracticeMode key={practiceKey} subject={effectiveSubject} difficulty={difficulty} onResult={handleResult} />
+          <PracticeMode key={practiceKey} subject={effectiveSubject} difficulty={difficulty} topics={topics} onResult={handleResult} />
         </div>
       </div>
     );

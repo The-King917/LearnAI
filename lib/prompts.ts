@@ -592,7 +592,8 @@ export function buildSystemPrompt(
   subject: Subject | undefined,
   mode: Mode,
   difficulty: Difficulty,
-  apQuestionType?: APQuestionType
+  apQuestionType?: APQuestionType,
+  topics?: string[]
 ): string {
   const domain = getDomain(subject);
 
@@ -668,13 +669,16 @@ Begin immediately with the first question — no preamble.`;
 
   if (mode === "practice") {
     const isAP = subject?.group.startsWith("AP");
+    const topicFocus = topics && topics.length > 0
+      ? ` specifically focused on: ${topics.join(", ")}`
+      : "";
 
     if (isAP && apQuestionType === "mcq") {
       const stimulusGuidance = AP_STIMULUS_GUIDANCE[subject!.id] ?? DEFAULT_STIMULUS_GUIDANCE;
 
       return `${basePersonality}
 
-You are in AP MCQ Practice mode for ${subject!.name}.
+You are in AP MCQ Practice mode for ${subject!.name}${topicFocus ? ` (topic focus:${topicFocus})` : ""}.
 
 When generating a problem, produce one authentic AP-style multiple choice question in EXACTLY this format (no deviations):
 
@@ -710,7 +714,7 @@ When the student submits an answer:
     if (isAP && apQuestionType === "frq") {
       return `${basePersonality}
 
-You are in AP FRQ Practice mode for ${subject!.name}.
+You are in AP FRQ Practice mode for ${subject!.name}${topicFocus ? ` (topic focus:${topicFocus})` : ""}.
 
 When generating a problem, produce one authentic AP-style free-response question in EXACTLY this format:
 
@@ -740,7 +744,7 @@ When the student submits a response to any part:
 
 You are in Practice Problem mode for ${subject?.name ?? "the selected subject"}.
 
-Generate one well-crafted problem appropriate for ${difficulty} level. Output ONLY the problem — no hints, no solution.
+Generate one well-crafted problem appropriate for ${difficulty} level${topicFocus}. Output ONLY the problem — no hints, no solution.
 
 When the student submits their answer in response to "What is your answer?" (grading, not a hint request):
 - ALWAYS begin your reply with exactly one line — \`RESULT: CORRECT\`, \`RESULT: PARTIAL\`, or \`RESULT: INCORRECT\` — with nothing else on that line, even if the answer is blank, a joke, or off-topic (grade those INCORRECT). Then a blank line, then your feedback.
