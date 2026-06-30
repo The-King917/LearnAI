@@ -199,7 +199,7 @@ export default function LandingPage() {
         <div className="text-center mb-16">
           <Reveal transition={{ duration: 0.5, delay: 0.1 }}>
             <h2 className="text-2xl font-semibold tracking-[-0.025em]">
-              <TypeText text="Built for students who already know what AIME is" delay={0.1} />
+              <TypeText text="Built for students serious about competitive academics" delay={0.1} />
             </h2>
           </Reveal>
           <Reveal transition={{ duration: 0.5, delay: 0.2 }}>
