@@ -127,15 +127,15 @@ export default function DiagnoseMode({ subject, onLevelFound }: DiagnoseModeProp
       <div className="flex flex-col items-center justify-center h-full gap-6 text-center px-6 max-w-sm mx-auto">
         <div>
           <p className="text-lg font-semibold tracking-[-0.02em] text-text">{subject.name}</p>
-          <p className="text-sm text-muted mt-2 leading-relaxed">
+          <p className="text-sm text-text-2 mt-2 leading-relaxed">
             An adaptive 8–10 question diagnostic that adjusts difficulty in real time.
             You&apos;ll get a detailed level assessment and a personalized study plan at the end.
           </p>
         </div>
-        <div className="grid grid-cols-2 gap-2 text-xs text-muted w-full">
+        <div className="grid grid-cols-2 gap-2 text-xs text-text-2 w-full">
           {["Adaptive difficulty", "5–7 topic areas", "Honest assessment", "Study roadmap"].map((f) => (
-            <div key={f} className="flex items-center gap-2 bg-surface border border-border rounded-lg px-3 py-2">
-              <svg className="w-3 h-3 text-text-2 shrink-0" fill="none" viewBox="0 0 12 12" stroke="currentColor" strokeWidth="2">
+            <div key={f} className="flex items-center gap-2 bg-surface border border-border-2 rounded-lg px-3 py-2">
+              <svg className="w-3 h-3 text-accent shrink-0" fill="none" viewBox="0 0 12 12" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M1.5 6.5l3 3 6-6"/>
               </svg>
               {f}

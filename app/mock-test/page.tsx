@@ -194,46 +194,52 @@ export default function MockTestPage() {
           <Link href="/coach" className="flex items-center text-sm font-semibold tracking-[-0.01em]">
             Poly<span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-accent text-background text-2xs font-bold">Teach</span>
           </Link>
-          <span className="text-sm text-muted">Mock Test</span>
+          <span className="text-sm text-text-2">Mock Test</span>
         </nav>
 
         <div className="max-w-2xl mx-auto px-6 py-16">
           <h1 className="text-2xl font-semibold tracking-[-0.025em] mb-2">Start a mock test</h1>
-          <p className="text-sm text-muted mb-10">Original problems matched to real competition style. No past papers — fresh every time.</p>
+          <p className="text-sm text-text-2 mb-10">Original problems matched to real competition style. No past papers — fresh every time.</p>
 
           {error && <p className="text-sm text-red-400 mb-6">{error}</p>}
 
           <div className="mb-8">
-            <p className="text-xs font-medium text-muted uppercase tracking-wider mb-3">Competition</p>
+            <p className="text-xs font-medium text-accent uppercase tracking-wider mb-3">Competition</p>
             <div className="grid grid-cols-2 gap-2">
-              {OLYMPIAD_COMPETITIONS.map((c) => (
-                <button
-                  key={c.id}
-                  onClick={() => setCompetition(c.id)}
-                  className={`p-3 rounded-xl border text-left transition-all duration-100 ${
-                    competition === c.id
-                      ? "border-accent bg-accent-muted text-text"
-                      : "border-border bg-surface text-muted hover:border-border-2 hover:text-text-2"
-                  }`}
-                >
-                  <p className="text-sm font-medium">{c.label}</p>
-                  <p className="text-xs text-subtle mt-0.5">{c.desc}</p>
-                </button>
-              ))}
+              {OLYMPIAD_COMPETITIONS.map((c) => {
+                const selected = competition === c.id;
+                return (
+                  <button
+                    key={c.id}
+                    onClick={() => setCompetition(c.id)}
+                    className={`p-3 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
+                      selected
+                        ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(232,168,32,0.25)]"
+                        : "border-border-2 bg-surface text-text-2 hover:border-[#484848] hover:text-text hover:bg-surface-2"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-1">
+                      <p className="text-sm font-medium">{c.label}</p>
+                      {selected && <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0 mt-[3px]" />}
+                    </div>
+                    <p className={`text-xs mt-0.5 ${selected ? "text-accent/70" : "text-[#666]"}`}>{c.desc}</p>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
           <div className="mb-10">
-            <p className="text-xs font-medium text-muted uppercase tracking-wider mb-3">Timer</p>
+            <p className="text-xs font-medium text-accent uppercase tracking-wider mb-3">Timer</p>
             <div className="flex gap-2">
               {[true, false].map((t) => (
                 <button
                   key={String(t)}
                   onClick={() => setTimed(t)}
-                  className={`px-4 py-2 rounded-lg border text-sm transition-all duration-100 ${
+                  className={`px-4 py-2 rounded-lg border text-sm transition-all duration-150 cursor-pointer ${
                     timed === t
-                      ? "border-accent bg-accent-muted text-text"
-                      : "border-border bg-surface text-muted hover:border-border-2"
+                      ? "border-accent bg-accent/10 text-accent"
+                      : "border-border-2 text-text-2 hover:border-[#484848] hover:text-text hover:bg-surface-2"
                   }`}
                 >
                   {t ? `Timed (${config?.timeLimitMins} min)` : "Untimed"}
@@ -245,7 +251,7 @@ export default function MockTestPage() {
           <button
             onClick={startTest}
             disabled={loading}
-            className="px-6 py-3 rounded-lg text-sm font-semibold bg-accent text-background hover:bg-accent-hover disabled:bg-disabled disabled:text-disabled-text transition-all duration-150"
+            className="px-6 py-3 rounded-lg text-sm font-semibold bg-accent text-background hover:bg-accent-hover disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-150"
           >
             {loading ? "Selecting problems…" : "Start test"}
           </button>
@@ -266,22 +272,22 @@ export default function MockTestPage() {
           <Link href="/coach" className="flex items-center text-sm font-semibold tracking-[-0.01em]">
             Poly<span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-accent text-background text-2xs font-bold">Teach</span>
           </Link>
-          <span className="text-sm text-muted">{competition.toUpperCase()} Results</span>
+          <span className="text-sm text-text-2">{competition.toUpperCase()} Results</span>
         </nav>
 
         <div className="max-w-3xl mx-auto px-6 py-16">
           <div className="grid grid-cols-3 gap-4 mb-10">
             <div className="p-6 rounded-xl border border-border bg-surface text-center">
               <p className="text-3xl font-semibold tracking-[-0.03em]">{results.score}</p>
-              <p className="text-xs text-muted mt-1">of {results.maxScore} pts</p>
+              <p className="text-xs text-text-2 mt-1">of {results.maxScore} pts</p>
             </div>
             <div className="p-6 rounded-xl border border-border bg-surface text-center">
               <p className="text-3xl font-semibold tracking-[-0.03em]">~{results.percentile}th</p>
-              <p className="text-xs text-muted mt-1">percentile estimate</p>
+              <p className="text-xs text-text-2 mt-1">percentile estimate</p>
             </div>
             <div className="p-6 rounded-xl border border-border bg-surface text-center">
               <p className="text-3xl font-semibold tracking-[-0.03em]">{formatTime(totalElapsed)}</p>
-              <p className="text-xs text-muted mt-1">total time</p>
+              <p className="text-xs text-text-2 mt-1">total time</p>
             </div>
           </div>
 
@@ -293,14 +299,14 @@ export default function MockTestPage() {
                   const pct = Math.round((stats.correct / stats.total) * 100);
                   return (
                     <div key={topic} className="flex items-center gap-3">
-                      <span className="text-sm text-muted w-40 truncate capitalize">{topic.replace(/_/g, " ")}</span>
+                      <span className="text-sm text-text-2 w-40 truncate capitalize">{topic.replace(/_/g, " ")}</span>
                       <div className="flex-1 h-1.5 bg-surface-2 rounded-full overflow-hidden">
                         <div
                           className="h-full rounded-full bg-accent/60"
                           style={{ width: `${pct}%` }}
                         />
                       </div>
-                      <span className="text-xs text-muted w-16 text-right">{stats.correct}/{stats.total}</span>
+                      <span className="text-xs text-text-2 w-16 text-right">{stats.correct}/{stats.total}</span>
                     </div>
                   );
                 })}
@@ -311,18 +317,18 @@ export default function MockTestPage() {
           {wrongProblemsData.length > 0 && (
             <div className="mb-10">
               <h2 className="text-sm font-semibold mb-2">Problems to debrief</h2>
-              <p className="text-sm text-muted mb-4">Start a Socratic session on any problem you got wrong.</p>
+              <p className="text-sm text-text-2 mb-4">Start a Socratic session on any problem you got wrong.</p>
               <div className="space-y-2">
                 {wrongProblemsData.map((p, i) => (
                   <div key={p.problem.id} className="p-4 rounded-xl border border-border bg-surface">
                     <div className="flex items-start justify-between gap-4">
-                      <p className="text-sm text-muted line-clamp-2 flex-1">
-                        <span className="text-subtle mr-2">#{i + 1}</span>
+                      <p className="text-sm text-text-2 line-clamp-2 flex-1">
+                        <span className="text-[#666] mr-2">#{i + 1}</span>
                         {p.problem.statement.slice(0, 120)}…
                       </p>
                       <Link
                         href={`/coach?debrief=${testId}&problem=${p.problem.id}&subject=${competition}`}
-                        className="shrink-0 px-3 py-1.5 rounded-lg border border-border text-xs text-muted hover:border-border-2 hover:text-text-2 transition-colors"
+                        className="shrink-0 px-3 py-1.5 rounded-lg border border-border-2 text-xs text-text-2 hover:border-[#484848] hover:text-text transition-colors"
                       >
                         Debrief →
                       </Link>
@@ -336,13 +342,13 @@ export default function MockTestPage() {
           <div className="flex gap-3">
             <button
               onClick={() => { setTestStatus("setup"); setResults(null); }}
-              className="px-5 py-2.5 rounded-lg text-sm font-medium border border-border hover:border-border-2 text-muted hover:text-text-2 transition-colors"
+              className="px-5 py-2.5 rounded-lg text-sm font-medium border border-border-2 text-text-2 hover:border-[#484848] hover:text-text transition-colors"
             >
               Take another test
             </button>
             <Link
               href="/coach"
-              className="px-5 py-2.5 rounded-lg text-sm font-medium text-muted hover:text-text-2 transition-colors"
+              className="px-5 py-2.5 rounded-lg text-sm font-medium text-text-2 hover:text-text transition-colors"
             >
               Back to coach
             </Link>
@@ -371,7 +377,7 @@ export default function MockTestPage() {
               )}
               <button
                 onClick={() => setTimerHidden((h) => !h)}
-                className="text-xs text-subtle hover:text-muted transition-colors"
+                className="text-xs text-text-2 hover:text-text transition-colors"
               >
                 {timerHidden ? "show" : "hide"}
               </button>
@@ -414,11 +420,11 @@ export default function MockTestPage() {
         {currentProblem && (
           <main className="flex-1 overflow-y-auto px-8 py-8 max-w-3xl">
             <div className="mb-6 flex items-center gap-2">
-              <span className="text-xs text-subtle">Problem {current + 1} of {problems.length}</span>
-              <span className="text-subtle">·</span>
-              <span className="text-xs text-subtle capitalize">{currentProblem.problem.difficulty}</span>
+              <span className="text-xs text-text-2">Problem {current + 1} of {problems.length}</span>
+              <span className="text-border-3">·</span>
+              <span className="text-xs text-text-2 capitalize">{currentProblem.problem.difficulty}</span>
               {currentProblem.problem.topics.slice(0, 2).map((t) => (
-                <span key={t} className="text-xs text-subtle px-1.5 py-0.5 rounded border border-border capitalize">
+                <span key={t} className="text-xs text-text-2 px-1.5 py-0.5 rounded border border-border-2 capitalize">
                   {t.replace(/_/g, " ")}
                 </span>
               ))}
@@ -435,10 +441,10 @@ export default function MockTestPage() {
                   <button
                     key={letter}
                     onClick={() => setAnswers((a) => ({ ...a, [currentProblem.problem.id]: letter }))}
-                    className={`w-full flex items-start gap-3 p-4 rounded-xl border text-left transition-all duration-100 ${
+                    className={`w-full flex items-start gap-3 p-4 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
                       answers[currentProblem.problem.id] === letter
-                        ? "border-accent bg-accent-muted text-text"
-                        : "border-border bg-surface text-muted hover:border-border-2 hover:text-text-2"
+                        ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(232,168,32,0.25)]"
+                        : "border-border-2 bg-surface text-text-2 hover:border-[#484848] hover:text-text hover:bg-surface-2"
                     }`}
                   >
                     <span className="text-sm font-semibold shrink-0 w-5">{letter}</span>
@@ -450,7 +456,7 @@ export default function MockTestPage() {
 
             {(currentProblem.problem.format === "integer" || currentProblem.problem.format === "short_answer") && (
               <div>
-                <label className="text-xs text-muted mb-2 block">
+                <label className="text-xs text-text-2 mb-2 block">
                   {currentProblem.problem.format === "integer" ? "Enter your answer (000–999):" : "Your answer:"}
                 </label>
                 <input
@@ -458,27 +464,27 @@ export default function MockTestPage() {
                   value={answers[currentProblem.problem.id] ?? ""}
                   onChange={(e) => setAnswers((a) => ({ ...a, [currentProblem.problem.id]: e.target.value }))}
                   placeholder={currentProblem.problem.format === "integer" ? "000" : "Answer…"}
-                  className="w-40 bg-surface border border-border rounded-lg px-4 py-2.5 text-sm text-text outline-none focus:border-accent transition-colors"
+                  className="w-40 bg-surface border border-border-2 rounded-lg px-4 py-2.5 text-sm text-text outline-none focus:border-accent transition-colors"
                 />
               </div>
             )}
 
             {currentProblem.problem.format === "proof" && (
               <div>
-                <label className="text-xs text-muted mb-2 block">Your proof / solution:</label>
+                <label className="text-xs text-text-2 mb-2 block">Your proof / solution:</label>
                 <textarea
                   value={answers[currentProblem.problem.id] ?? ""}
                   onChange={(e) => setAnswers((a) => ({ ...a, [currentProblem.problem.id]: e.target.value }))}
                   placeholder="Write your proof here…"
                   rows={10}
-                  className="w-full bg-surface border border-border rounded-lg px-4 py-3 text-sm text-text outline-none focus:border-accent transition-colors resize-y font-mono"
+                  className="w-full bg-surface border border-border-2 rounded-lg px-4 py-3 text-sm text-text outline-none focus:border-accent transition-colors resize-y font-mono"
                 />
               </div>
             )}
 
             {currentProblem.problem.format === "code" && (
               <div>
-                <label className="text-xs text-muted mb-2 block">Your solution (Python or C++):</label>
+                <label className="text-xs text-text-2 mb-2 block">Your solution (Python or C++):</label>
                 <textarea
                   value={answers[currentProblem.problem.id] ?? ""}
                   onChange={(e) => setAnswers((a) => ({ ...a, [currentProblem.problem.id]: e.target.value }))}
@@ -494,14 +500,14 @@ export default function MockTestPage() {
               <button
                 onClick={() => current > 0 && goToQuestion(current - 1)}
                 disabled={current === 0}
-                className="text-sm text-muted hover:text-text-2 disabled:opacity-30 transition-colors"
+                className="text-sm text-text-2 hover:text-text disabled:opacity-30 transition-colors"
               >
                 ← Previous
               </button>
               <button
                 onClick={() => current < problems.length - 1 && goToQuestion(current + 1)}
                 disabled={current === problems.length - 1}
-                className="text-sm text-muted hover:text-text-2 disabled:opacity-30 transition-colors"
+                className="text-sm text-text-2 hover:text-text disabled:opacity-30 transition-colors"
               >
                 Next →
               </button>
