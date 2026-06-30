@@ -203,7 +203,7 @@ export default function CoachCanvas({
 
           {/* ── Left column ── */}
           <div>
-            <h1 className="text-xl font-semibold tracking-[-0.02em] text-text mb-1">AI Competition Coach</h1>
+            <h1 className="text-xl font-semibold tracking-[-0.02em] text-text mb-1">Competition Coach</h1>
             <p className="text-sm text-text-2 mb-8">Pick your exam and difficulty. We'll guide you through problems step by step.</p>
 
             {/* Competition grid */}

@@ -2,6 +2,9 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { Syne } from "next/font/google";
+
+const syne = Syne({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], display: "swap" });
 import LandingDemo from "@/components/LandingDemo";
 import Reveal from "@/components/Reveal";
 import Faq from "@/components/Faq";
@@ -196,7 +199,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-text overflow-x-hidden">
+    <div className={`${syne.className} min-h-screen bg-background text-text overflow-x-hidden`}>
       {/* Static dot grid */}
       <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
       <FloatingSymbols />
