@@ -196,28 +196,28 @@ export default function LandingPage() {
           <div style={{ position: "absolute", top: "15%", left: "50%", transform: "translateX(-50%)", width: "900px", height: "500px", background: "radial-gradient(ellipse, rgba(232,168,32,0.10) 0%, transparent 65%)", filter: "blur(40px)" }} />
         </div>
 
-        {/* Social proof badge */}
+        {/* Social proof */}
         {accountCount !== null && (
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-            <div className="mb-8 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-accent/25 text-xs text-accent font-medium" style={{ backgroundColor: "rgba(232,168,32,0.08)" }}>
-              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-              Joined by {accountCount.toLocaleString()}+ competitors
-            </div>
-          </motion.div>
+          <motion.p
+            className="mb-8 text-xs text-text-2"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            Joined by {accountCount.toLocaleString()}+ competitors
+          </motion.p>
         )}
 
         {/* Headline */}
         <motion.h1
-          className="text-[clamp(44px,8vw,96px)] font-semibold tracking-[-0.04em] leading-[1.02] max-w-4xl"
+          className="text-[clamp(44px,8vw,96px)] font-semibold tracking-[-0.04em] leading-[1.02] max-w-4xl text-white"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, delay: 0.1 }}
         >
-          <span className="text-white">The AI coach that</span>
+          The AI coach that
           <br />
-          <span style={{ background: "linear-gradient(120deg, #E8A820 0%, #F7D070 45%, #E8A820 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-            thinks like a competitor
-          </span>
+          <span className="text-accent">thinks like a competitor</span>
         </motion.h1>
 
         <motion.p
@@ -450,10 +450,7 @@ export default function LandingPage() {
                   className="p-8 rounded-2xl border border-white/[0.08] bg-surface h-full"
                   style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}
                 >
-                  <div
-                    className="text-4xl font-semibold tracking-[-0.04em] mb-4"
-                    style={{ background: "linear-gradient(120deg, #E8A820 0%, #F7D070 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
-                  >
+                  <div className="text-4xl font-semibold tracking-[-0.04em] mb-4 text-accent">
                     {s.stat}
                   </div>
                   <p className="text-sm text-text-2 leading-relaxed mb-4">{s.desc}</p>
