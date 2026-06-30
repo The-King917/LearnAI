@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { Syne } from "next/font/google";
 
 const syne = Syne({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], display: "swap" });
@@ -206,72 +206,87 @@ const FEATURE_PANELS = [
 function FeatureScroll() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
-  const x = useTransform(scrollYProgress, [0, 1], ["0vw", `${-(FEATURE_PANELS.length - 1) * 100}vw`]);
-  const panelIndex = useTransform(scrollYProgress, [0, 1], [0, FEATURE_PANELS.length - 1]);
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    return panelIndex.on("change", (v) => setActiveIndex(Math.round(v)));
-  }, [panelIndex]);
+    return scrollYProgress.on("change", (v) => {
+      const idx = Math.min(FEATURE_PANELS.length - 1, Math.floor(v * FEATURE_PANELS.length));
+      setActiveIndex(idx);
+    });
+  }, [scrollYProgress]);
+
+  const panel = FEATURE_PANELS[activeIndex];
 
   return (
     <section ref={ref} style={{ height: `${FEATURE_PANELS.length * 100}vh` }} className="relative">
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
-        {/* Section header */}
-        <div className="absolute top-10 left-1/2 -translate-x-1/2 text-center z-10 pointer-events-none">
-          <p className="text-xs font-medium text-accent uppercase tracking-[0.12em] mb-2">What you get</p>
-        </div>
+      <div className="sticky top-0 h-screen flex items-center overflow-hidden">
 
-        {/* Progress dots */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+        {/* Vertical progress bar — left edge */}
+        <div className="absolute left-8 top-1/2 -translate-y-1/2 flex flex-col gap-2.5">
           {FEATURE_PANELS.map((_, i) => (
             <div
               key={i}
-              className="h-[3px] rounded-full transition-all duration-500"
+              className="w-[2px] rounded-full transition-all duration-500"
               style={{
-                width: i === activeIndex ? "24px" : "8px",
-                backgroundColor: i === activeIndex ? "rgba(232,168,32,1)" : "rgba(255,255,255,0.15)",
+                height: i === activeIndex ? "32px" : "12px",
+                backgroundColor: i === activeIndex ? "rgba(232,168,32,1)" : "rgba(255,255,255,0.12)",
               }}
             />
           ))}
         </div>
 
-        {/* Sliding track */}
-        <motion.div style={{ x }} className="flex will-change-transform">
-          {FEATURE_PANELS.map((panel) => (
-            <div
-              key={panel.index}
-              className="w-screen shrink-0 flex items-center justify-center px-8 md:px-16"
-            >
-              <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 items-center">
-                {/* Text side */}
-                <div>
-                  <div className="flex items-center gap-3 mb-6">
-                    <span className="text-4xl font-semibold tabular-nums" style={{ color: "rgba(255,255,255,0.07)" }}>{panel.index}</span>
-                    <span className="text-xs font-medium text-accent uppercase tracking-[0.1em]">{panel.tag}</span>
-                  </div>
-                  <h3 className="text-[clamp(28px,3.5vw,48px)] font-semibold tracking-[-0.03em] leading-[1.1] mb-4">
-                    {panel.title}
-                  </h3>
-                  <p className="text-base text-text-2 leading-relaxed max-w-sm">
-                    {panel.desc}
-                  </p>
-                </div>
+        {/* Section label — top center */}
+        <div className="absolute top-10 left-1/2 -translate-x-1/2 pointer-events-none">
+          <p className="text-xs font-medium text-accent uppercase tracking-[0.12em]">What you get</p>
+        </div>
 
-                {/* Preview side */}
-                <AppWindow>
-                  <div className="bg-[#0d0d0d]">
-                    <div className="flex items-center gap-2 px-3 py-2 border-b border-border bg-surface-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-                      <span className="text-2xs text-text-2">{panel.label}</span>
-                    </div>
-                    {panel.preview}
-                  </div>
-                </AppWindow>
+        {/* Main content */}
+        <div className="max-w-6xl mx-auto w-full px-16 grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-center">
+
+          {/* Text — animates on change */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeIndex}
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <span className="text-4xl font-semibold tabular-nums" style={{ color: "rgba(255,255,255,0.07)" }}>{panel.index}</span>
+                <span className="text-xs font-medium text-accent uppercase tracking-[0.1em]">{panel.tag}</span>
               </div>
-            </div>
-          ))}
-        </motion.div>
+              <h3 className="text-[clamp(26px,3.2vw,44px)] font-semibold tracking-[-0.03em] leading-[1.1] mb-5">
+                {panel.title}
+              </h3>
+              <p className="text-base text-text-2 leading-relaxed max-w-sm">
+                {panel.desc}
+              </p>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Preview card — animates on change */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeIndex}
+              initial={{ opacity: 0, y: 36, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.98 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <AppWindow>
+                <div className="bg-[#0d0d0d]">
+                  <div className="flex items-center gap-2 px-3 py-2 border-b border-border bg-surface-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                    <span className="text-2xs text-text-2">{panel.label}</span>
+                  </div>
+                  {panel.preview}
+                </div>
+              </AppWindow>
+            </motion.div>
+          </AnimatePresence>
+
+        </div>
       </div>
     </section>
   );
