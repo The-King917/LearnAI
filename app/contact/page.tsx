@@ -55,9 +55,27 @@ export default function ContactPage() {
       <main className="max-w-2xl mx-auto px-8 py-20">
         <p className="text-xs font-medium text-accent uppercase tracking-[0.12em] mb-4">Get in touch</p>
         <h1 className="text-3xl font-semibold tracking-[-0.03em] mb-4">Contact us</h1>
-        <p className="text-sm text-text-2 leading-relaxed mb-16 max-w-md">
+        <p className="text-sm text-text-2 leading-relaxed mb-8 max-w-md">
           We&apos;re a small team — email is the fastest way to reach us. We typically respond within one business day.
         </p>
+
+        <div className="flex flex-wrap items-center gap-6 mb-16">
+          <a
+            href="mailto:hello@polyteach.app"
+            className="flex items-center gap-2.5 text-sm text-text-2 hover:text-accent transition-colors duration-150"
+          >
+            <svg width="15" height="15" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.4"><rect x="1" y="3" width="12" height="8" rx="1.5"/><path d="M1 4l6 4 6-4" strokeLinecap="round"/></svg>
+            hello@polyteach.app
+          </a>
+          <span className="text-[#333]">·</span>
+          <a
+            href="tel:+16303640643"
+            className="flex items-center gap-2.5 text-sm text-text-2 hover:text-accent transition-colors duration-150"
+          >
+            <svg width="15" height="15" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.4"><path d="M2 2.5C2 2.5 3.5 1 4.5 2.5L5.5 4C5.5 4 6 4.8 5 5.5 4 6.2 4.5 7.5 5.5 8.5 6.5 9.5 7.8 10 8.5 9 9.2 8 10 8.5 10 8.5L11.5 9.5C13 10.5 11.5 12 11.5 12 10 13.5 2 8 2 2.5Z" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            (630) 364-0643
+          </a>
+        </div>
 
         <div className="space-y-4">
           {CONTACTS.map(({ category, desc, email }) => (
