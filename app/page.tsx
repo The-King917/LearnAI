@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import LandingDemo from "@/components/LandingDemo";
 import Reveal from "@/components/Reveal";
 import Faq from "@/components/Faq";
+import { TEAM_MIN_SEATS, TEAM_SEAT_PRICE, PRO_PRICE } from "@/lib/billing";
 
 // ── Data ────────────────────────────────────────────────────────────────────
 
@@ -163,6 +164,9 @@ function CalendarPreview() {
 
 export default function LandingPage() {
   const [accountCount, setAccountCount] = useState<number | null>(null);
+  const [seats, setSeats] = useState(TEAM_MIN_SEATS);
+  const [checkoutLoading, setCheckoutLoading] = useState<"pro" | "team" | null>(null);
+  const [checkoutError, setCheckoutError] = useState("");
 
   useEffect(() => {
     fetch("/api/stats")
@@ -170,6 +174,25 @@ export default function LandingPage() {
       .then((d) => setAccountCount(d.totalAccounts))
       .catch(() => {});
   }, []);
+
+  const subscribe = async (kind: "pro" | "team") => {
+    setCheckoutError("");
+    setCheckoutLoading(kind);
+    try {
+      const res = await fetch("/api/billing/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(kind === "team" ? { kind, seats } : { kind }),
+      });
+      const data: { error?: string; url?: string } = await res.json();
+      if (!res.ok) throw new Error(data.error ?? `Server returned ${res.status}`);
+      if (!data.url) throw new Error("No checkout URL returned");
+      window.location.href = data.url;
+    } catch (err) {
+      setCheckoutError(err instanceof Error ? err.message : "Something went wrong");
+      setCheckoutLoading(null);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background text-text overflow-x-hidden">
@@ -182,7 +205,7 @@ export default function LandingPage() {
           <span className="text-text">Poly</span><span className="text-accent">Teach</span>
         </span>
         <div className="flex items-center gap-6">
-          <Link href="/pricing" className="text-sm text-text-2 hover:text-text transition-colors duration-150">Pricing</Link>
+          <Link href="#pricing" className="text-sm text-text-2 hover:text-text transition-colors duration-150">Pricing</Link>
           <Link href="/coach" className="text-sm font-semibold px-4 py-2 rounded-lg bg-accent text-background hover:bg-accent-hover transition-all duration-150">
             Open app →
           </Link>
@@ -459,6 +482,136 @@ export default function LandingPage() {
               </Reveal>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── Pricing ── */}
+      <section id="pricing" className="relative z-10 px-8 py-28 border-t border-white/[0.06]">
+        <div className="max-w-5xl mx-auto">
+          <Reveal transition={{ duration: 0.5 }}>
+            <div className="text-center mb-14">
+              <p className="text-xs font-medium text-accent uppercase tracking-[0.1em] mb-4">Pricing</p>
+              <h2 className="text-[clamp(24px,4vw,44px)] font-semibold tracking-[-0.03em]">Simple pricing for serious competitors</h2>
+              <p className="text-sm text-text-2 mt-4 max-w-sm mx-auto">
+                AIME qualification is worth $0 to a college if you can&apos;t explain how you solved the problem.
+              </p>
+            </div>
+          </Reveal>
+
+          {checkoutError && (
+            <p className="text-center text-sm text-red-400 mb-6">{checkoutError}</p>
+          )}
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            {/* Free */}
+            <Reveal y={32} transition={{ type: "spring", stiffness: 350, damping: 30, delay: 0.05 }}>
+              <div className="h-full p-7 rounded-2xl border border-white/[0.08] bg-surface flex flex-col" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
+                <p className="text-xs font-medium text-text-2 uppercase tracking-wider">Free</p>
+                <div className="mt-4 mb-1">
+                  <span className="text-4xl font-semibold tracking-[-0.03em]">$0</span>
+                </div>
+                <p className="text-xs text-text-2 mb-7">30 sessions / month</p>
+                <ul className="space-y-3 flex-1 mb-8">
+                  {["Socratic coaching on all subjects", "Practice problem generation", "One diagnostic per subject"].map((f) => (
+                    <li key={f} className="flex items-start gap-2.5 text-sm text-text-2">
+                      <span className="mt-[5px] w-1 h-1 rounded-full bg-border-3 shrink-0" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href="/coach"
+                  className="px-4 py-2.5 rounded-xl text-sm font-medium text-center border border-white/[0.1] text-text-2 hover:border-white/[0.2] hover:text-text transition-all duration-150"
+                >
+                  Start training
+                </Link>
+              </div>
+            </Reveal>
+
+            {/* Pro — highlighted */}
+            <Reveal y={32} transition={{ type: "spring", stiffness: 350, damping: 30, delay: 0.12 }}>
+              <div className="relative h-full p-7 rounded-2xl border border-accent bg-surface-2 flex flex-col" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.5), 0 0 40px rgba(232,168,32,0.08)" }}>
+                <div className="flex items-center justify-between mb-0.5">
+                  <p className="text-xs font-medium text-accent uppercase tracking-wider">Pro</p>
+                  <span className="text-2xs text-text-2 px-2 py-0.5 rounded-full border border-white/[0.1]">Most popular</span>
+                </div>
+                <div className="mt-4 mb-1">
+                  <span className="text-4xl font-semibold tracking-[-0.03em]">${PRO_PRICE}</span>
+                  <span className="text-sm text-text-2 font-normal ml-1">/mo</span>
+                </div>
+                <p className="text-xs text-text-2 mb-7">Cancel anytime</p>
+                <ul className="space-y-3 flex-1 mb-8">
+                  {[
+                    "Unlimited sessions",
+                    "Full adaptive study plan from diagnostic",
+                    "Competition prep campaign mode",
+                    "Week-by-week progress reports",
+                    "Concept-level mastery tracking",
+                  ].map((f) => (
+                    <li key={f} className="flex items-start gap-2.5 text-sm text-text-2">
+                      <span className="mt-[5px] w-1 h-1 rounded-full bg-accent shrink-0" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  onClick={() => subscribe("pro")}
+                  disabled={checkoutLoading !== null}
+                  className="px-4 py-2.5 rounded-xl text-sm font-semibold bg-accent text-background hover:bg-accent-hover disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-150"
+                >
+                  {checkoutLoading === "pro" ? "Redirecting…" : "Subscribe"}
+                </button>
+              </div>
+            </Reveal>
+
+            {/* Team */}
+            <Reveal y={32} transition={{ type: "spring", stiffness: 350, damping: 30, delay: 0.18 }}>
+              <div className="h-full p-7 rounded-2xl border border-white/[0.08] bg-surface flex flex-col" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
+                <p className="text-xs font-medium text-text-2 uppercase tracking-wider">Team / School</p>
+                <div className="mt-4 mb-1">
+                  <span className="text-4xl font-semibold tracking-[-0.03em]">${TEAM_SEAT_PRICE}</span>
+                  <span className="text-sm text-text-2 font-normal ml-1">/seat/mo</span>
+                </div>
+                <p className="text-xs text-text-2 mb-7">{TEAM_MIN_SEATS}-seat minimum</p>
+                <ul className="space-y-3 flex-1 mb-6">
+                  {["Everything in Pro", "Seat-based billing for clubs and schools", "Invite-code team management"].map((f) => (
+                    <li key={f} className="flex items-start gap-2.5 text-sm text-text-2">
+                      <span className="mt-[5px] w-1 h-1 rounded-full bg-border-3 shrink-0" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex items-center gap-2 mb-4">
+                  <label htmlFor="lp-seats" className="text-xs text-text-2 shrink-0">Seats</label>
+                  <input
+                    id="lp-seats"
+                    type="number"
+                    min={TEAM_MIN_SEATS}
+                    value={seats}
+                    onChange={(e) => setSeats(Math.max(TEAM_MIN_SEATS, Number(e.target.value) || TEAM_MIN_SEATS))}
+                    className="w-16 bg-background border border-white/[0.1] rounded-lg px-2 py-1.5 text-sm text-text outline-none focus:border-accent transition-colors"
+                  />
+                  <span className="text-xs text-text-2">= ${seats * TEAM_SEAT_PRICE}/mo</span>
+                </div>
+                <button
+                  onClick={() => subscribe("team")}
+                  disabled={checkoutLoading !== null}
+                  className="px-4 py-2.5 rounded-xl text-sm font-medium border border-white/[0.1] text-text-2 hover:border-white/[0.2] hover:text-text disabled:opacity-50 transition-all duration-150"
+                >
+                  {checkoutLoading === "team" ? "Redirecting…" : "Subscribe"}
+                </button>
+              </div>
+            </Reveal>
+          </div>
+
+          {/* ROI callout */}
+          <Reveal transition={{ duration: 0.5, delay: 0.2 }}>
+            <div className="mt-8 p-6 rounded-2xl border border-white/[0.06] bg-surface text-center">
+              <p className="text-sm text-text-2 leading-relaxed max-w-2xl mx-auto">
+                At ${PRO_PRICE}/month during a 4-month prep window, the cost is less than a single hour with a private math tutor — and you get unlimited sessions.
+              </p>
+            </div>
+          </Reveal>
         </div>
       </section>
 
