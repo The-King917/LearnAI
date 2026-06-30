@@ -238,9 +238,9 @@ export default function LandingPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, delay: 0.1 }}
         >
-          The AI coach that
+          YOUR COACH THAT
           <br />
-          <span className="text-accent">thinks like a competitor</span>
+          <span className="text-accent">THINKS LIKE YOUR COMPETITOR</span>
         </motion.h1>
 
         <motion.p
