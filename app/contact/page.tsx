@@ -13,32 +13,32 @@ const CONTACTS = [
   {
     category: "General questions",
     desc: "Not sure where to start, or have a question about how PolyTeach works?",
-    email: "hello@polyteach.app",
+    email: "asubramanian2000@gmail.com",
   },
   {
     category: "Billing & subscriptions",
     desc: "Questions about your Pro or Team plan, invoices, or cancellations.",
-    email: "billing@polyteach.app",
+    email: "asubramanian2000@gmail.com",
   },
   {
     category: "Schools & teams",
     desc: "Setting up a school math team, science olympiad squad, or USACO club?",
-    email: "teams@polyteach.app",
+    email: "asubramanian2000@gmail.com",
   },
   {
     category: "Privacy & data",
     desc: "Requests to access, correct, or delete your personal data.",
-    email: "privacy@polyteach.app",
+    email: "asubramanian2000@gmail.com",
   },
   {
     category: "Legal",
     desc: "Terms of service, takedown requests, or other legal matters.",
-    email: "legal@polyteach.app",
+    email: "asubramanian2000@gmail.com",
   },
   {
     category: "Bug reports & feedback",
     desc: "Found something broken, or have a suggestion to make the coach better?",
-    email: "feedback@polyteach.app",
+    email: "asubramanian2000@gmail.com",
   },
 ];
 
@@ -61,11 +61,11 @@ export default function ContactPage() {
 
         <div className="flex flex-wrap items-center gap-6 mb-16">
           <a
-            href="mailto:hello@polyteach.app"
+            href="mailto:asubramanian2000@gmail.com"
             className="flex items-center gap-2.5 text-sm text-text-2 hover:text-accent transition-colors duration-150"
           >
             <svg width="15" height="15" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.4"><rect x="1" y="3" width="12" height="8" rx="1.5"/><path d="M1 4l6 4 6-4" strokeLinecap="round"/></svg>
-            hello@polyteach.app
+            asubramanian2000@gmail.com
           </a>
           <span className="text-[#333]">·</span>
           <a

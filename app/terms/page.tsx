@@ -44,7 +44,7 @@ export default function TermsPage() {
         </Section>
 
         <Section title="Your account">
-          <p>You are responsible for keeping your account credentials secure. Notify us immediately at <a href="mailto:hello@polyteach.app" className="text-accent hover:underline">hello@polyteach.app</a> if you suspect unauthorized access. You may not share, sell, or transfer your account to another person.</p>
+          <p>You are responsible for keeping your account credentials secure. Notify us immediately at <a href="mailto:asubramanian2000@gmail.com" className="text-accent hover:underline">asubramanian2000@gmail.com</a> if you suspect unauthorized access. You may not share, sell, or transfer your account to another person.</p>
           <p>We reserve the right to suspend or terminate accounts that violate these Terms, abuse the Service, or engage in fraudulent activity.</p>
         </Section>
 
@@ -90,7 +90,7 @@ export default function TermsPage() {
         </Section>
 
         <Section title="Contact">
-          <p>Questions about these Terms? Email us at <a href="mailto:legal@polyteach.app" className="text-accent hover:underline">legal@polyteach.app</a>.</p>
+          <p>Questions about these Terms? Email us at <a href="mailto:asubramanian2000@gmail.com" className="text-accent hover:underline">asubramanian2000@gmail.com</a>.</p>
         </Section>
       </main>
 

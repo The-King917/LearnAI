@@ -37,7 +37,7 @@ export default function PrivacyPage() {
 
         <Section title="Who we are">
           <p>PolyTeach ("we", "us", "our") operates the website and application at polyteach.app. We build AI-powered Socratic coaching tools for students preparing for academic olympiads.</p>
-          <p>Questions about this policy? Email us at <a href="mailto:privacy@polyteach.app" className="text-accent hover:underline">privacy@polyteach.app</a>.</p>
+          <p>Questions about this policy? Email us at <a href="mailto:asubramanian2000@gmail.com" className="text-accent hover:underline">asubramanian2000@gmail.com</a>.</p>
         </Section>
 
         <Section title="Information we collect">
@@ -69,7 +69,7 @@ export default function PrivacyPage() {
         </Section>
 
         <Section title="Your rights">
-          <p>Depending on your location, you may have the right to access, correct, export, or delete your personal data. To exercise any of these rights, email <a href="mailto:privacy@polyteach.app" className="text-accent hover:underline">privacy@polyteach.app</a> and we will respond within 30 days.</p>
+          <p>Depending on your location, you may have the right to access, correct, export, or delete your personal data. To exercise any of these rights, email <a href="mailto:asubramanian2000@gmail.com" className="text-accent hover:underline">asubramanian2000@gmail.com</a> and we will respond within 30 days.</p>
           <p>If you are located in the EU/EEA or UK, you also have the right to lodge a complaint with your local data protection authority.</p>
         </Section>
 
@@ -78,7 +78,7 @@ export default function PrivacyPage() {
         </Section>
 
         <Section title="Children's privacy">
-          <p>PolyTeach is intended for users aged 13 and older. If you are under 13, please do not create an account. If we learn that we have collected personal data from a child under 13 without parental consent, we will delete that information promptly. Parents or guardians who believe their child has provided us with personal data should contact us at <a href="mailto:privacy@polyteach.app" className="text-accent hover:underline">privacy@polyteach.app</a>.</p>
+          <p>PolyTeach is intended for users aged 13 and older. If you are under 13, please do not create an account. If we learn that we have collected personal data from a child under 13 without parental consent, we will delete that information promptly. Parents or guardians who believe their child has provided us with personal data should contact us at <a href="mailto:asubramanian2000@gmail.com" className="text-accent hover:underline">asubramanian2000@gmail.com</a>.</p>
         </Section>
 
         <Section title="Changes to this policy">

@@ -1197,11 +1197,11 @@ export default function LandingPage() {
                 AI Socratic coaching for every major math, CS, and science olympiad — available 24/7.
               </p>
               <a
-                href="mailto:hello@polyteach.app"
+                href="mailto:asubramanian2000@gmail.com"
                 className="inline-flex items-center gap-2 mt-5 text-xs text-text-2 hover:text-accent transition-colors duration-150"
               >
                 <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.4"><rect x="1" y="3" width="12" height="8" rx="1.5"/><path d="M1 4l6 4 6-4" strokeLinecap="round"/></svg>
-                hello@polyteach.app
+                asubramanian2000@gmail.com
               </a>
             </div>
 

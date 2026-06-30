@@ -107,7 +107,7 @@ export default function DownloadPage() {
 
         <p className="text-xs text-[#444]">
           Want to be notified when the desktop apps launch?{" "}
-          <a href="mailto:hello@polyteach.app?subject=Notify me about the desktop app" className="text-accent hover:underline">
+          <a href="mailto:asubramanian2000@gmail.com?subject=Notify me about the desktop app" className="text-accent hover:underline">
             Email us
           </a>
           .
