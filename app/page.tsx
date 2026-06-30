@@ -512,6 +512,82 @@ function InteractiveDiagnostic() {
 // ── Horizontal sticky-scroll feature section ─────────────────────────────────
 
 
+// ── Comparison table data ────────────────────────────────────────────────────
+
+const COMPETITORS = [
+  { name: "PolyTeach", highlight: true },
+  { name: "AoPS", highlight: false },
+  { name: "USACO Guide", highlight: false },
+  { name: "Brilliant", highlight: false },
+  { name: "Private Tutor", highlight: false },
+];
+
+type CellValue = true | false | "partial";
+
+interface ComparisonRow {
+  feature: string;
+  desc: string;
+  values: CellValue[];
+}
+
+const COMPARISON_ROWS: ComparisonRow[] = [
+  {
+    feature: "Socratic coaching",
+    desc: "Guides you to the answer through questions — never just gives it away",
+    values: [true, false, false, false, "partial"],
+  },
+  {
+    feature: "Math olympiads (AMC · AIME · USAMO)",
+    desc: "Structured content and coaching for AMC 8/10/12, AIME, USAMO, MATHCOUNTS",
+    values: [true, true, false, "partial", "partial"],
+  },
+  {
+    feature: "CS olympiad (USACO · ACSL)",
+    desc: "Algorithms, data structures, and contest problem sets for USACO Bronze–Platinum",
+    values: [true, false, true, false, "partial"],
+  },
+  {
+    feature: "Physics olympiad (USAPhO · F=ma)",
+    desc: "Mechanics, E&M, and olympiad-style derivations for F=ma and USAPhO",
+    values: [true, "partial", false, false, "partial"],
+  },
+  {
+    feature: "Chemistry olympiad (USNCO)",
+    desc: "Stoichiometry, organic, and lab-theory problems calibrated to USNCO difficulty",
+    values: [true, false, false, false, "partial"],
+  },
+  {
+    feature: "Biology olympiad (USABO)",
+    desc: "Cell biology, genetics, ecology, and physiology coaching for USABO Open/Semifinals",
+    values: [true, false, false, false, "partial"],
+  },
+  {
+    feature: "Adaptive diagnostic",
+    desc: "Pinpoints your exact knowledge ceiling concept-by-concept in one session",
+    values: [true, false, false, false, false],
+  },
+  {
+    feature: "Competition study plan",
+    desc: "Day-by-day prep campaign keyed to your competition date — adjusts after every session",
+    values: [true, false, false, false, false],
+  },
+  {
+    feature: "Personalized to your level",
+    desc: "Every problem and hint is calibrated to where you actually are right now",
+    values: [true, false, false, false, true],
+  },
+  {
+    feature: "Available 24/7",
+    desc: "No scheduling, no waiting — start a session any time",
+    values: [true, true, true, true, false],
+  },
+  {
+    feature: "Affordable (≤ $25/mo)",
+    desc: "Less than a single hour with a private tutor, every month, unlimited sessions",
+    values: [true, "partial", true, true, false],
+  },
+];
+
 // ── Main page ────────────────────────────────────────────────────────────────
 
 export default function LandingPage() {
@@ -854,6 +930,117 @@ export default function LandingPage() {
               </Reveal>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── Comparison table ── */}
+      <section className="relative z-10 px-8 py-32">
+        <div className="max-w-6xl mx-auto">
+          <Reveal>
+            <div className="text-center mb-16">
+              <p className="text-xs font-medium text-accent uppercase tracking-[0.12em] mb-4">How we compare</p>
+              <h2 className="text-[clamp(24px,3.5vw,42px)] font-semibold tracking-[-0.03em]">
+                The only platform built<br/>for every major olympiad
+              </h2>
+              <p className="text-sm text-text-2 mt-5 max-w-lg mx-auto leading-relaxed">
+                AoPS pioneered math olympiad prep. USACO Guide owns competitive programming. But no single platform coaches you across math, CS, physics, chemistry, and biology — until now.
+              </p>
+            </div>
+          </Reveal>
+
+          <Reveal y={32} delay={0.1}>
+            <div className="rounded-2xl border border-white/[0.08] bg-surface overflow-hidden" style={{ boxShadow: "0 4px 60px rgba(0,0,0,0.5), 0 0 80px rgba(232,168,32,0.04)" }}>
+              {/* Table header strip */}
+              <div className="px-8 pt-8 pb-6 border-b border-white/[0.06]">
+                <div className="grid gap-4" style={{ gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr" }}>
+                  <div />
+                  {COMPETITORS.map((c) => (
+                    <div key={c.name} className={`text-center ${c.highlight ? "" : ""}`}>
+                      {c.highlight ? (
+                        <div className="inline-flex flex-col items-center gap-1.5">
+                          <span className="px-3 py-1 rounded-full bg-accent/15 border border-accent/30 text-xs font-semibold text-accent">
+                            PolyTeach
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-xs text-[#555] font-medium">{c.name}</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Rows */}
+              <div className="px-8 pb-6">
+                {COMPARISON_ROWS.map((row, i) => {
+                  const Check = () => (
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="mx-auto">
+                      <circle cx="10" cy="10" r="9.5" fill="rgba(34,197,94,0.1)" stroke="rgba(34,197,94,0.3)" />
+                      <path d="M5.5 10.5L8 13L14.5 7" stroke="#4ade80" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  );
+                  const Cross = () => (
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="mx-auto">
+                      <circle cx="10" cy="10" r="9.5" fill="rgba(239,68,68,0.06)" stroke="rgba(239,68,68,0.15)" />
+                      <path d="M7 7L13 13M13 7L7 13" stroke="#ef4444" strokeOpacity="0.5" strokeWidth="1.6" strokeLinecap="round"/>
+                    </svg>
+                  );
+                  const Partial = () => (
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="mx-auto">
+                      <circle cx="10" cy="10" r="9.5" fill="rgba(234,179,8,0.08)" stroke="rgba(234,179,8,0.25)" />
+                      <path d="M6 10H14" stroke="#facc15" strokeOpacity="0.7" strokeWidth="1.6" strokeLinecap="round"/>
+                    </svg>
+                  );
+                  const renderCell = (val: CellValue) => {
+                    if (val === true) return <Check />;
+                    if (val === false) return <Cross />;
+                    return <Partial />;
+                  };
+
+                  return (
+                    <div
+                      key={row.feature}
+                      className={`grid gap-4 py-5 ${i < COMPARISON_ROWS.length - 1 ? "border-b border-white/[0.05]" : ""} group`}
+                      style={{ gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr" }}
+                    >
+                      <div>
+                        <p className="text-sm font-medium text-text group-hover:text-white transition-colors duration-150">{row.feature}</p>
+                        <p className="text-xs text-[#555] mt-1 leading-relaxed">{row.desc}</p>
+                      </div>
+                      {row.values.map((val, j) => (
+                        <div
+                          key={j}
+                          className={`flex items-center justify-center ${COMPETITORS[j].highlight ? "relative" : ""}`}
+                        >
+                          {COMPETITORS[j].highlight && (
+                            <div className="absolute inset-0 -mx-px bg-accent/[0.03] rounded-sm pointer-events-none" />
+                          )}
+                          {renderCell(val)}
+                        </div>
+                      ))}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Footer legend */}
+              <div className="px-8 py-5 border-t border-white/[0.06] bg-surface-2 flex flex-wrap items-center gap-6">
+                <div className="flex items-center gap-2">
+                  <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9.5" fill="rgba(34,197,94,0.1)" stroke="rgba(34,197,94,0.3)"/><path d="M5.5 10.5L8 13L14.5 7" stroke="#4ade80" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <span className="text-2xs text-[#555]">Full support</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9.5" fill="rgba(234,179,8,0.08)" stroke="rgba(234,179,8,0.25)"/><path d="M6 10H14" stroke="#facc15" strokeOpacity="0.7" strokeWidth="1.6" strokeLinecap="round"/></svg>
+                  <span className="text-2xs text-[#555]">Partial / limited</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9.5" fill="rgba(239,68,68,0.06)" stroke="rgba(239,68,68,0.15)"/><path d="M7 7L13 13M13 7L7 13" stroke="#ef4444" strokeOpacity="0.5" strokeWidth="1.6" strokeLinecap="round"/></svg>
+                  <span className="text-2xs text-[#555]">Not available</span>
+                </div>
+                <p className="text-2xs text-[#444] ml-auto">Competitor features based on publicly available information as of 2026.</p>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 
