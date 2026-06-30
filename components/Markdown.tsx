@@ -4,6 +4,7 @@ import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import remarkGfm from "remark-gfm";
 import rehypeKatex from "rehype-katex";
+import rehypeRaw from "rehype-raw";
 import type { Components } from "react-markdown";
 
 const components: Components = {
@@ -49,7 +50,7 @@ export default function Markdown({ children, streaming }: MarkdownProps) {
     <div className="prose-md">
       <ReactMarkdown
         remarkPlugins={[remarkMath, remarkGfm]}
-        rehypePlugins={[rehypeKatex]}
+        rehypePlugins={[rehypeRaw, rehypeKatex]}
         components={components}
       >
         {escapeCurrency(children)}

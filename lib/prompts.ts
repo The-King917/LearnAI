@@ -611,6 +611,24 @@ export function buildSystemPrompt(
     olympiad: "assumes mastery of fundamentals, targeting top national/international performance",
   }[difficulty];
 
+  const needsDiagrams = subject && (
+    subject.group === "Math Competitions" ||
+    subject.id === "fma" ||
+    subject.id === "usabo" ||
+    subject.group === "Science Olympiad"
+  );
+
+  const diagramInstruction = needsDiagrams ? `
+7. Diagrams: When a geometry problem or physics scenario would benefit from a visual, embed an inline SVG immediately after the problem statement. SVG rules:
+   - Root: <svg width="320" height="[fit content]" viewBox="0 0 320 [height]" xmlns="http://www.w3.org/2000/svg">
+   - Strokes: stroke="#C8C8C8" stroke-width="1.5" fill="none" by default
+   - Solid fills (for dots, arrowheads): fill="#C8C8C8"
+   - Accent highlight (labeled angle, key segment): stroke="#E8A820" or fill="#E8A820"
+   - Text labels: <text fill="#D0D0D0" font-size="13" font-family="monospace">
+   - Keep it minimal — only the shapes needed to understand the problem geometry
+   - Draw arrows using a short marker or a thin triangle at the tip
+   - Never include JavaScript or external references in SVG` : "";
+
   const basePersonality = `You are PolyTeach, an elite AI study coach for high school students. You are brilliant, precise, and pedagogically rigorous. Your entire approach is Socratic — you guide students to discover answers themselves through targeted questions and hints. You never give direct answers unless the student has genuinely exhausted all attempts.
 
 ${subjectContext}
@@ -622,7 +640,7 @@ Core coaching rules:
 3. When stuck, break the problem into a smaller sub-question.
 4. Use precise subject-specific vocabulary and reference named theorems or techniques.
 5. Keep responses focused — one key insight or question per turn.
-6. Format math with LaTeX: $...$ for inline, $$...$$ for display.`;
+6. Format math with LaTeX: $...$ for inline, $$...$$ for display.${diagramInstruction}`;
 
   if (mode === "chat") {
     return `${basePersonality}

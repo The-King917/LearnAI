@@ -70,6 +70,16 @@ body {
 .prose-md th, .prose-md td { border: 1px solid #2A2A2A; padding: 6px 10px; text-align: left; }
 .prose-md th { background: #1C1C1C; color: #E0E0E0; font-weight: 600; }
 .prose-md td { color: #C0C0C0; }
+.prose-md svg {
+  display: block;
+  margin: 1em auto;
+  max-width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.prose-md svg text { font-family: ui-monospace, monospace; }
+.prose-md figure { margin: 0.75em 0; text-align: center; }
+.prose-md figure figcaption { font-size: 11px; color: #666; margin-top: 4px; }
 
 /* Streaming cursor */
 @keyframes blink {
