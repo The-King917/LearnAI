@@ -1184,11 +1184,90 @@ export default function LandingPage() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="relative z-10 border-t border-white/[0.06] px-8 py-6 flex items-center justify-between">
-        <span className="flex items-center text-sm font-bold tracking-tight">
-          <span className="text-text">Poly</span><span className="text-accent">Teach</span>
-        </span>
-        <span className="text-xs text-[#444]">© 2026 PolyTeach</span>
+      <footer className="relative z-10 border-t border-white/[0.06] px-8 pt-16 pb-10">
+        <div className="max-w-6xl mx-auto">
+          {/* Top row */}
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-10 pb-14 border-b border-white/[0.06]">
+            {/* Brand col */}
+            <div className="col-span-2 md:col-span-2">
+              <span className="flex items-center text-sm font-bold tracking-tight mb-4">
+                <span className="text-text">Poly</span><span className="text-accent">Teach</span>
+              </span>
+              <p className="text-xs text-[#555] leading-relaxed max-w-[220px]">
+                AI Socratic coaching for every major math, CS, and science olympiad — available 24/7.
+              </p>
+              <a
+                href="mailto:hello@polyteach.app"
+                className="inline-flex items-center gap-2 mt-5 text-xs text-text-2 hover:text-accent transition-colors duration-150"
+              >
+                <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.4"><rect x="1" y="3" width="12" height="8" rx="1.5"/><path d="M1 4l6 4 6-4" strokeLinecap="round"/></svg>
+                hello@polyteach.app
+              </a>
+            </div>
+
+            {/* Product */}
+            <div>
+              <p className="text-2xs font-semibold text-[#444] uppercase tracking-[0.1em] mb-5">Product</p>
+              <ul className="space-y-3">
+                {[
+                  { label: "AI Coach", href: "/coach" },
+                  { label: "Mock Tests", href: "/mock-test" },
+                  { label: "Progress", href: "/progress" },
+                  { label: "Pricing", href: "#pricing" },
+                ].map(({ label, href }) => (
+                  <li key={label}>
+                    <Link href={href} className="text-xs text-[#555] hover:text-text transition-colors duration-150">{label}</Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Competitions */}
+            <div>
+              <p className="text-2xs font-semibold text-[#444] uppercase tracking-[0.1em] mb-5">Competitions</p>
+              <ul className="space-y-3">
+                {["AMC · AIME · USAMO", "USACO · ACSL", "USAPhO · F=ma", "USNCO", "USABO", "Science Olympiad"].map((c) => (
+                  <li key={c}>
+                    <Link href="/coach" className="text-xs text-[#555] hover:text-text transition-colors duration-150">{c}</Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Support + Legal */}
+            <div>
+              <p className="text-2xs font-semibold text-[#444] uppercase tracking-[0.1em] mb-5">Support</p>
+              <ul className="space-y-3 mb-8">
+                {[
+                  { label: "FAQ", href: "#faq" },
+                  { label: "Contact us", href: "/contact" },
+                  { label: "Getting started", href: "/coach" },
+                ].map(({ label, href }) => (
+                  <li key={label}>
+                    <Link href={href} className="text-xs text-[#555] hover:text-text transition-colors duration-150">{label}</Link>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-2xs font-semibold text-[#444] uppercase tracking-[0.1em] mb-5">Legal</p>
+              <ul className="space-y-3">
+                {[
+                  { label: "Privacy Policy", href: "/privacy" },
+                  { label: "Terms of Service", href: "/terms" },
+                ].map(({ label, href }) => (
+                  <li key={label}>
+                    <Link href={href} className="text-xs text-[#555] hover:text-text transition-colors duration-150">{label}</Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom row */}
+          <div className="pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <p className="text-xs text-[#3a3a3a]">© 2026 PolyTeach. All rights reserved.</p>
+            <p className="text-xs text-[#3a3a3a]">Not affiliated with AMC, USACO, ACS, AAPT, or USABO.</p>
+          </div>
+        </div>
       </footer>
     </div>
   );
