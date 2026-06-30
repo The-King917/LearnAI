@@ -19,6 +19,7 @@ const CSP = [
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  transpilePackages: ["rehype-raw"],
   experimental: {
     serverComponentsExternalPackages: ["pdf-parse", "pdfjs-dist", "tesseract.js"],
   },

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import LandingDemo from "@/components/LandingDemo";
 import Reveal from "@/components/Reveal";
 import Faq from "@/components/Faq";
+import FloatingSymbols from "@/components/FloatingSymbols";
 import { TEAM_MIN_SEATS, TEAM_SEAT_PRICE, PRO_PRICE } from "@/lib/billing";
 
 // ── Data ────────────────────────────────────────────────────────────────────
@@ -198,6 +199,7 @@ export default function LandingPage() {
     <div className="min-h-screen bg-background text-text overflow-x-hidden">
       {/* Static dot grid */}
       <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
+      <FloatingSymbols />
 
       {/* ── Nav ── */}
       <nav className="relative z-50 flex items-center justify-between px-8 py-5 border-b border-white/[0.06] backdrop-blur-md bg-background/80">
