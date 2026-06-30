@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence, useScroll } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Syne } from "next/font/google";
 
 const syne = Syne({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], display: "swap" });
@@ -511,129 +511,6 @@ function InteractiveDiagnostic() {
 
 // ── Horizontal sticky-scroll feature section ─────────────────────────────────
 
-const FEATURE_PANELS = [
-  {
-    index: "01",
-    tag: "Coach mode",
-    title: "Socratic coaching",
-    desc: "Never hands you the answer. Asks the exact question that unblocks your thinking — at any hour.",
-    preview: <ChatPreview />,
-    label: "AMC 12 · Counting & Probability",
-  },
-  {
-    index: "02",
-    tag: "Practice mode",
-    title: "Competition-caliber problems",
-    desc: "Problems matched to real contest difficulty — not generic textbook exercises.",
-    preview: <ProblemPreview />,
-    label: "AMC 12 · Problem set",
-  },
-  {
-    index: "03",
-    tag: "Diagnose mode",
-    title: "Adaptive diagnostic",
-    desc: "10 questions that map your knowledge ceiling concept-by-concept and generate a study plan.",
-    preview: <DiagnosticPreview />,
-    label: "AIME · Level assessment",
-  },
-  {
-    index: "04",
-    tag: "Prep campaign",
-    title: "Day-by-day study plan",
-    desc: "Set a competition date. The agent builds a daily plan and adjusts after each session based on what you actually understood.",
-    preview: <CalendarPreview />,
-    label: "AMC 12 prep · 44 days",
-  },
-];
-
-function FeatureScroll() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  useEffect(() => {
-    return scrollYProgress.on("change", (v) => {
-      const idx = Math.min(FEATURE_PANELS.length - 1, Math.floor(v * FEATURE_PANELS.length));
-      setActiveIndex(idx);
-    });
-  }, [scrollYProgress]);
-
-  const panel = FEATURE_PANELS[activeIndex];
-
-  return (
-    <section ref={ref} style={{ height: `${FEATURE_PANELS.length * 100}vh` }} className="relative">
-      <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-
-        {/* Vertical progress bar — left edge */}
-        <div className="absolute left-8 top-1/2 -translate-y-1/2 flex flex-col gap-2.5">
-          {FEATURE_PANELS.map((_, i) => (
-            <div
-              key={i}
-              className="w-[2px] rounded-full transition-all duration-500"
-              style={{
-                height: i === activeIndex ? "32px" : "12px",
-                backgroundColor: i === activeIndex ? "rgba(232,168,32,1)" : "rgba(255,255,255,0.12)",
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Section label — top center */}
-        <div className="absolute top-10 left-1/2 -translate-x-1/2 pointer-events-none">
-          <p className="text-xs font-medium text-accent uppercase tracking-[0.12em]">What you get</p>
-        </div>
-
-        {/* Main content */}
-        <div className="max-w-6xl mx-auto w-full px-16 grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-center">
-
-          {/* Text — animates on change */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeIndex}
-              initial={{ opacity: 0, y: 28 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl font-semibold tabular-nums" style={{ color: "rgba(255,255,255,0.07)" }}>{panel.index}</span>
-                <span className="text-xs font-medium text-accent uppercase tracking-[0.1em]">{panel.tag}</span>
-              </div>
-              <h3 className="text-[clamp(26px,3.2vw,44px)] font-semibold tracking-[-0.03em] leading-[1.1] mb-5">
-                {panel.title}
-              </h3>
-              <p className="text-base text-text-2 leading-relaxed max-w-sm">
-                {panel.desc}
-              </p>
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Preview card — animates on change */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeIndex}
-              initial={{ opacity: 0, y: 36, scale: 0.97 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.98 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <AppWindow>
-                <div className="bg-[#0d0d0d]">
-                  <div className="flex items-center gap-2 px-3 py-2 border-b border-border bg-surface-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-                    <span className="text-2xs text-text-2">{panel.label}</span>
-                  </div>
-                  {panel.preview}
-                </div>
-              </AppWindow>
-            </motion.div>
-          </AnimatePresence>
-
-        </div>
-      </div>
-    </section>
-  );
-}
 
 // ── Main page ────────────────────────────────────────────────────────────────
 
@@ -774,11 +651,6 @@ export default function LandingPage() {
             </span>
           ))}
         </div>
-      </div>
-
-      {/* ── Sticky feature scroll ── */}
-      <div className="relative z-10">
-        <FeatureScroll />
       </div>
 
       {/* ── Feature bento grid ── */}
