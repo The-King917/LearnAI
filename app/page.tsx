@@ -1,392 +1,504 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import LandingDemo from "@/components/LandingDemo";
 import Reveal from "@/components/Reveal";
 import Faq from "@/components/Faq";
-import TypeText from "@/components/TypeText";
 
-const FEATURES = [
-  {
-    title: "Socratic coaching",
-    desc: "Never hands you the answer. Asks the exact question that unblocks your thinking — the way the best human coaches do, at any hour.",
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M9 2a7 7 0 1 0 0 14A7 7 0 0 0 9 2Z"/>
-        <path d="M9 7a2 2 0 0 1 .5 3.93V12"/>
-        <circle cx="9" cy="14" r="0.5" fill="currentColor" stroke="none"/>
-      </svg>
-    ),
-  },
-  {
-    title: "Adaptive diagnostic",
-    desc: "A 10-question session that maps your exact knowledge ceiling — concept by concept — and generates a prioritized study plan from the results.",
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="1.5 13 5 8 8.5 10.5 12.5 5.5 16.5 10"/>
-      </svg>
-    ),
-  },
-  {
-    title: "Competition-caliber problems",
-    desc: "Problems sourced from AMC, AIME, USAMO, USAPhO, and USACO difficulty tiers — not generic textbook exercises.",
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12.5 2.5a2 2 0 0 1 2.83 2.83L5.5 15.17l-4 .83.83-4L12.5 2.5Z"/>
-      </svg>
-    ),
-  },
-  {
-    title: "Prep campaign mode",
-    desc: "Set a competition date. The agent builds a day-by-day plan and adjusts after each session based on what you actually understood.",
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="3" width="14" height="13" rx="2"/>
-        <path d="M6 1v4M12 1v4M2 8h14"/>
-      </svg>
-    ),
-  },
-];
-
-const STATS = [
-  {
-    stat: "50%",
-    desc: "more material retained a week later when you actively recall an idea instead of re-reading it.",
-    source: "Karpicke & Roediger, Science (2006)",
-  },
-  {
-    stat: "98th percentile",
-    desc: "is where the average one-on-one tutored student lands relative to conventionally taught peers.",
-    source: "Bloom, Educational Researcher (1984)",
-  },
-  {
-    stat: "55%",
-    desc: "fewer students fail STEM courses when taught with active, question-driven methods over lecture.",
-    source: "Freeman et al., PNAS (2014)",
-  },
-];
+// ── Data ────────────────────────────────────────────────────────────────────
 
 const TESTIMONIALS = [
   {
     quote: "I qualified for AIME this year after two years of trying. The difference was having to derive every answer myself instead of watching solutions.",
     name: "Marcus T.",
     role: "AMC 12 → AIME qualifier",
+    initials: "MT",
   },
   {
     quote: "I went from barely knowing what USACO was to a Silver finish in one prep season. The Socratic sessions on graph algorithms were brutal — but they stuck.",
     name: "Priya K.",
     role: "USACO Silver",
+    initials: "PK",
   },
   {
     quote: "My F=ma score jumped 18 points. Having an AI that refuses to give you the answer is annoying at first, then it becomes the only thing that works.",
     name: "Daniel R.",
     role: "USAPhO semifinalist",
+    initials: "DR",
   },
+];
+
+const STATS = [
+  { stat: "50%", desc: "more material retained when you actively recall vs. re-reading.", source: "Karpicke & Roediger, Science (2006)" },
+  { stat: "98th pct", desc: "where the average tutored student lands relative to lecture-taught peers.", source: "Bloom, Educational Researcher (1984)" },
+  { stat: "55%", desc: "fewer STEM failures when taught with question-driven active methods.", source: "Freeman et al., PNAS (2014)" },
 ];
 
 const OLYMPIAD_MARQUEE = [
   "AMC 8", "AMC 10", "AMC 12", "AIME", "USAMO", "MATHCOUNTS",
-  "USACO", "ACSL", "USAPhO (F=ma)", "USNCO", "USABO",
-  "Science Olympiad", "Science Bowl",
+  "USACO", "ACSL", "F=ma", "USNCO", "USABO", "Science Olympiad", "Science Bowl",
 ];
 
-const HEADLINE_PLAIN = "The AI coach that";
-const HEADLINE_ITALIC = "thinks like a competitor";
-const HEADLINE_TOTAL = HEADLINE_PLAIN.length + HEADLINE_ITALIC.length;
+// ── Sub-components ───────────────────────────────────────────────────────────
+
+function AppWindow({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      className="relative rounded-2xl overflow-hidden"
+      style={{
+        border: "1px solid rgba(255,255,255,0.08)",
+        boxShadow: "0 0 0 1px rgba(255,255,255,0.04), 0 40px 100px rgba(0,0,0,0.85), 0 0 100px rgba(232,168,32,0.07)",
+      }}
+    >
+      <div className="flex items-center gap-2 px-4 py-3 bg-[#111] border-b border-white/[0.06]">
+        <div className="flex gap-1.5">
+          <span className="w-3 h-3 rounded-full bg-[#FF5F56]" />
+          <span className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
+          <span className="w-3 h-3 rounded-full bg-[#27C93F]" />
+        </div>
+        <div className="flex-1 flex justify-center">
+          <div className="px-6 py-1 rounded-[5px] bg-white/[0.04] border border-white/[0.07] text-[11px] text-white/30 font-mono">
+            polyteach.app — AI Competition Coach
+          </div>
+        </div>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function ChatPreview() {
+  return (
+    <div className="space-y-3 p-4 pt-2">
+      <div className="flex justify-end">
+        <div className="px-3 py-2 rounded-xl rounded-br-sm bg-surface-2 border border-border-2 text-xs text-text max-w-[85%] leading-relaxed">
+          How do I count arrangements of AABBCC?
+        </div>
+      </div>
+      <div className="flex gap-2">
+        <div className="w-4 h-4 rounded-md bg-accent flex items-center justify-center shrink-0 mt-0.5">
+          <svg width="7" height="7" viewBox="0 0 10 10" fill="none" stroke="black" strokeWidth="2.2"><path d="M1 5.5L3.5 8 9 2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        </div>
+        <div className="text-xs text-text-2 leading-relaxed">If all 6 letters were distinct, how many arrangements would there be?</div>
+      </div>
+      <div className="flex justify-end">
+        <div className="px-3 py-2 rounded-xl rounded-br-sm bg-surface-2 border border-border-2 text-xs text-text max-w-[85%]">6! = 720</div>
+      </div>
+      <div className="flex gap-2">
+        <div className="w-4 h-4 rounded-md bg-accent flex items-center justify-center shrink-0 mt-0.5">
+          <svg width="7" height="7" viewBox="0 0 10 10" fill="none" stroke="black" strokeWidth="2.2"><path d="M1 5.5L3.5 8 9 2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        </div>
+        <div className="text-xs text-text-2 leading-relaxed">Good. Now the two A's are identical — how does that affect the count?</div>
+      </div>
+    </div>
+  );
+}
+
+function DiagnosticPreview() {
+  const bars = [
+    { topic: "Algebra", pct: 82, color: "bg-green-500/60" },
+    { topic: "Combinatorics", pct: 64, color: "bg-accent/60" },
+    { topic: "Number Theory", pct: 41, color: "bg-yellow-500/60" },
+    { topic: "Geometry", pct: 28, color: "bg-red-500/60" },
+  ];
+  return (
+    <div className="p-4 pt-2 space-y-2.5">
+      <p className="text-2xs text-accent font-medium uppercase tracking-wider mb-3">Level assessment</p>
+      {bars.map(({ topic, pct, color }) => (
+        <div key={topic} className="flex items-center gap-2.5">
+          <span className="text-2xs text-text-2 w-[88px] shrink-0">{topic}</span>
+          <div className="flex-1 h-1.5 bg-surface-2 rounded-full overflow-hidden">
+            <div className={`h-full rounded-full ${color}`} style={{ width: `${pct}%` }} />
+          </div>
+          <span className="text-2xs text-text-2 w-6 text-right">{pct}%</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ProblemPreview() {
+  return (
+    <div className="p-4 pt-2">
+      <p className="text-2xs text-accent font-medium uppercase tracking-wider mb-3">AMC 12 · Problem 14</p>
+      <p className="text-xs text-text leading-relaxed mb-4">
+        How many positive integers n ≤ 100 satisfy n² − n + 1 ≡ 0 (mod 7)?
+      </p>
+      <div className="grid grid-cols-2 gap-1.5">
+        {["A) 13", "B) 14", "C) 15", "D) 16"].map((c) => (
+          <div key={c} className="px-2 py-1.5 rounded-lg border border-border-2 text-2xs text-text-2 text-center">{c}</div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CalendarPreview() {
+  return (
+    <div className="p-4 pt-2">
+      <p className="text-2xs text-accent font-medium uppercase tracking-wider mb-3">AMC 12 prep · 44 days left</p>
+      <div className="grid grid-cols-7 gap-1 mb-2">
+        {["M","T","W","T","F","S","S"].map((d, i) => (
+          <div key={i} className="text-center text-2xs text-[#555]">{d}</div>
+        ))}
+      </div>
+      <div className="grid grid-cols-7 gap-1">
+        {Array.from({ length: 28 }).map((_, i) => (
+          <div
+            key={i}
+            className={`h-5 rounded-sm ${
+              i < 16 ? "bg-accent/30" :
+              i === 16 ? "bg-accent ring-1 ring-accent/60" :
+              "bg-surface-2"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Main page ────────────────────────────────────────────────────────────────
 
 export default function LandingPage() {
   const [accountCount, setAccountCount] = useState<number | null>(null);
-  const [typedChars, setTypedChars] = useState(0);
 
   useEffect(() => {
     fetch("/api/stats")
-      .then((res) => res.json())
-      .then((data) => setAccountCount(data.totalAccounts))
+      .then((r) => r.json())
+      .then((d) => setAccountCount(d.totalAccounts))
       .catch(() => {});
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTypedChars((c) => {
-        if (c >= HEADLINE_TOTAL) { clearInterval(interval); return c; }
-        return c + 1;
-      });
-    }, 35);
-    return () => clearInterval(interval);
-  }, []);
-
-  const typedPlain = HEADLINE_PLAIN.slice(0, Math.max(0, Math.min(typedChars, HEADLINE_PLAIN.length)));
-  const typedItalic = HEADLINE_ITALIC.slice(0, Math.max(0, Math.min(typedChars - HEADLINE_PLAIN.length, HEADLINE_ITALIC.length)));
-
   return (
-    <div className="min-h-screen bg-background text-text">
-      {/* Background */}
-      <div className="fixed inset-0 pointer-events-none" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
-      <div className="fixed inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 80% 55% at 50% -5%, rgba(255,255,255,0.08) 0%, transparent 65%)" }} />
-      <div className="fixed inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 60% 40% at 50% 105%, rgba(255,255,255,0.04) 0%, transparent 70%)" }} />
+    <div className="min-h-screen bg-background text-text overflow-x-hidden">
+      {/* Static dot grid */}
+      <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
 
-      {/* Nav */}
-      <nav className="relative z-10 flex items-center justify-between px-8 py-5 border-b border-border/60 backdrop-blur-sm bg-background/70">
-        <span className="flex items-center text-sm font-bold tracking-[-0.01em]">
+      {/* ── Nav ── */}
+      <nav className="relative z-50 flex items-center justify-between px-8 py-5 border-b border-white/[0.06] backdrop-blur-md bg-background/80">
+        <span className="flex items-center text-sm font-bold tracking-tight">
           <span className="text-text">Poly</span><span className="text-accent">Teach</span>
         </span>
         <div className="flex items-center gap-6">
-          <Link href="/pricing" className="text-sm font-medium text-muted hover:text-text transition-colors duration-150">
-            Pricing
-          </Link>
-          <Link href="/coach" className="text-sm font-medium text-muted hover:text-text transition-colors duration-150">
+          <Link href="/pricing" className="text-sm text-text-2 hover:text-text transition-colors duration-150">Pricing</Link>
+          <Link href="/coach" className="text-sm font-semibold px-4 py-2 rounded-lg bg-accent text-background hover:bg-accent-hover transition-all duration-150">
             Open app →
           </Link>
         </div>
       </nav>
 
-      {/* Hero */}
-      <section className="relative z-10 flex flex-col items-center text-center px-6 pt-28 pb-24">
-        <h1
-          className="text-[clamp(36px,7vw,80px)] font-semibold tracking-[-0.035em] leading-[1.06] max-w-3xl text-text-2"
-          style={{ animation: "fadeSlideUp 0.5s ease-out 0.2s both" }}
+      {/* ── Hero ── */}
+      <section className="relative z-10 flex flex-col items-center text-center px-6 pt-24 pb-0">
+        {/* Ambient glow */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div style={{ position: "absolute", top: "15%", left: "50%", transform: "translateX(-50%)", width: "900px", height: "500px", background: "radial-gradient(ellipse, rgba(232,168,32,0.10) 0%, transparent 65%)", filter: "blur(40px)" }} />
+        </div>
+
+        {/* Social proof badge */}
+        {accountCount !== null && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+            <div className="mb-8 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-accent/25 text-xs text-accent font-medium" style={{ backgroundColor: "rgba(232,168,32,0.08)" }}>
+              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+              Joined by {accountCount.toLocaleString()}+ competitors
+            </div>
+          </motion.div>
+        )}
+
+        {/* Headline */}
+        <motion.h1
+          className="text-[clamp(44px,8vw,96px)] font-semibold tracking-[-0.04em] leading-[1.02] max-w-4xl"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.65, delay: 0.1 }}
         >
-          {typedPlain}
+          <span className="text-white">The AI coach that</span>
           <br />
-          <em className="not-italic">{typedItalic}</em>
-        </h1>
+          <span style={{ background: "linear-gradient(120deg, #E8A820 0%, #F7D070 45%, #E8A820 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            thinks like a competitor
+          </span>
+        </motion.h1>
 
-        <p
-          className="mt-6 text-base text-muted leading-relaxed max-w-lg"
-          style={{ animation: "fadeSlideUp 0.5s ease-out 0.32s both" }}
+        <motion.p
+          className="mt-6 text-base text-text-2 leading-relaxed max-w-md"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.25 }}
         >
-          AMC · AIME · USAMO · USACO · USAPhO · USNCO · USABO · Science Olympiad
-        </p>
+          Socratic AI coaching for AMC · AIME · USAMO · USACO · USAPhO · USNCO · USABO · Science Olympiad
+        </motion.p>
 
-        <div
-          className="flex items-center gap-3 mt-10"
-          style={{ animation: "fadeSlideUp 0.5s ease-out 0.42s both" }}
+        {/* CTAs */}
+        <motion.div
+          className="flex flex-wrap items-center justify-center gap-3 mt-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.38 }}
         >
           <Link
             href="/coach"
-            className="px-5 py-2.5 rounded-lg text-sm font-semibold bg-accent text-background hover:bg-accent-hover transition-all duration-150"
+            className="px-6 py-3 rounded-xl text-sm font-semibold bg-accent text-background hover:bg-accent-hover transition-all duration-150 shadow-[0_0_24px_rgba(232,168,32,0.25)]"
           >
-            Start training
+            Start training free
           </Link>
           <Link
             href="#demo"
-            className="px-5 py-2.5 rounded-lg text-sm font-medium text-muted border border-border hover:border-border-2 hover:text-text-2 transition-colors duration-150"
+            className="px-6 py-3 rounded-xl text-sm font-medium border border-white/10 text-text-2 hover:border-white/20 hover:text-text transition-all duration-150"
           >
-            See it in action
+            See it in action ↓
           </Link>
-        </div>
+        </motion.div>
 
-        {accountCount !== null && (
-          <p className="mt-8 text-sm text-muted" style={{ animation: "fadeSlideUp 0.5s ease-out 0.5s both" }}>
-            Joined by {accountCount.toLocaleString()} competitors
-          </p>
-        )}
+        {/* Hero app screenshot */}
+        <motion.div
+          className="relative mt-16 w-full max-w-4xl mx-auto"
+          initial={{ opacity: 0, y: 48, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.9, delay: 0.5, type: "spring", stiffness: 180, damping: 28 }}
+        >
+          <AppWindow>
+            <div className="p-6 bg-[#0d0d0d]">
+              <LandingDemo />
+            </div>
+          </AppWindow>
+          {/* Fade to background at bottom */}
+          <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none" style={{ background: "linear-gradient(to bottom, transparent, #0A0A0A)" }} />
+        </motion.div>
       </section>
 
-      {/* Competition marquee */}
-      <div className="relative z-10 overflow-hidden border-y border-border py-4" style={{ animation: "fadeSlideUp 0.5s ease-out 0.55s both" }}>
+      {/* ── Competition marquee ── */}
+      <div className="relative z-10 overflow-hidden border-y border-white/[0.06] py-4 mt-8">
         <div className="flex gap-3 marquee-track">
           {[...OLYMPIAD_MARQUEE, ...OLYMPIAD_MARQUEE].map((s, i) => (
-            <span key={i} className="shrink-0 px-3 py-1 rounded-md border border-border bg-surface text-xs text-muted whitespace-nowrap">
+            <span key={i} className="shrink-0 px-3 py-1 rounded-md border border-border-2 bg-surface text-xs text-text-2 whitespace-nowrap">
               {s}
             </span>
           ))}
         </div>
       </div>
 
-      {/* Features */}
-      <section id="features" className="relative z-10 px-8 py-24 max-w-5xl mx-auto">
-        <div className="text-center mb-16">
-          <Reveal transition={{ duration: 0.5, delay: 0.1 }}>
-            <h2 className="text-2xl font-semibold tracking-[-0.025em]">
-              <TypeText text="Built for students serious about competitive academics" delay={0.1} />
-            </h2>
+      {/* ── Feature bento ── */}
+      <section className="relative z-10 px-8 py-28">
+        <div className="max-w-6xl mx-auto">
+          <Reveal transition={{ duration: 0.5 }}>
+            <div className="text-center mb-16">
+              <p className="text-xs font-medium text-accent uppercase tracking-[0.1em] mb-4">What you get</p>
+              <h2 className="text-[clamp(24px,4vw,44px)] font-semibold tracking-[-0.03em]">Built for students serious<br/>about competitive academics</h2>
+            </div>
           </Reveal>
-          <Reveal transition={{ duration: 0.5, delay: 0.2 }}>
-            <p className="text-sm text-muted mt-3">
-              <TypeText text="No explanations of what competitions are. Just the tools to win them." delay={0.2} />
-            </p>
-          </Reveal>
-        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {FEATURES.map((f, i) => {
-            const d = 0.1 + i * 0.08;
-            return (
-              <Reveal key={f.title} y={32} transition={{ type: "spring", stiffness: 400, damping: 30, delay: d }}>
-                <div className="group p-6 rounded-xl border border-border bg-surface hover:border-border-2 hover:bg-surface-2 transition-all duration-200">
-                  <div className="w-9 h-9 rounded-lg border border-border bg-surface-2 group-hover:border-border-2 flex items-center justify-center text-muted group-hover:text-text-2 mb-4 transition-colors duration-200">
-                    {f.icon}
+          <div className="grid grid-cols-12 gap-4">
+            {/* Coaching — large */}
+            <Reveal className="col-span-12 md:col-span-7" y={32} transition={{ type: "spring", stiffness: 350, damping: 30, delay: 0.05 }}>
+              <div className="h-full rounded-2xl border border-white/[0.08] bg-surface overflow-hidden hover:border-white/[0.14] transition-colors duration-300" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
+                <div className="p-6 pb-2">
+                  <span className="text-2xs font-medium text-accent uppercase tracking-wider">Coach mode</span>
+                  <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Socratic coaching</h3>
+                  <p className="text-sm text-text-2 leading-relaxed max-w-xs">Never hands you the answer. Asks the exact question that unblocks your thinking — at any hour.</p>
+                </div>
+                <div className="mx-4 mb-4 mt-4 rounded-xl border border-border-2 bg-[#0d0d0d] overflow-hidden">
+                  <div className="flex items-center gap-2 px-3 py-2 border-b border-border bg-surface-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                    <span className="text-2xs text-text-2">AMC 12 · Counting &amp; Probability</span>
                   </div>
-                  <h3 className="text-sm font-semibold text-text mb-2">
-                    <TypeText text={f.title} delay={d} />
-                  </h3>
-                  <p className="text-sm text-muted leading-relaxed">
-                    <TypeText text={f.desc} delay={d + 0.2} />
-                  </p>
+                  <ChatPreview />
+                </div>
+              </div>
+            </Reveal>
+
+            {/* Problems — small */}
+            <Reveal className="col-span-12 md:col-span-5" y={32} transition={{ type: "spring", stiffness: 350, damping: 30, delay: 0.12 }}>
+              <div className="h-full rounded-2xl border border-white/[0.08] bg-surface overflow-hidden hover:border-white/[0.14] transition-colors duration-300" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
+                <div className="p-6 pb-2">
+                  <span className="text-2xs font-medium text-accent uppercase tracking-wider">Practice mode</span>
+                  <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Competition-caliber problems</h3>
+                  <p className="text-sm text-text-2 leading-relaxed">Problems matched to real contest difficulty — not generic textbook exercises.</p>
+                </div>
+                <div className="mx-4 mb-4 mt-4 rounded-xl border border-border-2 bg-[#0d0d0d]">
+                  <ProblemPreview />
+                </div>
+              </div>
+            </Reveal>
+
+            {/* Diagnostic — small */}
+            <Reveal className="col-span-12 md:col-span-5" y={32} transition={{ type: "spring", stiffness: 350, damping: 30, delay: 0.18 }}>
+              <div className="h-full rounded-2xl border border-white/[0.08] bg-surface overflow-hidden hover:border-white/[0.14] transition-colors duration-300" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
+                <div className="p-6 pb-2">
+                  <span className="text-2xs font-medium text-accent uppercase tracking-wider">Diagnose mode</span>
+                  <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Adaptive diagnostic</h3>
+                  <p className="text-sm text-text-2 leading-relaxed">10 questions that map your knowledge ceiling concept-by-concept and generate a study plan.</p>
+                </div>
+                <div className="mx-4 mb-4 mt-4 rounded-xl border border-border-2 bg-[#0d0d0d]">
+                  <DiagnosticPreview />
+                </div>
+              </div>
+            </Reveal>
+
+            {/* Prep — large */}
+            <Reveal className="col-span-12 md:col-span-7" y={32} transition={{ type: "spring", stiffness: 350, damping: 30, delay: 0.24 }}>
+              <div className="h-full rounded-2xl border border-white/[0.08] bg-surface overflow-hidden hover:border-white/[0.14] transition-colors duration-300" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
+                <div className="p-6 pb-2">
+                  <span className="text-2xs font-medium text-accent uppercase tracking-wider">Prep campaign</span>
+                  <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Day-by-day study plan</h3>
+                  <p className="text-sm text-text-2 leading-relaxed max-w-xs">Set a competition date. The agent builds a day-by-day plan and adjusts after each session based on what you actually understood.</p>
+                </div>
+                <div className="mx-4 mb-4 mt-4 rounded-xl border border-border-2 bg-[#0d0d0d]">
+                  <CalendarPreview />
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Live Demo ── */}
+      <section id="demo" className="relative z-10 px-8 py-28 border-t border-white/[0.06]">
+        <div className="max-w-5xl mx-auto">
+          <Reveal transition={{ duration: 0.5 }}>
+            <div className="text-center mb-16">
+              <p className="text-xs font-medium text-accent uppercase tracking-[0.1em] mb-4">Live demo</p>
+              <h2 className="text-[clamp(24px,4vw,44px)] font-semibold tracking-[-0.03em]">What a session looks like</h2>
+              <p className="text-sm text-text-2 mt-4 max-w-md mx-auto">The coach never gives you the answer. It asks the question that makes you find it.</p>
+            </div>
+          </Reveal>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-10 order-2 lg:order-1">
+              {[
+                { step: "01", title: "Pick your competition", desc: "AMC 12, AIME, USAMO, USACO, USAPhO, USNCO, USABO — select the one you're training for." },
+                { step: "02", title: "Run a session", desc: "Coach mode for open questions, Practice for problems, Diagnose to map your gaps and get a study plan." },
+                { step: "03", title: "Derive, don't memorize", desc: "The coach never gives you the answer. It asks the question that makes you find it — so it actually sticks." },
+              ].map((item, i) => (
+                <Reveal key={item.step} transition={{ duration: 0.5, delay: i * 0.1 }}>
+                  <div className="flex gap-6">
+                    <span className="text-3xl font-semibold tracking-[-0.04em] shrink-0 w-10 text-white/10 tabular-nums">{item.step}</span>
+                    <div>
+                      <h3 className="text-base font-semibold text-text mb-1.5">{item.title}</h3>
+                      <p className="text-sm text-text-2 leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+            <Reveal y={40} transition={{ type: "spring", stiffness: 300, damping: 28, delay: 0.1 }} className="order-1 lg:order-2">
+              <AppWindow>
+                <div className="p-6 bg-[#0d0d0d]">
+                  <LandingDemo />
+                </div>
+              </AppWindow>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Testimonials ── */}
+      <section className="relative z-10 px-8 py-28 border-t border-white/[0.06]">
+        {/* Section glow */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div style={{ position: "absolute", top: "30%", left: "50%", transform: "translateX(-50%)", width: "700px", height: "400px", background: "radial-gradient(ellipse, rgba(232,168,32,0.05) 0%, transparent 65%)", filter: "blur(60px)" }} />
+        </div>
+        <div className="max-w-6xl mx-auto">
+          <Reveal transition={{ duration: 0.5 }}>
+            <div className="text-center mb-16">
+              <p className="text-xs font-medium text-accent uppercase tracking-[0.1em] mb-4">Student results</p>
+              <h2 className="text-[clamp(24px,4vw,44px)] font-semibold tracking-[-0.03em]">Students who qualified</h2>
+              <p className="text-sm text-text-2 mt-4">What changes once you stop looking up solutions.</p>
+            </div>
+          </Reveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {TESTIMONIALS.map((t, i) => (
+              <Reveal key={t.name} y={40} transition={{ type: "spring", stiffness: 350, damping: 30, delay: i * 0.1 }}>
+                <div
+                  className="relative flex flex-col h-full p-8 rounded-2xl border border-white/[0.08] bg-surface hover:border-white/[0.14] transition-all duration-300 overflow-hidden"
+                  style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}
+                >
+                  {/* Subtle corner glow */}
+                  <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full" style={{ background: "radial-gradient(circle, rgba(232,168,32,0.06) 0%, transparent 70%)" }} />
+                  <div className="text-6xl text-accent/40 font-serif leading-none mb-5 select-none">&ldquo;</div>
+                  <p className="text-base text-text leading-relaxed flex-1 mb-8">{t.quote}</p>
+                  <div className="flex items-center gap-3 pt-5 border-t border-white/[0.07]">
+                    <div className="w-9 h-9 rounded-full border border-accent/25 flex items-center justify-center text-xs font-bold text-accent shrink-0" style={{ backgroundColor: "rgba(232,168,32,0.12)" }}>
+                      {t.initials}
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-text">{t.name}</p>
+                      <p className="text-xs text-text-2">{t.role}</p>
+                    </div>
+                  </div>
                 </div>
               </Reveal>
-            );
-          })}
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Interactive Demo */}
-      <section id="demo" className="relative z-10 px-8 py-20 border-t border-border">
+      {/* ── Stats ── */}
+      <section className="relative z-10 px-8 py-28 border-t border-white/[0.06]">
         <div className="max-w-5xl mx-auto">
-          <Reveal transition={{ duration: 0.5, delay: 0.1 }}>
-            <h2 className="text-xl font-semibold tracking-[-0.025em] text-center mb-12">
-              <TypeText text="What a session looks like" delay={0.1} />
-            </h2>
-          </Reveal>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-10">
-              {[
-                {
-                  step: "01",
-                  title: "Pick your competition",
-                  desc: "AMC 12, AIME, USAMO, USACO, USAPhO, USNCO, USABO, Science Olympiad, Science Bowl — select the one you're training for.",
-                },
-                {
-                  step: "02",
-                  title: "Run a session",
-                  desc: "Coach mode for open questions, Practice mode for problems, Diagnostic mode to map your gaps and get a study plan.",
-                },
-                {
-                  step: "03",
-                  title: "Derive, don't memorize",
-                  desc: "The coach never gives you the answer. It asks the question that makes you find it — so the result actually sticks.",
-                },
-              ].map((item, i) => {
-                const d = 0.1 + i * 0.1;
-                return (
-                  <Reveal key={item.step} transition={{ duration: 0.5, delay: d }}>
-                    <div className="flex gap-8">
-                      <span className="text-2xl font-semibold tracking-[-0.04em] shrink-0 w-10 text-right text-white/15">
-                        {item.step}
-                      </span>
-                      <div>
-                        <h3 className="text-sm font-semibold text-text mb-1.5">
-                          <TypeText text={item.title} delay={d} />
-                        </h3>
-                        <p className="text-sm text-muted leading-relaxed">
-                          <TypeText text={item.desc} delay={d + 0.2} />
-                        </p>
-                      </div>
-                    </div>
-                  </Reveal>
-                );
-              })}
+          <Reveal transition={{ duration: 0.5 }}>
+            <div className="text-center mb-16">
+              <p className="text-xs font-medium text-accent uppercase tracking-[0.1em] mb-4">The research</p>
+              <h2 className="text-[clamp(24px,4vw,44px)] font-semibold tracking-[-0.03em]">Why Socratic coaching produces competitors</h2>
             </div>
-            <Reveal y={40} transition={{ type: "spring", stiffness: 400, damping: 30, delay: 0.1 }}>
-              <LandingDemo />
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section className="relative z-10 px-8 py-20 border-t border-border">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <Reveal transition={{ duration: 0.5, delay: 0.1 }}>
-              <h2 className="text-2xl font-semibold tracking-[-0.025em]">
-                <TypeText text="Why Socratic coaching produces competitors" delay={0.1} />
-              </h2>
-            </Reveal>
-            <Reveal transition={{ duration: 0.5, delay: 0.2 }}>
-              <p className="text-sm text-muted mt-3">
-                <TypeText text="The research on what actually builds durable problem-solving skill." delay={0.2} />
-              </p>
-            </Reveal>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {STATS.map((s, i) => {
-              const d = 0.1 + i * 0.1;
-              return (
-                <Reveal key={s.stat} y={32} transition={{ type: "spring", stiffness: 400, damping: 30, delay: d }}>
-                  <div className="p-6 rounded-xl border border-border bg-surface h-full">
-                    <div className="text-3xl font-semibold tracking-[-0.03em] text-text-2 mb-3">
-                      <TypeText text={s.stat} delay={d} speed={35} />
-                    </div>
-                    <p className="text-sm text-muted leading-relaxed mb-3">
-                      <TypeText text={s.desc} delay={d + 0.2} />
-                    </p>
-                    <p className="text-2xs text-subtle">{s.source}</p>
+          </Reveal>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            {STATS.map((s, i) => (
+              <Reveal key={s.stat} y={32} transition={{ type: "spring", stiffness: 350, damping: 30, delay: i * 0.1 }}>
+                <div
+                  className="p-8 rounded-2xl border border-white/[0.08] bg-surface h-full"
+                  style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}
+                >
+                  <div
+                    className="text-4xl font-semibold tracking-[-0.04em] mb-4"
+                    style={{ background: "linear-gradient(120deg, #E8A820 0%, #F7D070 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
+                  >
+                    {s.stat}
                   </div>
-                </Reveal>
-              );
-            })}
+                  <p className="text-sm text-text-2 leading-relaxed mb-4">{s.desc}</p>
+                  <p className="text-2xs text-[#555]">{s.source}</p>
+                </div>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="relative z-10 px-8 py-20 border-t border-border">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <Reveal transition={{ duration: 0.5, delay: 0.1 }}>
-              <h2 className="text-2xl font-semibold tracking-[-0.025em]">
-                <TypeText text="Students who qualified" delay={0.1} />
-              </h2>
-            </Reveal>
-            <Reveal transition={{ duration: 0.5, delay: 0.2 }}>
-              <p className="text-sm text-muted mt-3">
-                <TypeText text="What changes once you stop looking up solutions." delay={0.2} />
-              </p>
-            </Reveal>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {TESTIMONIALS.map((t, i) => {
-              const d = 0.1 + i * 0.08;
-              return (
-                <Reveal key={t.name} y={32} transition={{ type: "spring", stiffness: 400, damping: 30, delay: d }}>
-                  <div className="p-6 rounded-xl border border-border bg-surface hover:border-border-2 hover:bg-surface-2 transition-all duration-200 h-full flex flex-col">
-                    <p className="text-sm text-muted leading-relaxed flex-1">
-                      <TypeText text={t.quote} delay={d} />
-                    </p>
-                    <div className="mt-5 pt-4 border-t border-border">
-                      <p className="text-sm font-semibold text-text">{t.name}</p>
-                      <p className="text-xs text-subtle">{t.role}</p>
-                    </div>
-                  </div>
-                </Reveal>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
+      {/* ── FAQ ── */}
       <Faq />
 
-      {/* Bottom CTA */}
-      <section className="relative z-10 px-8 py-28 text-center border-t border-border">
-        <Reveal transition={{ duration: 0.6, ease: "easeOut" }}>
-          <h2 className="text-[clamp(24px,4vw,44px)] font-semibold tracking-[-0.03em] mb-5">
-            <TypeText text="Train the way competitors train." />
+      {/* ── Bottom CTA ── */}
+      <section className="relative z-10 px-8 py-32 text-center border-t border-white/[0.06] overflow-hidden">
+        <div className="pointer-events-none absolute inset-0">
+          <div style={{ position: "absolute", bottom: 0, left: "50%", transform: "translateX(-50%)", width: "900px", height: "400px", background: "radial-gradient(ellipse, rgba(232,168,32,0.12) 0%, transparent 65%)", filter: "blur(40px)" }} />
+        </div>
+        <Reveal transition={{ duration: 0.6 }}>
+          <h2 className="text-[clamp(28px,5vw,60px)] font-semibold tracking-[-0.03em] mb-5">
+            Train the way competitors train.
           </h2>
-          <p className="text-sm text-muted mb-8 max-w-sm mx-auto">
-            <TypeText text="Pick your competition. Map your gaps. Work through problems until the answers come from you, not from a solution manual." delay={0.3} />
+          <p className="text-base text-text-2 mb-10 max-w-sm mx-auto leading-relaxed">
+            Pick your competition. Map your gaps. Work through problems until the answers come from you.
           </p>
-        </Reveal>
-        <Reveal transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}>
           <Link
             href="/coach"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold bg-accent text-background hover:bg-accent-hover transition-all duration-150"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl text-base font-semibold bg-accent text-background hover:bg-accent-hover transition-all duration-150"
+            style={{ boxShadow: "0 0 32px rgba(232,168,32,0.3)" }}
           >
-            Start training
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M7 2l5 5-5 5M2 7h10"/>
+            Start training free
+            <svg width="16" height="16" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M7 2l5 5-5 5M2 7h10" />
             </svg>
           </Link>
         </Reveal>
       </section>
 
-      <footer className="relative z-10 border-t border-border px-8 py-6 flex items-center justify-between">
-        <span className="flex items-center text-sm font-bold tracking-[-0.01em]">
+      {/* ── Footer ── */}
+      <footer className="relative z-10 border-t border-white/[0.06] px-8 py-6 flex items-center justify-between">
+        <span className="flex items-center text-sm font-bold tracking-tight">
           <span className="text-text">Poly</span><span className="text-accent">Teach</span>
         </span>
-        <span className="text-xs text-subtle">© 2026</span>
+        <span className="text-xs text-[#444]">© 2026 PolyTeach</span>
       </footer>
     </div>
   );

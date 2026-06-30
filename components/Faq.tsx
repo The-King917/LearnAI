@@ -36,7 +36,7 @@ function FaqRow({ q, a, delay }: { q: string; a: string; delay: number }) {
 
   return (
     <Reveal y={16} transition={{ duration: 0.4, delay }}>
-      <div className="rounded-xl border border-border bg-surface overflow-hidden">
+      <div className="rounded-xl border border-white/[0.08] bg-surface overflow-hidden">
         <button
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
@@ -54,7 +54,7 @@ function FaqRow({ q, a, delay }: { q: string; a: string; delay: number }) {
             strokeWidth="1.6"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="shrink-0 text-muted transition-transform duration-300"
+            className="shrink-0 text-text-2 transition-transform duration-300"
             style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
           >
             <path d="M2.5 5l4.5 4.5L11.5 5" />
@@ -65,7 +65,7 @@ function FaqRow({ q, a, delay }: { q: string; a: string; delay: number }) {
           style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
         >
           <div className="overflow-hidden">
-            <p className="px-5 pb-4 text-sm text-muted leading-relaxed">{a}</p>
+            <p className="px-5 pb-4 text-sm text-text-2 leading-relaxed">{a}</p>
           </div>
         </div>
       </div>
