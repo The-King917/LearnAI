@@ -16,22 +16,26 @@ interface RecentSession {
 
 interface CoachCanvasProps {
   signedIn: boolean;
-  // Debrief params — both must be set to activate debrief mode
   debriefSubjectId?: string;
   debriefMessage?: string;
-  // Session wiring (managed by parent)
   sessionId: string | null;
   onSessionStart: (subjectId: string, subjectName: string) => void;
   onPersistMessage: (msg: { role: "user" | "assistant"; content: string }) => void;
-  // After diagnose: pre-select a subject
   initialSubjectId?: string | null;
 }
 
-const DIFFICULTY_OPTIONS: Array<{ value: Difficulty; label: string; sub: string }> = [
-  { value: "beginner",     label: "Intro",    sub: "Foundational" },
-  { value: "intermediate", label: "Standard", sub: "Competition" },
-  { value: "advanced",     label: "Hard",     sub: "Qualifying" },
-  { value: "olympiad",     label: "Expert",   sub: "National" },
+const DIFFICULTY_OPTIONS: Array<{ value: Difficulty; label: string; desc: string }> = [
+  { value: "beginner",     label: "Intro",    desc: "Learn concepts from scratch" },
+  { value: "intermediate", label: "Standard", desc: "Typical contest-level practice" },
+  { value: "advanced",     label: "Hard",     desc: "Challenging multi-step problems" },
+  { value: "olympiad",     label: "Expert",   desc: "Olympiad-style reasoning" },
+];
+
+const BENEFITS = [
+  "Socratic hints — never just answers",
+  "Step-by-step guided reasoning",
+  "Mistake diagnosis and follow-up",
+  "Personalized to your weak areas",
 ];
 
 function timeAgo(iso: string): string {
@@ -61,7 +65,6 @@ export default function CoachCanvas({
   >(undefined);
   const [recentSessions, setRecentSessions] = useState<RecentSession[]>([]);
 
-  // Load recent coach sessions
   useEffect(() => {
     if (!signedIn) return;
     fetch("/api/sessions")
@@ -80,7 +83,6 @@ export default function CoachCanvas({
       .catch(() => {});
   }, [signedIn]);
 
-  // Pre-select subject if coming from diagnostic
   useEffect(() => {
     if (initialSubjectId && canvasState === "setup") {
       const subj = getSubjectById(initialSubjectId);
@@ -88,7 +90,6 @@ export default function CoachCanvas({
     }
   }, [initialSubjectId, canvasState]);
 
-  // Debrief: auto-start session when message is ready
   useEffect(() => {
     if (!debriefSubjectId || !debriefMessage || !signedIn) return;
     const subj = getSubjectById(debriefSubjectId);
@@ -135,7 +136,7 @@ export default function CoachCanvas({
     return (
       <div className="flex flex-col items-center justify-center h-full gap-3 text-center px-6">
         <p className="text-base font-semibold text-text">Sign in to start coaching</p>
-        <p className="text-sm text-muted max-w-xs">Create a free account to chat with the coach, save sessions, and track mastery.</p>
+        <p className="text-sm text-text-2 max-w-xs">Create a free account to chat with the coach, save sessions, and track mastery.</p>
       </div>
     );
   }
@@ -169,104 +170,144 @@ export default function CoachCanvas({
   // ── Setup screen ────────────────────────────────────────────────────────────
   const mathSubjects = VISIBLE_SUBJECTS.filter((s) => s.group === "Math Competitions");
   const scienceSubjects = VISIBLE_SUBJECTS.filter((s) => s.group === "Science Competitions");
+  const currentDiff = DIFFICULTY_OPTIONS.find((o) => o.value === difficulty)!;
+
+  const CompetitionCard = ({ s }: { s: Subject }) => {
+    const selected = subject?.id === s.id;
+    return (
+      <button
+        key={s.id}
+        onClick={() => setSubject(s)}
+        className={`px-3 py-3 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
+          selected
+            ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(232,168,32,0.25)]"
+            : "border-border-2 bg-surface text-text-2 hover:border-[#484848] hover:text-text hover:bg-surface-2"
+        }`}
+      >
+        <div className="flex items-start justify-between gap-1">
+          <p className="text-sm font-medium leading-tight">{s.name}</p>
+          {selected && <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0 mt-[3px]" />}
+        </div>
+      </button>
+    );
+  };
 
   return (
     <div className="h-full overflow-y-auto">
-      <div className="max-w-2xl mx-auto px-8 py-10">
-        <h1 className="text-xl font-semibold tracking-[-0.02em] text-text mb-1">Coach</h1>
-        <p className="text-sm text-muted mb-8">Select a competition and level, then start a Socratic session.</p>
+      <div className="max-w-4xl mx-auto px-8 py-10">
+        <div className="grid grid-cols-[1fr_260px] gap-10 items-start">
 
-        {/* Subject grid */}
-        <div className="mb-8">
-          <p className="text-2xs font-medium text-accent uppercase tracking-[0.07em] mb-3">Competition</p>
+          {/* ── Left column ── */}
+          <div>
+            <h1 className="text-xl font-semibold tracking-[-0.02em] text-text mb-1">AI Competition Coach</h1>
+            <p className="text-sm text-text-2 mb-8">Pick your exam and difficulty. We'll guide you through problems step by step.</p>
 
-          {/* Math row */}
-          <p className="text-2xs text-subtle mb-2 tracking-wide">Math</p>
-          <div className="grid grid-cols-3 gap-2 mb-4">
-            {mathSubjects.map((s) => (
-              <button
-                key={s.id}
-                onClick={() => setSubject(s)}
-                className={`px-3 py-3 rounded-xl border text-left transition-all duration-100 ${
-                  subject?.id === s.id
-                    ? "border-accent bg-accent text-background"
-                    : "border-border bg-surface text-muted hover:border-border-2 hover:text-text-2"
-                }`}
-              >
-                <p className="text-sm font-medium leading-tight">{s.name}</p>
-              </button>
-            ))}
-          </div>
+            {/* Competition grid */}
+            <div className="mb-8">
+              <p className="text-2xs font-medium text-accent uppercase tracking-[0.07em] mb-4">Competition</p>
 
-          {/* Science row */}
-          <p className="text-2xs text-subtle mb-2 tracking-wide">Science &amp; CS</p>
-          <div className="grid grid-cols-3 gap-2">
-            {scienceSubjects.map((s) => (
-              <button
-                key={s.id}
-                onClick={() => setSubject(s)}
-                className={`px-3 py-3 rounded-xl border text-left transition-all duration-100 ${
-                  subject?.id === s.id
-                    ? "border-accent bg-accent text-background"
-                    : "border-border bg-surface text-muted hover:border-border-2 hover:text-text-2"
-                }`}
-              >
-                <p className="text-sm font-medium leading-tight">{s.name}</p>
-              </button>
-            ))}
-          </div>
-        </div>
+              <p className="text-xs font-medium text-text-2 mb-2">Math</p>
+              <div className="grid grid-cols-3 gap-2 mb-5">
+                {mathSubjects.map((s) => <CompetitionCard key={s.id} s={s} />)}
+              </div>
 
-        {/* Difficulty segmented control */}
-        <div className="mb-8">
-          <p className="text-2xs font-medium text-accent uppercase tracking-[0.07em] mb-3">Level</p>
-          <div className="flex bg-surface-2 border border-border rounded-xl p-1 gap-1">
-            {DIFFICULTY_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                onClick={() => setDifficulty(opt.value)}
-                className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all duration-100 ${
-                  difficulty === opt.value
-                    ? "bg-accent text-background shadow-sm"
-                    : "text-muted hover:text-text-2"
-                }`}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Recent sessions */}
-        {recentSessions.length > 0 && (
-          <div className="mb-8">
-            <p className="text-2xs font-medium text-accent uppercase tracking-[0.07em] mb-3">Resume</p>
-            <div className="space-y-2">
-              {recentSessions.map((s) => (
-                <button
-                  key={s.id}
-                  onClick={() => resumeSession(s)}
-                  className="w-full flex items-center justify-between px-4 py-3 rounded-xl border border-border bg-surface hover:border-border-2 hover:bg-surface-2 transition-all duration-100 group"
-                >
-                  <div className="text-left">
-                    <p className="text-sm text-text-2 group-hover:text-text transition-colors">{s.subjectName}</p>
-                    <p className="text-2xs text-muted mt-0.5">{timeAgo(s.updatedAt)}</p>
-                  </div>
-                  <span className="text-2xs text-muted group-hover:text-text-2 transition-colors">Resume →</span>
-                </button>
-              ))}
+              <p className="text-xs font-medium text-text-2 mb-2">Science &amp; CS</p>
+              <div className="grid grid-cols-3 gap-2">
+                {scienceSubjects.map((s) => <CompetitionCard key={s.id} s={s} />)}
+              </div>
             </div>
-          </div>
-        )}
 
-        {/* CTA */}
-        <button
-          onClick={startSession}
-          disabled={!subject}
-          className="w-full py-3 rounded-xl text-sm font-semibold bg-accent text-background hover:bg-accent-hover disabled:bg-disabled disabled:text-disabled-text disabled:cursor-not-allowed transition-all duration-150"
-        >
-          {subject ? `Start ${subject.name} session` : "Select a competition to begin"}
-        </button>
+            {/* Difficulty segmented control */}
+            <div className="mb-8">
+              <p className="text-2xs font-medium text-accent uppercase tracking-[0.07em] mb-3">Level</p>
+              <div className="flex bg-surface-2 border border-border-2 rounded-xl p-1 gap-1">
+                {DIFFICULTY_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => setDifficulty(opt.value)}
+                    className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all duration-100 cursor-pointer ${
+                      difficulty === opt.value
+                        ? "bg-accent text-background shadow-sm"
+                        : "text-text-2 hover:text-text hover:bg-white/5"
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+              <p className="text-2xs text-text-2 mt-2 pl-1">{currentDiff.desc}</p>
+            </div>
+
+            {/* Recent sessions */}
+            {recentSessions.length > 0 && (
+              <div className="mb-8">
+                <p className="text-2xs font-medium text-accent uppercase tracking-[0.07em] mb-3">Resume</p>
+                <div className="space-y-2">
+                  {recentSessions.map((s) => (
+                    <button
+                      key={s.id}
+                      onClick={() => resumeSession(s)}
+                      className="w-full flex items-center justify-between px-4 py-3 rounded-xl border border-border-2 bg-surface hover:border-[#484848] hover:bg-surface-2 transition-all duration-100 group cursor-pointer"
+                    >
+                      <div className="text-left">
+                        <p className="text-sm text-text-2 group-hover:text-text transition-colors">{s.subjectName}</p>
+                        <p className="text-2xs text-[#666] mt-0.5">{timeAgo(s.updatedAt)}</p>
+                      </div>
+                      <span className="text-2xs text-[#777] group-hover:text-text-2 transition-colors">Resume →</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* CTA */}
+            <button
+              onClick={startSession}
+              disabled={!subject}
+              className={`w-full py-3 rounded-xl text-sm font-semibold transition-all duration-150 ${
+                subject
+                  ? "bg-accent text-background hover:bg-accent-hover cursor-pointer"
+                  : "border border-border-2 text-text-2 cursor-not-allowed"
+              }`}
+            >
+              {subject
+                ? `Start ${subject.name} · ${currentDiff.label} Coach`
+                : "Choose a competition above"}
+            </button>
+          </div>
+
+          {/* ── Right column ── */}
+          <div className="sticky top-10">
+            {subject ? (
+              <div className="rounded-2xl border border-accent/30 bg-accent/5 p-5">
+                <p className="text-2xs font-medium text-accent uppercase tracking-[0.07em] mb-3">Ready to start</p>
+                <p className="text-base font-semibold text-text leading-tight">{subject.name}</p>
+                <p className="text-sm text-text-2 mt-0.5 mb-5">{currentDiff.label} — {currentDiff.desc}</p>
+                <div className="border-t border-accent/15 pt-4 space-y-2.5">
+                  {BENEFITS.map((b) => (
+                    <div key={b} className="flex items-start gap-2.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0 mt-[5px]" />
+                      <span className="text-xs text-text-2">{b}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="rounded-2xl border border-border-2 bg-surface p-5">
+                <p className="text-2xs font-medium text-text-2 uppercase tracking-[0.07em] mb-4">What you&apos;ll get</p>
+                <div className="space-y-3">
+                  {BENEFITS.map((b) => (
+                    <div key={b} className="flex items-start gap-2.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0 mt-[5px]" />
+                      <span className="text-sm text-text-2">{b}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+        </div>
       </div>
     </div>
   );

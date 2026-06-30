@@ -87,7 +87,7 @@ export default function NavRail({ mode, onModeChange }: NavRailProps) {
                 onClick={() => onModeChange(item.id)}
                 title={item.label}
                 className={`relative w-full flex flex-col items-center justify-center gap-1.5 py-3 transition-colors duration-100 ${
-                  active ? "text-accent" : "text-muted hover:text-text-2"
+                  active ? "text-accent" : "text-text-2 hover:text-text"
                 }`}
               >
                 {active && (
@@ -115,7 +115,7 @@ export default function NavRail({ mode, onModeChange }: NavRailProps) {
                 href="/mock-test"
                 title="Mock Test"
                 className={`relative w-full flex flex-col items-center justify-center gap-1.5 py-3 transition-colors duration-100 ${
-                  active ? "text-accent" : "text-muted hover:text-text-2"
+                  active ? "text-accent" : "text-text-2 hover:text-text"
                 }`}
               >
                 {active && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-7 bg-accent rounded-r" />}
@@ -140,7 +140,7 @@ export default function NavRail({ mode, onModeChange }: NavRailProps) {
                 href="/progress"
                 title="Progress"
                 className={`relative w-full flex flex-col items-center justify-center gap-1.5 py-3 transition-colors duration-100 ${
-                  active ? "text-accent" : "text-muted hover:text-text-2"
+                  active ? "text-accent" : "text-text-2 hover:text-text"
                 }`}
               >
                 {active && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-7 bg-accent rounded-r" />}
@@ -195,7 +195,7 @@ export default function NavRail({ mode, onModeChange }: NavRailProps) {
             <button
               onClick={() => setAuthOpen(true)}
               title="Sign in"
-              className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-muted hover:border-border-2 hover:text-text-2 transition-colors"
+              className="w-8 h-8 rounded-full border border-border-2 flex items-center justify-center text-text-2 hover:border-[#484848] hover:text-text transition-colors"
             >
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
