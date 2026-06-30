@@ -824,8 +824,36 @@ export default function LandingPage() {
               </div>
             </Reveal>
 
+            {/* Interactive Mock Test — full width */}
+            <Reveal className="col-span-12" y={32} delay={0.16}>
+              <div className="rounded-2xl border border-white/[0.08] bg-surface overflow-hidden" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
+                <div className="px-6 pt-6 pb-4 border-b border-white/[0.06]">
+                  <span className="text-2xs font-medium text-accent uppercase tracking-wider">Mock test</span>
+                  <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Full AMC practice, built in.</h3>
+                  <p className="text-sm text-text-2 leading-relaxed max-w-xl">Timed, scored, and instantly debriefed — just like the real exam. Try a live question below.</p>
+                </div>
+                <div className="p-6">
+                  <InteractiveMockTest />
+                </div>
+              </div>
+            </Reveal>
+
+            {/* Interactive Diagnostic — full width */}
+            <Reveal className="col-span-12" y={32} delay={0.2}>
+              <div className="rounded-2xl border border-white/[0.08] bg-surface overflow-hidden" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
+                <div className="px-6 pt-6 pb-4 border-b border-white/[0.06]">
+                  <span className="text-2xs font-medium text-accent uppercase tracking-wider">Diagnostic assessment</span>
+                  <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Knows exactly where you stand.</h3>
+                  <p className="text-sm text-text-2 leading-relaxed max-w-xl">Answer a few questions and watch the system pinpoint your strengths and gaps in real time.</p>
+                </div>
+                <div className="p-6">
+                  <InteractiveDiagnostic />
+                </div>
+              </div>
+            </Reveal>
+
             {/* Diagnostic — small */}
-            <Reveal className="col-span-12 md:col-span-5" y={32} delay={0.18}>
+            <Reveal className="col-span-12 md:col-span-5" y={32} delay={0.24}>
               <div className="h-full rounded-2xl border border-white/[0.08] bg-surface overflow-hidden hover:border-white/[0.14] transition-colors duration-300" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
                 <div className="p-6 pb-2">
                   <span className="text-2xs font-medium text-accent uppercase tracking-wider">Diagnose mode</span>
@@ -839,7 +867,7 @@ export default function LandingPage() {
             </Reveal>
 
             {/* Prep campaign — large */}
-            <Reveal className="col-span-12 md:col-span-7" y={32} delay={0.24}>
+            <Reveal className="col-span-12 md:col-span-7" y={32} delay={0.3}>
               <div className="h-full rounded-2xl border border-white/[0.08] bg-surface overflow-hidden hover:border-white/[0.14] transition-colors duration-300" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
                 <div className="p-6 pb-2">
                   <span className="text-2xs font-medium text-accent uppercase tracking-wider">Prep campaign</span>
@@ -852,38 +880,6 @@ export default function LandingPage() {
               </div>
             </Reveal>
           </div>
-        </div>
-      </section>
-
-      {/* ── Interactive Mock Test ── */}
-      <section className="relative z-10 px-8 py-24">
-        <div className="max-w-5xl mx-auto">
-          <Reveal>
-            <div className="mb-12">
-              <p className="text-xs font-medium text-accent uppercase tracking-[0.12em] mb-4">Mock test</p>
-              <h2 className="text-3xl font-semibold tracking-[-0.03em] text-text mb-4">Full AMC practice, built in.</h2>
-              <p className="text-base text-text-2 max-w-xl">Timed, scored, and instantly debriefed — just like the real exam. Try a live question below.</p>
-            </div>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <InteractiveMockTest />
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ── Interactive Diagnostic ── */}
-      <section className="relative z-10 px-8 py-24">
-        <div className="max-w-5xl mx-auto">
-          <Reveal>
-            <div className="mb-12">
-              <p className="text-xs font-medium text-accent uppercase tracking-[0.12em] mb-4">Diagnostic assessment</p>
-              <h2 className="text-3xl font-semibold tracking-[-0.03em] text-text mb-4">Knows exactly where you stand.</h2>
-              <p className="text-base text-text-2 max-w-xl">Answer a few questions and watch the system pinpoint your strengths and gaps in real time.</p>
-            </div>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <InteractiveDiagnostic />
-          </Reveal>
         </div>
       </section>
 
