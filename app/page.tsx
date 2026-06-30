@@ -433,10 +433,84 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* ── Horizontal sticky feature scroll ── */}
+      {/* ── Sticky feature scroll ── */}
       <div className="relative z-10">
         <FeatureScroll />
       </div>
+
+      {/* ── Feature bento grid ── */}
+      <section className="relative z-10 px-8 pb-32">
+        <div className="max-w-6xl mx-auto">
+          <Reveal>
+            <div className="text-center mb-14">
+              <p className="text-xs font-medium text-accent uppercase tracking-[0.12em] mb-4">What you get</p>
+              <h2 className="text-[clamp(22px,3vw,38px)] font-semibold tracking-[-0.03em]">Built for students serious<br/>about competitive academics</h2>
+            </div>
+          </Reveal>
+
+          <div className="grid grid-cols-12 gap-4">
+            {/* Coaching — large */}
+            <Reveal className="col-span-12 md:col-span-7" y={32} delay={0.05}>
+              <div className="h-full rounded-2xl border border-white/[0.08] bg-surface overflow-hidden hover:border-white/[0.14] transition-colors duration-300" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
+                <div className="p-6 pb-2">
+                  <span className="text-2xs font-medium text-accent uppercase tracking-wider">Coach mode</span>
+                  <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Socratic coaching</h3>
+                  <p className="text-sm text-text-2 leading-relaxed max-w-xs">Never hands you the answer. Asks the exact question that unblocks your thinking — at any hour.</p>
+                </div>
+                <div className="mx-4 mb-4 mt-4 rounded-xl border border-border-2 bg-[#0d0d0d] overflow-hidden">
+                  <div className="flex items-center gap-2 px-3 py-2 border-b border-border bg-surface-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                    <span className="text-2xs text-text-2">AMC 12 · Counting &amp; Probability</span>
+                  </div>
+                  <ChatPreview />
+                </div>
+              </div>
+            </Reveal>
+
+            {/* Problems — small */}
+            <Reveal className="col-span-12 md:col-span-5" y={32} delay={0.12}>
+              <div className="h-full rounded-2xl border border-white/[0.08] bg-surface overflow-hidden hover:border-white/[0.14] transition-colors duration-300" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
+                <div className="p-6 pb-2">
+                  <span className="text-2xs font-medium text-accent uppercase tracking-wider">Practice mode</span>
+                  <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Competition-caliber problems</h3>
+                  <p className="text-sm text-text-2 leading-relaxed">Problems matched to real contest difficulty — not generic textbook exercises.</p>
+                </div>
+                <div className="mx-4 mb-4 mt-4 rounded-xl border border-border-2 bg-[#0d0d0d]">
+                  <ProblemPreview />
+                </div>
+              </div>
+            </Reveal>
+
+            {/* Diagnostic — small */}
+            <Reveal className="col-span-12 md:col-span-5" y={32} delay={0.18}>
+              <div className="h-full rounded-2xl border border-white/[0.08] bg-surface overflow-hidden hover:border-white/[0.14] transition-colors duration-300" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
+                <div className="p-6 pb-2">
+                  <span className="text-2xs font-medium text-accent uppercase tracking-wider">Diagnose mode</span>
+                  <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Adaptive diagnostic</h3>
+                  <p className="text-sm text-text-2 leading-relaxed">10 questions that map your knowledge ceiling concept-by-concept and generate a study plan.</p>
+                </div>
+                <div className="mx-4 mb-4 mt-4 rounded-xl border border-border-2 bg-[#0d0d0d]">
+                  <DiagnosticPreview />
+                </div>
+              </div>
+            </Reveal>
+
+            {/* Prep campaign — large */}
+            <Reveal className="col-span-12 md:col-span-7" y={32} delay={0.24}>
+              <div className="h-full rounded-2xl border border-white/[0.08] bg-surface overflow-hidden hover:border-white/[0.14] transition-colors duration-300" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
+                <div className="p-6 pb-2">
+                  <span className="text-2xs font-medium text-accent uppercase tracking-wider">Prep campaign</span>
+                  <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Day-by-day study plan</h3>
+                  <p className="text-sm text-text-2 leading-relaxed max-w-xs">Set a competition date. The agent builds a day-by-day plan and adjusts after each session based on what you actually understood.</p>
+                </div>
+                <div className="mx-4 mb-4 mt-4 rounded-xl border border-border-2 bg-[#0d0d0d]">
+                  <CalendarPreview />
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
 
       {/* ── Live Demo ── */}
       <section id="demo" className="relative z-10 px-8 py-32">
