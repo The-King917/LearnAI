@@ -569,7 +569,6 @@ export default function LandingPage() {
       <section className="relative z-10 flex flex-col items-center text-center px-6 pt-28 pb-0">
         {/* Ambient glow */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div style={{ position: "absolute", top: "15%", left: "50%", transform: "translateX(-50%)", width: "900px", height: "500px", background: "radial-gradient(ellipse, rgba(232,168,32,0.10) 0%, transparent 65%)", filter: "blur(40px)" }} />
         </div>
 
         {/* Social proof */}
@@ -638,7 +637,6 @@ export default function LandingPage() {
               <LandingDemo />
             </div>
           </AppWindow>
-          <div className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none" style={{ background: "linear-gradient(to bottom, transparent, #0A0A0A)" }} />
         </motion.div>
       </section>
 
@@ -798,7 +796,6 @@ export default function LandingPage() {
       {/* ── Testimonials ── */}
       <section className="relative z-10 px-8 py-32">
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div style={{ position: "absolute", top: "30%", left: "50%", transform: "translateX(-50%)", width: "700px", height: "400px", background: "radial-gradient(ellipse, rgba(232,168,32,0.05) 0%, transparent 65%)", filter: "blur(60px)" }} />
         </div>
         <div className="max-w-6xl mx-auto">
           <Reveal>
@@ -816,7 +813,6 @@ export default function LandingPage() {
                   className="relative flex flex-col h-full p-8 rounded-2xl border border-white/[0.08] bg-surface hover:border-white/[0.14] transition-all duration-300 overflow-hidden"
                   style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}
                 >
-                  <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full" style={{ background: "radial-gradient(circle, rgba(232,168,32,0.06) 0%, transparent 70%)" }} />
                   <div className="text-6xl text-accent/40 font-serif leading-none mb-5 select-none">&ldquo;</div>
                   <p className="text-base text-text leading-relaxed flex-1 mb-8">{t.quote}</p>
                   <div className="flex items-center gap-3 pt-5 border-t border-white/[0.07]">
@@ -979,7 +975,6 @@ export default function LandingPage() {
       {/* ── Bottom CTA ── */}
       <section className="relative z-10 px-8 py-36 text-center overflow-hidden">
         <div className="pointer-events-none absolute inset-0">
-          <div style={{ position: "absolute", bottom: 0, left: "50%", transform: "translateX(-50%)", width: "900px", height: "400px", background: "radial-gradient(ellipse, rgba(232,168,32,0.12) 0%, transparent 65%)", filter: "blur(40px)" }} />
         </div>
         <Reveal>
           <h2 className="text-[clamp(28px,4vw,54px)] font-semibold tracking-[-0.03em] mb-5">
