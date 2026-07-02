@@ -34,7 +34,7 @@ const config: Config = {
         "grain": "radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)",
       },
       fontFamily: {
-        sans: ["-apple-system", "BlinkMacSystemFont", "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI", "Roboto", "sans-serif"],
+        sans: ["var(--font-geist-sans)", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
         mono: ["var(--font-geist-mono)", "ui-monospace", "SFMono-Regular", "SF Mono", "Menlo", "monospace"],
       },
       fontSize: {
