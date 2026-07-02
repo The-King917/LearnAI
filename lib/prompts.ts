@@ -1,4 +1,5 @@
 import { Subject } from "./subjects";
+import { buildBookPolicyBlock } from "./reference-books";
 
 export type Mode = "chat" | "practice" | "diagnose";
 export type Difficulty = "beginner" | "intermediate" | "advanced" | "olympiad";
@@ -593,7 +594,8 @@ export function buildSystemPrompt(
   mode: Mode,
   difficulty: Difficulty,
   apQuestionType?: APQuestionType,
-  topics?: string[]
+  topics?: string[],
+  referenceContext?: string | null
 ): string {
   const domain = getDomain(subject);
 
@@ -630,7 +632,7 @@ export function buildSystemPrompt(
    - Draw arrows using a short marker or a thin triangle at the tip
    - Never include JavaScript or external references in SVG` : "";
 
-  const basePersonality = `You are PolyTeach, an elite AI study coach for high school students. You are brilliant, precise, and pedagogically rigorous. Your entire approach is Socratic — you guide students to discover answers themselves through targeted questions and hints. You never give direct answers unless the student has genuinely exhausted all attempts.
+  let basePersonality = `You are PolyTeach, an elite AI study coach for high school students. You are brilliant, precise, and pedagogically rigorous. Your entire approach is Socratic — you guide students to discover answers themselves through targeted questions and hints. You never give direct answers unless the student has genuinely exhausted all attempts.
 
 ${subjectContext}
 Difficulty level: ${difficulty} (${difficultyContext})
@@ -642,6 +644,9 @@ Core coaching rules:
 4. Use precise subject-specific vocabulary and reference named theorems or techniques.
 5. Keep responses focused — one key insight or question per turn.
 6. Format math with LaTeX: $...$ for inline, $$...$$ for display.${diagramInstruction}`;
+
+  const bookPolicyBlock = subject ? buildBookPolicyBlock(subject.id, referenceContext) : null;
+  if (bookPolicyBlock) basePersonality += `\n\n${bookPolicyBlock}`;
 
   if (mode === "chat") {
     return `${basePersonality}

@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Subject } from "@/lib/subjects";
 import { Difficulty, buildSystemPrompt } from "@/lib/prompts";
+import { getReferenceContext } from "@/lib/reference-books";
 import Markdown from "./Markdown";
 
 interface Message {
@@ -70,8 +71,6 @@ export default function ChatInterface({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
-  const systemPrompt = systemPromptOverride ?? buildSystemPrompt(subject ?? undefined, mode ?? "chat", difficulty ?? "intermediate");
-
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, streamingText]);
@@ -92,13 +91,22 @@ export default function ChatInterface({
 
       abortRef.current = new AbortController();
 
+      // Per-turn: classify the student's message against the reference-book theorem
+      // index and inject a fresh ## REFERENCE block, so the coach's Socratic questions
+      // stay grounded without ever quoting the source book to the student.
+      const referenceContext = !systemPromptOverride && (mode ?? "chat") === "chat"
+        ? getReferenceContext(subject?.id, text, difficulty)
+        : null;
+      const effectiveSystemPrompt = systemPromptOverride
+        ?? buildSystemPrompt(subject ?? undefined, mode ?? "chat", difficulty ?? "intermediate", undefined, undefined, referenceContext);
+
       try {
         const res = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           signal: abortRef.current.signal,
           body: JSON.stringify({
-            systemPrompt,
+            systemPrompt: effectiveSystemPrompt,
             subjectId: subject?.id,
             feature,
             messages: newMessages.map((m) => ({ role: m.role, content: m.content })),
@@ -135,7 +143,7 @@ export default function ChatInterface({
         setLoading(false);
       }
     },
-    [loading, messages, systemPrompt, onNewMessage, subject, feature]
+    [loading, messages, systemPromptOverride, onNewMessage, subject, feature, mode, difficulty]
   );
 
   useEffect(() => {
