@@ -188,7 +188,7 @@ Core coaching rules:
 2. Use Socratic questions: "What's the sample space?", "Can you write the expected value formula?", "What would you bid if you were the market maker?"
 3. For mental math, coach them on tricks (rounding, decomposition, approximation).
 4. Acknowledge correct reasoning before pushing further.
-5. Format math with LaTeX: $...$ for inline, $$...$$ for display.`;
+5. Format math with LaTeX: \\(...\\) for inline, \\[...\\] for display. Never use a bare $ for math — plain $ is reserved for dollar amounts and needs no escaping.`;
 
   const domainHint = {
     "quant-probability": "Focus on probability puzzles, expected value, and combinatorics.",
@@ -460,7 +460,7 @@ Core coaching rules:
 2. For passage-based questions: always ask "Where in the passage does this come from?" first.
 3. For content questions: guide them to recall the underlying concept, not just the answer.
 4. Be precise with MCAT terminology and scoring (472–528 scale, 118–132 per section).
-5. Use LaTeX for equations: $...$ inline, $$...$$ display.`;
+5. Use LaTeX for equations: \\(...\\) inline, \\[...\\] display. Never use a bare $ for math — plain $ is reserved for dollar amounts and needs no escaping.`;
 
     if (isCARs) {
       if (mode === "chat") {
@@ -643,7 +643,7 @@ Core coaching rules:
 3. When stuck, break the problem into a smaller sub-question.
 4. Use precise subject-specific vocabulary and reference named theorems or techniques.
 5. Keep responses focused — one key insight or question per turn.
-6. Format math with LaTeX: $...$ for inline, $$...$$ for display.${diagramInstruction}`;
+6. Format math with LaTeX: \\(...\\) for inline, \\[...\\] for display. Never use a bare $ for math — plain $ is reserved for dollar amounts and needs no escaping.${diagramInstruction}`;
 
   const bookPolicyBlock = subject ? buildBookPolicyBlock(subject.id, referenceContext) : null;
   if (bookPolicyBlock) basePersonality += `\n\n${bookPolicyBlock}`;
@@ -707,7 +707,7 @@ Rules:
 - When a stimulus is visual by nature (an artwork, map, diagram, or chart), describe it in precise, vivid textual detail since no image will be rendered — never just say "see image" or "see graph"
 - Format tabular data as a markdown table; describe graphs in words with exact axis labels, ranges, and the trend so the student could redraw it
 - Do NOT reveal the answer or explain anything in the generation step
-- Use LaTeX for any math: $...$ inline, $$...$$ display
+- Use LaTeX for any math: \\(...\\) inline, \\[...\\] display. Never use a bare $ for math — plain $ is reserved for dollar amounts (common in Econ/Stats data) and needs no escaping.
 
 When the student submits an answer:
 - Begin your reply with a line containing exactly \`RESULT: CORRECT\` or \`RESULT: INCORRECT\` (nothing else on that line), then a blank line, then your explanation.

@@ -38,11 +38,17 @@ interface MarkdownProps {
   streaming?: boolean;
 }
 
-// Escape bare currency dollar signs (e.g. $1.20) so remark-math doesn't
-// treat them as LaTeX delimiters. Math expressions use \(...\) or $$...$$
-// from the generator, so single $ followed by a digit is always currency.
-function escapeCurrency(text: string): string {
-  return text.replace(/\$(?=\d)/g, "\\$");
+// The generator is instructed to write math as \(...\) / \[...\] and to leave
+// bare $ exclusively for currency (see lib/prompts.ts). remark-math only
+// understands $-delimited math though, so: (1) escape every literal $ first,
+// so a stray currency sign can never be misread as a math delimiter, then
+// (2) turn our own \(...\) / \[...\] spans into fresh, unescaped $ / $$
+// pairs — the only $ signs remark-math will ever see are ones we just made.
+function normalizeLatexDelimiters(text: string): string {
+  return text
+    .replace(/\\?\$/g, (m) => (m === "\\$" ? m : "\\$"))
+    .replace(/\\\[([\s\S]*?)\\\]/g, (_, expr: string) => `$$${expr}$$`)
+    .replace(/\\\(([\s\S]*?)\\\)/g, (_, expr: string) => `$${expr}$`);
 }
 
 export default function Markdown({ children, streaming }: MarkdownProps) {
@@ -53,7 +59,7 @@ export default function Markdown({ children, streaming }: MarkdownProps) {
         rehypePlugins={[rehypeRaw, rehypeKatex]}
         components={components}
       >
-        {escapeCurrency(children)}
+        {normalizeLatexDelimiters(children)}
       </ReactMarkdown>
       {streaming && (
         <span
