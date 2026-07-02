@@ -645,12 +645,13 @@ export default function LandingPage() {
       <section className="relative z-10 flex flex-col items-center text-center px-6 pt-28 pb-0">
         {/* Ambient glow */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute left-1/2 top-8 -translate-x-1/2 w-[900px] h-[440px] rounded-full bg-white/[0.035] blur-[140px]" />
         </div>
 
         {/* Social proof */}
         {accountCount !== null && (
           <motion.p
-            className="mb-7 text-xs text-text-2"
+            className="mb-8 text-xs font-medium tracking-wide text-text-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: EASE }}
@@ -659,20 +660,20 @@ export default function LandingPage() {
           </motion.p>
         )}
 
-        {/* Headline — deliberately tighter */}
+        {/* Headline */}
         <motion.h1
-          className="text-[clamp(28px,3.8vw,52px)] font-semibold tracking-[-0.03em] leading-[1.08] max-w-2xl text-white"
+          className="font-sans text-[clamp(32px,4.2vw,58px)] font-black tracking-[-0.025em] leading-[1.06] max-w-4xl text-white"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: EASE, delay: 0.08 }}
         >
-          YOUR COACH THAT
+          Your coach that
           <br />
-          <span className="text-accent">THINKS LIKE YOUR COMPETITOR</span>
+          <span className="text-accent">thinks like your competitor</span>
         </motion.h1>
 
         <motion.p
-          className="mt-5 text-base text-text-2 leading-relaxed max-w-md"
+          className="mt-6 text-base text-white/80 leading-relaxed max-w-lg font-sans"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: EASE, delay: 0.18 }}
@@ -682,7 +683,7 @@ export default function LandingPage() {
 
         {/* CTAs */}
         <motion.div
-          className="flex flex-wrap items-center justify-center gap-3 mt-9"
+          className="flex flex-wrap items-center justify-center gap-3 mt-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: EASE, delay: 0.28 }}
