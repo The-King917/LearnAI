@@ -1,8 +1,5 @@
 import Link from "next/link";
-import { Syne } from "next/font/google";
 import type { Metadata } from "next";
-
-const syne = Syne({ subsets: ["latin"], weight: ["400", "600", "700", "800"], display: "swap" });
 
 export const metadata: Metadata = {
   title: "Download — PolyTeach",
@@ -32,7 +29,7 @@ const PLATFORMS = [
 
 export default function DownloadPage() {
   return (
-    <div className={`${syne.className} min-h-screen bg-background text-text`}>
+    <div className="min-h-screen bg-background text-text">
       {/* Static dot grid */}
       <div
         className="fixed inset-0 pointer-events-none z-0"
@@ -40,7 +37,7 @@ export default function DownloadPage() {
       />
 
       <nav className="relative z-10 flex items-center justify-between px-8 py-5 border-b border-white/[0.06]">
-        <Link href="/" className="flex items-center text-sm font-bold tracking-tight">
+        <Link href="/" className="flex items-center text-sm font-semibold tracking-tight">
           <span className="text-text">Poly</span><span className="text-accent">Teach</span>
         </Link>
         <Link href="/" className="text-xs text-text-2 hover:text-text transition-colors">← Back to home</Link>
@@ -95,8 +92,7 @@ export default function DownloadPage() {
           </p>
           <Link
             href="/coach"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent text-background text-sm font-semibold hover:bg-accent-hover transition-all duration-150"
-            style={{ boxShadow: "0 0 20px rgba(232,168,32,0.2)" }}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent text-background text-sm font-medium hover:bg-accent-hover transition-all duration-150"
           >
             Open the app
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -115,7 +111,7 @@ export default function DownloadPage() {
       </main>
 
       <footer className="relative z-10 border-t border-white/[0.06] px-8 py-6 flex items-center justify-between">
-        <Link href="/" className="flex items-center text-sm font-bold tracking-tight">
+        <Link href="/" className="flex items-center text-sm font-semibold tracking-tight">
           <span className="text-text">Poly</span><span className="text-accent">Teach</span>
         </Link>
         <div className="flex items-center gap-6">

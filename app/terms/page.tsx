@@ -1,8 +1,6 @@
 import Link from "next/link";
-import { Syne } from "next/font/google";
 import type { Metadata } from "next";
 
-const syne = Syne({ subsets: ["latin"], weight: ["400", "600", "700"], display: "swap" });
 
 export const metadata: Metadata = {
   title: "Terms of Service — PolyTeach",
@@ -22,16 +20,16 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export default function TermsPage() {
   return (
-    <div className={`${syne.className} min-h-screen bg-background text-text`}>
+    <div className="min-h-screen bg-background text-text">
       <nav className="flex items-center justify-between px-8 py-5 border-b border-white/[0.06]">
-        <Link href="/" className="flex items-center text-sm font-bold tracking-tight">
+        <Link href="/" className="flex items-center text-sm font-semibold tracking-tight">
           <span className="text-text">Poly</span><span className="text-accent">Teach</span>
         </Link>
         <Link href="/" className="text-xs text-text-2 hover:text-text transition-colors">← Back to home</Link>
       </nav>
 
       <main className="max-w-2xl mx-auto px-8 py-20">
-        <p className="text-xs font-medium text-accent uppercase tracking-[0.12em] mb-4">Legal</p>
+        <p className="text-sm font-medium text-accent mb-3">Legal</p>
         <h1 className="text-3xl font-semibold tracking-[-0.03em] mb-3">Terms of Service</h1>
         <p className="text-sm text-[#555] mb-14">Effective date: {EFFECTIVE_DATE}</p>
 
@@ -95,7 +93,7 @@ export default function TermsPage() {
       </main>
 
       <footer className="border-t border-white/[0.06] px-8 py-6 flex items-center justify-between">
-        <Link href="/" className="flex items-center text-sm font-bold tracking-tight">
+        <Link href="/" className="flex items-center text-sm font-semibold tracking-tight">
           <span className="text-text">Poly</span><span className="text-accent">Teach</span>
         </Link>
         <div className="flex items-center gap-6">

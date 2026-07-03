@@ -2,9 +2,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Syne } from "next/font/google";
-
-const syne = Syne({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], display: "swap" });
 import LandingDemo from "@/components/LandingDemo";
 import Reveal from "@/components/Reveal";
 import Faq from "@/components/Faq";
@@ -111,7 +108,7 @@ function DiagnosticPreview() {
   ];
   return (
     <div className="p-4 pt-2 space-y-2.5">
-      <p className="text-2xs text-accent font-medium uppercase tracking-wider mb-3">Level assessment</p>
+      <p className="text-xs text-accent font-medium mb-3">Level assessment</p>
       {bars.map(({ topic, pct, color }) => (
         <div key={topic} className="flex items-center gap-2.5">
           <span className="text-2xs text-text-2 w-[88px] shrink-0">{topic}</span>
@@ -128,7 +125,7 @@ function DiagnosticPreview() {
 function ProblemPreview() {
   return (
     <div className="p-4 pt-2">
-      <p className="text-2xs text-accent font-medium uppercase tracking-wider mb-3">AMC 12 · Problem 14</p>
+      <p className="text-xs text-accent font-medium mb-3">AMC 12 · Problem 14</p>
       <p className="text-xs text-text leading-relaxed mb-4">
         How many positive integers n ≤ 100 satisfy n² − n + 1 ≡ 0 (mod 7)?
       </p>
@@ -144,7 +141,7 @@ function ProblemPreview() {
 function CalendarPreview() {
   return (
     <div className="p-4 pt-2">
-      <p className="text-2xs text-accent font-medium uppercase tracking-wider mb-3">AMC 12 prep · 44 days left</p>
+      <p className="text-xs text-accent font-medium mb-3">AMC 12 prep · 44 days left</p>
       <div className="grid grid-cols-7 gap-1 mb-2">
         {["M","T","W","T","F","S","S"].map((d, i) => (
           <div key={i} className="text-center text-2xs text-[#555]">{d}</div>
@@ -235,7 +232,7 @@ function InteractiveMockTest() {
       {/* Test header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07] bg-surface">
         <div className="flex items-center gap-4">
-          <span className="text-xs font-semibold text-accent uppercase tracking-wider">AMC 10</span>
+          <span className="text-xs font-medium text-accent">AMC 10</span>
           <span className="text-xs text-[#555]">·</span>
           <span className="text-xs text-text-2">Question {qIdx + 8} of 30</span>
           <div className="flex gap-1 ml-2">
@@ -288,7 +285,7 @@ function InteractiveMockTest() {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               className={`mt-5 p-4 rounded-xl border text-sm leading-relaxed ${isCorrect ? "border-green-500/30 bg-green-500/[0.07] text-green-300/80" : "border-red-500/30 bg-red-500/[0.07] text-red-300/80"}`}
             >
-              <p className={`text-xs font-semibold uppercase tracking-wider mb-1.5 ${isCorrect ? "text-green-400" : "text-red-400"}`}>
+              <p className={`text-xs font-medium mb-1.5 ${isCorrect ? "text-green-400" : "text-red-400"}`}>
                 {isCorrect ? "Correct" : `Incorrect — Answer is ${q.correct}`}
               </p>
               {q.explanation}
@@ -299,7 +296,7 @@ function InteractiveMockTest() {
         {/* Sidebar */}
         <div className="space-y-5">
           <div className="p-5 rounded-xl border border-white/[0.07] bg-surface">
-            <p className="text-2xs text-text-2 uppercase tracking-wider mb-4">Score</p>
+            <p className="text-xs font-medium text-text-2 mb-4">Score</p>
             <div className="text-4xl font-semibold tracking-[-0.04em] mb-1">
               {score.correct}<span className="text-xl text-text-2 font-normal">/{score.total || "–"}</span>
             </div>
@@ -312,7 +309,7 @@ function InteractiveMockTest() {
           </div>
 
           <div className="p-5 rounded-xl border border-white/[0.07] bg-surface">
-            <p className="text-2xs text-text-2 uppercase tracking-wider mb-3">Instructions</p>
+            <p className="text-xs font-medium text-text-2 mb-3">Instructions</p>
             <p className="text-xs text-text-2 leading-relaxed">Select the best answer. No penalty for guessing. Each correct answer is worth 6 points.</p>
           </div>
 
@@ -393,7 +390,7 @@ function InteractiveDiagnostic() {
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07] bg-surface">
         <div className="flex items-center gap-3">
-          <span className="text-xs font-semibold text-accent uppercase tracking-wider">AMC 10 Diagnostic</span>
+          <span className="text-xs font-medium text-accent">AMC 10 Diagnostic</span>
           <span className="text-xs text-[#555]">·</span>
           {!done && <span className="text-xs text-text-2">Question {qIdx + 1} of {DIAG_SEQUENCE.length}</span>}
           {done && <span className="text-xs text-green-400">Assessment complete</span>}
@@ -465,7 +462,7 @@ function InteractiveDiagnostic() {
             </>
           ) : (
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}>
-              <p className="text-xs font-medium text-accent uppercase tracking-wider mb-4">Assessment complete</p>
+              <p className="text-xs font-medium text-accent mb-4">Assessment complete</p>
               <h3 className="text-2xl font-semibold tracking-tight mb-3">Your level: <span className="text-accent">Advanced</span></h3>
               <p className="text-sm text-text-2 leading-relaxed mb-6 max-w-sm">Strong in Algebra and Number Theory. Focus on Geometry proofs and advanced Combinatorics to reach Olympiad level.</p>
               <button onClick={reset} className="px-4 py-2.5 rounded-xl border border-white/[0.1] text-sm text-text-2 hover:text-text hover:border-white/20 transition-colors">
@@ -477,7 +474,7 @@ function InteractiveDiagnostic() {
 
         {/* Right: live skill bars */}
         <div className="p-5 rounded-xl border border-white/[0.07] bg-surface self-start">
-          <p className="text-2xs text-text-2 uppercase tracking-wider mb-5">Live assessment</p>
+          <p className="text-xs font-medium text-text-2 mb-5">Live assessment</p>
           <div className="space-y-5">
             {Object.entries(skills).map(([topic, pct]) => (
               <div key={topic}>
@@ -499,7 +496,7 @@ function InteractiveDiagnostic() {
 
           {!done && qIdx > 0 && (
             <div className="mt-6 pt-5 border-t border-border">
-              <p className="text-2xs text-text-2 mb-2 uppercase tracking-wider">Estimated level</p>
+              <p className="text-xs font-medium text-text-2 mb-2">Estimated level</p>
               <p className="text-sm font-semibold text-text">{DIAG_SEQUENCE[qIdx - 1]?.difficulty ?? "—"}</p>
             </div>
           )}
@@ -623,14 +620,14 @@ export default function LandingPage() {
   };
 
   return (
-    <div className={`${syne.className} min-h-screen bg-background text-text overflow-x-hidden`}>
+    <div className="min-h-screen bg-background text-text overflow-x-hidden">
       {/* Static dot grid */}
       <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
       <FloatingSymbols />
 
       {/* ── Nav ── */}
       <nav className="relative z-50 flex items-center justify-between px-8 py-5 border-b border-white/[0.06] backdrop-blur-md bg-background/80">
-        <span className="flex items-center text-sm font-bold tracking-tight">
+        <span className="flex items-center text-sm font-semibold tracking-tight">
           <span className="text-text">Poly</span><span className="text-accent">Teach</span>
         </span>
         <div className="flex items-center gap-6">
@@ -651,7 +648,7 @@ export default function LandingPage() {
         {/* Social proof */}
         {accountCount !== null && (
           <motion.p
-            className="mb-8 text-xs font-medium tracking-wide text-text-2"
+            className="mb-8 text-sm text-text-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: EASE }}
@@ -662,7 +659,7 @@ export default function LandingPage() {
 
         {/* Headline */}
         <motion.h1
-          className="font-sans text-[clamp(32px,4.2vw,58px)] font-black tracking-[-0.025em] leading-[1.06] max-w-4xl text-white"
+          className="font-sans text-[clamp(34px,4.2vw,56px)] font-semibold tracking-[-0.03em] leading-[1.1] max-w-4xl text-white"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: EASE, delay: 0.08 }}
@@ -690,7 +687,7 @@ export default function LandingPage() {
         >
           <Link
             href="/coach"
-            className="px-6 py-3 rounded-xl text-sm font-semibold bg-accent text-background hover:bg-accent-hover transition-all duration-150 shadow-[0_0_24px_rgba(232,168,32,0.25)]"
+            className="px-6 py-3 rounded-xl text-sm font-medium bg-accent text-background hover:bg-accent-hover transition-all duration-150"
           >
             Start training free
           </Link>
@@ -733,7 +730,7 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto">
           <Reveal>
             <div className="text-center mb-14">
-              <p className="text-xs font-medium text-accent uppercase tracking-[0.12em] mb-4">What you get</p>
+              <p className="text-sm font-medium text-accent mb-3">What you get</p>
               <h2 className="text-[clamp(22px,3vw,38px)] font-semibold tracking-[-0.03em]">Built for students serious<br/>about competitive academics</h2>
             </div>
           </Reveal>
@@ -743,7 +740,7 @@ export default function LandingPage() {
             <Reveal className="col-span-12 md:col-span-7" y={32} delay={0.05}>
               <div className="h-full rounded-2xl border border-white/[0.08] bg-surface overflow-hidden hover:border-white/[0.14] transition-colors duration-300" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
                 <div className="p-6 pb-2">
-                  <span className="text-2xs font-medium text-accent uppercase tracking-wider">Coach mode</span>
+                  <span className="text-xs font-medium text-accent">Coach mode</span>
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Socratic coaching</h3>
                   <p className="text-sm text-text-2 leading-relaxed max-w-xs">Never hands you the answer. Asks the exact question that unblocks your thinking — at any hour.</p>
                 </div>
@@ -761,7 +758,7 @@ export default function LandingPage() {
             <Reveal className="col-span-12 md:col-span-5" y={32} delay={0.12}>
               <div className="h-full rounded-2xl border border-white/[0.08] bg-surface overflow-hidden hover:border-white/[0.14] transition-colors duration-300" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
                 <div className="p-6 pb-2">
-                  <span className="text-2xs font-medium text-accent uppercase tracking-wider">Practice mode</span>
+                  <span className="text-xs font-medium text-accent">Practice mode</span>
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Competition-caliber problems</h3>
                   <p className="text-sm text-text-2 leading-relaxed">Problems matched to real contest difficulty — not generic textbook exercises.</p>
                 </div>
@@ -775,7 +772,7 @@ export default function LandingPage() {
             <Reveal className="col-span-12" y={32} delay={0.16}>
               <div className="rounded-2xl border border-white/[0.08] bg-surface overflow-hidden" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
                 <div className="px-6 pt-6 pb-4 border-b border-white/[0.06]">
-                  <span className="text-2xs font-medium text-accent uppercase tracking-wider">Mock test</span>
+                  <span className="text-xs font-medium text-accent">Mock test</span>
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Full AMC practice, built in.</h3>
                   <p className="text-sm text-text-2 leading-relaxed max-w-xl">Timed, scored, and instantly debriefed — just like the real exam. Try a live question below.</p>
                 </div>
@@ -789,7 +786,7 @@ export default function LandingPage() {
             <Reveal className="col-span-12" y={32} delay={0.2}>
               <div className="rounded-2xl border border-white/[0.08] bg-surface overflow-hidden" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
                 <div className="px-6 pt-6 pb-4 border-b border-white/[0.06]">
-                  <span className="text-2xs font-medium text-accent uppercase tracking-wider">Diagnostic assessment</span>
+                  <span className="text-xs font-medium text-accent">Diagnostic assessment</span>
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Knows exactly where you stand.</h3>
                   <p className="text-sm text-text-2 leading-relaxed max-w-xl">Answer a few questions and watch the system pinpoint your strengths and gaps in real time.</p>
                 </div>
@@ -803,7 +800,7 @@ export default function LandingPage() {
             <Reveal className="col-span-12 md:col-span-5" y={32} delay={0.24}>
               <div className="h-full rounded-2xl border border-white/[0.08] bg-surface overflow-hidden hover:border-white/[0.14] transition-colors duration-300" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
                 <div className="p-6 pb-2">
-                  <span className="text-2xs font-medium text-accent uppercase tracking-wider">Diagnose mode</span>
+                  <span className="text-xs font-medium text-accent">Diagnose mode</span>
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Adaptive diagnostic</h3>
                   <p className="text-sm text-text-2 leading-relaxed">10 questions that map your knowledge ceiling concept-by-concept and generate a study plan.</p>
                 </div>
@@ -817,7 +814,7 @@ export default function LandingPage() {
             <Reveal className="col-span-12 md:col-span-7" y={32} delay={0.3}>
               <div className="h-full rounded-2xl border border-white/[0.08] bg-surface overflow-hidden hover:border-white/[0.14] transition-colors duration-300" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
                 <div className="p-6 pb-2">
-                  <span className="text-2xs font-medium text-accent uppercase tracking-wider">Prep campaign</span>
+                  <span className="text-xs font-medium text-accent">Prep campaign</span>
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Day-by-day study plan</h3>
                   <p className="text-sm text-text-2 leading-relaxed max-w-xs">Set a competition date. The agent builds a day-by-day plan and adjusts after each session based on what you actually understood.</p>
                 </div>
@@ -835,7 +832,7 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto">
           <Reveal>
             <div className="text-center mb-20">
-              <p className="text-xs font-medium text-accent uppercase tracking-[0.12em] mb-4">Live demo</p>
+              <p className="text-sm font-medium text-accent mb-3">Live demo</p>
               <h2 className="text-[clamp(24px,3.5vw,42px)] font-semibold tracking-[-0.03em]">What a session looks like</h2>
               <p className="text-sm text-text-2 mt-4 max-w-md mx-auto leading-relaxed">The coach never gives you the answer. It asks the question that makes you find it.</p>
             </div>
@@ -877,7 +874,7 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto">
           <Reveal>
             <div className="text-center mb-20">
-              <p className="text-xs font-medium text-accent uppercase tracking-[0.12em] mb-4">Student results</p>
+              <p className="text-sm font-medium text-accent mb-3">Student results</p>
               <h2 className="text-[clamp(24px,3.5vw,42px)] font-semibold tracking-[-0.03em]">Students who qualified</h2>
               <p className="text-sm text-text-2 mt-4">What changes once you stop looking up solutions.</p>
             </div>
@@ -893,7 +890,7 @@ export default function LandingPage() {
                   <div className="text-6xl text-accent/40 font-serif leading-none mb-5 select-none">&ldquo;</div>
                   <p className="text-base text-text leading-relaxed flex-1 mb-8">{t.quote}</p>
                   <div className="flex items-center gap-3 pt-5 border-t border-white/[0.07]">
-                    <div className="w-9 h-9 rounded-full border border-accent/25 flex items-center justify-center text-xs font-bold text-accent shrink-0" style={{ backgroundColor: "rgba(232,168,32,0.12)" }}>
+                    <div className="w-9 h-9 rounded-full border border-accent/25 flex items-center justify-center text-xs font-semibold text-accent shrink-0" style={{ backgroundColor: "rgba(232,168,32,0.12)" }}>
                       {t.initials}
                     </div>
                     <div>
@@ -913,7 +910,7 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto">
           <Reveal>
             <div className="text-center mb-20">
-              <p className="text-xs font-medium text-accent uppercase tracking-[0.12em] mb-4">The research</p>
+              <p className="text-sm font-medium text-accent mb-3">The research</p>
               <h2 className="text-[clamp(24px,3.5vw,42px)] font-semibold tracking-[-0.03em]">Why Socratic coaching produces competitors</h2>
             </div>
           </Reveal>
@@ -939,7 +936,7 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto">
           <Reveal>
             <div className="text-center mb-16">
-              <p className="text-xs font-medium text-accent uppercase tracking-[0.12em] mb-4">How we compare</p>
+              <p className="text-sm font-medium text-accent mb-3">How we compare</p>
               <h2 className="text-[clamp(24px,3.5vw,42px)] font-semibold tracking-[-0.03em]">
                 The only platform built<br/>for every major olympiad
               </h2>
@@ -1050,7 +1047,7 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto">
           <Reveal>
             <div className="text-center mb-16">
-              <p className="text-xs font-medium text-accent uppercase tracking-[0.12em] mb-4">Pricing</p>
+              <p className="text-sm font-medium text-accent mb-3">Pricing</p>
               <h2 className="text-[clamp(24px,3.5vw,42px)] font-semibold tracking-[-0.03em]">Simple pricing for serious competitors</h2>
               <p className="text-sm text-text-2 mt-4 max-w-sm mx-auto leading-relaxed">
                 AIME qualification is worth $0 to a college if you can&apos;t explain how you solved the problem.
@@ -1066,7 +1063,7 @@ export default function LandingPage() {
             {/* Free */}
             <Reveal y={32} delay={0.05}>
               <div className="h-full p-7 rounded-2xl border border-white/[0.08] bg-surface flex flex-col" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
-                <p className="text-xs font-medium text-text-2 uppercase tracking-wider">Free</p>
+                <p className="text-sm font-medium text-text-2">Free</p>
                 <div className="mt-4 mb-1">
                   <span className="text-4xl font-semibold tracking-[-0.03em]">$0</span>
                 </div>
@@ -1089,7 +1086,7 @@ export default function LandingPage() {
             <Reveal y={32} delay={0.12}>
               <div className="relative h-full p-7 rounded-2xl border border-accent bg-surface-2 flex flex-col" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.5), 0 0 40px rgba(232,168,32,0.08)" }}>
                 <div className="flex items-center justify-between mb-0.5">
-                  <p className="text-xs font-medium text-accent uppercase tracking-wider">Pro</p>
+                  <p className="text-sm font-medium text-accent">Pro</p>
                   <span className="text-2xs text-text-2 px-2 py-0.5 rounded-full border border-white/[0.1]">Most popular</span>
                 </div>
                 <div className="mt-4 mb-1">
@@ -1114,7 +1111,7 @@ export default function LandingPage() {
             {/* Team */}
             <Reveal y={32} delay={0.18}>
               <div className="h-full p-7 rounded-2xl border border-white/[0.08] bg-surface flex flex-col" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
-                <p className="text-xs font-medium text-text-2 uppercase tracking-wider">Team / School</p>
+                <p className="text-sm font-medium text-text-2">Team / School</p>
                 <div className="mt-4 mb-1">
                   <span className="text-4xl font-semibold tracking-[-0.03em]">${TEAM_SEAT_PRICE}</span>
                   <span className="text-sm text-text-2 font-normal ml-1">/seat/mo</span>
@@ -1173,8 +1170,7 @@ export default function LandingPage() {
           </p>
           <Link
             href="/coach"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl text-base font-semibold bg-accent text-background hover:bg-accent-hover transition-all duration-150"
-            style={{ boxShadow: "0 0 32px rgba(232,168,32,0.3)" }}
+            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl text-base font-medium bg-accent text-background hover:bg-accent-hover transition-all duration-150"
           >
             Start training free
             <svg width="16" height="16" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1191,7 +1187,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-2 md:grid-cols-6 gap-10 pb-14 border-b border-white/[0.06]">
             {/* Brand col */}
             <div className="col-span-2 md:col-span-2">
-              <span className="flex items-center text-sm font-bold tracking-tight mb-4">
+              <span className="flex items-center text-sm font-semibold tracking-tight mb-4">
                 <span className="text-text">Poly</span><span className="text-accent">Teach</span>
               </span>
               <p className="text-xs text-[#555] leading-relaxed max-w-[220px]">
@@ -1208,7 +1204,7 @@ export default function LandingPage() {
 
             {/* Product */}
             <div>
-              <p className="text-2xs font-semibold text-[#444] uppercase tracking-[0.1em] mb-5">Product</p>
+              <p className="text-xs font-medium text-text-2 mb-5">Product</p>
               <ul className="space-y-3">
                 {[
                   { label: "AI Coach", href: "/coach" },
@@ -1225,7 +1221,7 @@ export default function LandingPage() {
 
             {/* Competitions */}
             <div>
-              <p className="text-2xs font-semibold text-[#444] uppercase tracking-[0.1em] mb-5">Competitions</p>
+              <p className="text-xs font-medium text-text-2 mb-5">Competitions</p>
               <ul className="space-y-3">
                 {["AMC · AIME · USAMO", "USACO · ACSL", "USAPhO · F=ma", "USNCO", "USABO", "Science Olympiad"].map((c) => (
                   <li key={c}>
@@ -1237,7 +1233,7 @@ export default function LandingPage() {
 
             {/* Download */}
             <div className="col-span-2 md:col-span-1">
-              <p className="text-2xs font-semibold text-[#444] uppercase tracking-[0.1em] mb-5">Download</p>
+              <p className="text-xs font-medium text-text-2 mb-5">Download</p>
               <div className="space-y-3">
                 <Link
                   href="/download"
@@ -1268,7 +1264,7 @@ export default function LandingPage() {
 
             {/* Support + Legal */}
             <div>
-              <p className="text-2xs font-semibold text-[#444] uppercase tracking-[0.1em] mb-5">Support</p>
+              <p className="text-xs font-medium text-text-2 mb-5">Support</p>
               <ul className="space-y-3 mb-8">
                 {[
                   { label: "FAQ", href: "#faq" },
@@ -1280,7 +1276,7 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <p className="text-2xs font-semibold text-[#444] uppercase tracking-[0.1em] mb-5">Legal</p>
+              <p className="text-xs font-medium text-text-2 mb-5">Legal</p>
               <ul className="space-y-3">
                 {[
                   { label: "Privacy Policy", href: "/privacy" },

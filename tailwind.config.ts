@@ -40,9 +40,9 @@ const config: Config = {
       fontSize: {
         "2xs": ["11px", "16px"],
         xs: ["12px", "18px"],
-        sm: ["13px", "20px"],
-        base: ["14px", "22px"],
-        lg: ["15px", "24px"],
+        sm: ["13px", "21px"],
+        base: ["14px", "23px"],
+        lg: ["15px", "25px"],
       },
     },
   },
