@@ -21,7 +21,7 @@ export default function ProgressIndicator({ mastery, signedIn }: ProgressIndicat
           style={{ width: `${pct}%` }}
         />
       </div>
-      <span className="text-2xs font-mono text-text-2 w-8 text-right tabular-nums">{pct}%</span>
+      <span className="text-2xs font-medium text-text-2 w-8 text-right tabular-nums">{pct}%</span>
     </div>
   );
 }

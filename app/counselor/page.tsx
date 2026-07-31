@@ -21,7 +21,7 @@ export default function CounselorWaitlistPage() {
       <nav className="relative z-10 flex items-center justify-between px-8 py-5 border-b border-border/60 backdrop-blur-sm bg-background/70">
         <Link href="/" className="flex items-center text-sm font-semibold tracking-[-0.01em]">
           Poly
-          <span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-accent text-background text-2xs font-bold tracking-[0.02em]">Teach</span>
+          <span className="text-accent">Teach</span>
         </Link>
         <Link href="/coach" className="text-sm font-medium text-muted hover:text-text transition-colors duration-150">
           Open app →

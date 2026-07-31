@@ -192,7 +192,7 @@ export default function MockTestPage() {
       <div className="min-h-screen bg-background text-text">
         <nav className="flex items-center justify-between px-8 py-5 border-b border-border/60">
           <Link href="/coach" className="flex items-center text-sm font-semibold tracking-[-0.01em]">
-            Poly<span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-accent text-background text-2xs font-bold">Teach</span>
+            Poly<span className="text-accent">Teach</span>
           </Link>
           <span className="text-sm text-text-2">Mock Test</span>
         </nav>
@@ -270,7 +270,7 @@ export default function MockTestPage() {
       <div className="min-h-screen bg-background text-text">
         <nav className="flex items-center justify-between px-8 py-5 border-b border-border/60">
           <Link href="/coach" className="flex items-center text-sm font-semibold tracking-[-0.01em]">
-            Poly<span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-accent text-background text-2xs font-bold">Teach</span>
+            Poly<span className="text-accent">Teach</span>
           </Link>
           <span className="text-sm text-text-2">{competition.toUpperCase()} Results</span>
         </nav>
@@ -371,7 +371,7 @@ export default function MockTestPage() {
           {timed && remainingSecs !== null && (
             <div className="flex items-center gap-2">
               {!timerHidden && (
-                <span className={`text-sm font-mono ${remainingSecs < 300 ? "text-red-400" : "text-muted"}`}>
+                <span className={`text-sm font-semibold tabular-nums ${remainingSecs < 300 ? "text-red-400" : "text-muted"}`}>
                   {formatTime(Math.max(0, remainingSecs))}
                 </span>
               )}
@@ -477,7 +477,7 @@ export default function MockTestPage() {
                   onChange={(e) => setAnswers((a) => ({ ...a, [currentProblem.problem.id]: e.target.value }))}
                   placeholder="Write your proof here…"
                   rows={10}
-                  className="w-full bg-surface border border-border-2 rounded-lg px-4 py-3 text-sm text-text outline-none focus:border-accent transition-colors resize-y font-mono"
+                  className="w-full bg-surface border border-border-2 rounded-lg px-4 py-3 text-sm text-text outline-none focus:border-accent transition-colors resize-y"
                 />
               </div>
             )}

@@ -79,8 +79,6 @@ function MiniSparkline({ values, color = "white" }: { values: number[]; color?: 
 
 function levelColor(level: string) {
   if (level === "olympiad") return "text-accent";
-  if (level === "advanced") return "text-blue-400";
-  if (level === "intermediate") return "text-yellow-400";
   return "text-text-2";
 }
 
@@ -131,7 +129,7 @@ export default function ProgressPage() {
       {/* Nav */}
       <nav className="flex items-center justify-between px-8 py-4 border-b border-border/60">
         <Link href="/coach" className="flex items-center text-sm font-semibold tracking-[-0.01em]">
-          Poly<span className="ml-1 px-1.5 py-0.5 rounded-[3px] bg-accent text-background text-2xs font-bold">Teach</span>
+          Poly<span className="text-accent">Teach</span>
         </Link>
         <div className="flex items-center gap-1">
           {(["overview", "tests", "concepts"] as const).map((t) => (
@@ -320,8 +318,8 @@ export default function ProgressPage() {
                               <span className="text-xs text-text-2 w-40 truncate capitalize">{name.replace(/_/g, " ")}</span>
                               <div className="flex-1 h-1 bg-surface-2 rounded-full overflow-hidden">
                                 <div
-                                  className={`h-full rounded-full ${data.level >= 0.7 ? "bg-green-500/60" : data.level >= 0.4 ? "bg-yellow-500/60" : "bg-red-500/60"}`}
-                                  style={{ width: `${Math.round(data.level * 100)}%` }}
+                                  className="h-full rounded-full bg-accent"
+                                  style={{ width: `${Math.round(data.level * 100)}%`, opacity: 0.35 + data.level * 0.65 }}
                                 />
                               </div>
                               <span className="text-xs text-text-2 w-8 text-right">{Math.round(data.level * 100)}%</span>

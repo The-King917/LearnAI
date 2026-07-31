@@ -62,7 +62,7 @@ function AppWindow({ children }: { children: React.ReactNode }) {
           <span className="w-3 h-3 rounded-full bg-[#27C93F]" />
         </div>
         <div className="flex-1 flex justify-center">
-          <div className="px-6 py-1 rounded-[5px] bg-white/[0.04] border border-white/[0.07] text-[11px] text-white/30 font-mono">
+          <div className="px-6 py-1 rounded-[5px] bg-white/[0.04] border border-white/[0.07] text-[11px] text-white/30 tracking-wide">
             polyteach.app
           </div>
         </div>
@@ -101,19 +101,19 @@ function ChatPreview() {
 
 function DiagnosticPreview() {
   const bars = [
-    { topic: "Algebra", pct: 82, color: "bg-green-500/60" },
-    { topic: "Combinatorics", pct: 64, color: "bg-accent/60" },
-    { topic: "Number Theory", pct: 41, color: "bg-yellow-500/60" },
-    { topic: "Geometry", pct: 28, color: "bg-red-500/60" },
+    { topic: "Algebra", pct: 82 },
+    { topic: "Combinatorics", pct: 64 },
+    { topic: "Number Theory", pct: 41 },
+    { topic: "Geometry", pct: 28 },
   ];
   return (
     <div className="p-4 pt-2 space-y-2.5">
       <p className="text-xs text-accent font-medium mb-3">Level assessment</p>
-      {bars.map(({ topic, pct, color }) => (
+      {bars.map(({ topic, pct }) => (
         <div key={topic} className="flex items-center gap-2.5">
           <span className="text-2xs text-text-2 w-[88px] shrink-0">{topic}</span>
           <div className="flex-1 h-1.5 bg-surface-2 rounded-full overflow-hidden">
-            <div className={`h-full rounded-full ${color}`} style={{ width: `${pct}%` }} />
+            <div className="h-full rounded-full bg-accent" style={{ width: `${pct}%`, opacity: 0.35 + (pct / 100) * 0.65 }} />
           </div>
           <span className="text-2xs text-text-2 w-6 text-right">{pct}%</span>
         </div>
@@ -241,7 +241,7 @@ function InteractiveMockTest() {
             ))}
           </div>
         </div>
-        <div className={`flex items-center gap-2 text-sm font-mono font-semibold tabular-nums ${time < 300 ? "text-red-400" : "text-text"}`}>
+        <div className={`flex items-center gap-2 text-sm font-semibold tabular-nums ${time < 300 ? "text-red-400" : "text-text"}`}>
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="7" cy="7" r="6"/><path d="M7 4v3.5l2 1.5" strokeLinecap="round"/></svg>
           {mins}:{secs}
         </div>
@@ -270,7 +270,7 @@ function InteractiveMockTest() {
                   disabled={!!selected}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border text-sm text-left transition-all duration-150 ${style}`}
                 >
-                  <span className={`w-6 h-6 rounded-lg border flex items-center justify-center text-xs font-mono shrink-0 ${isSelected ? "border-current" : "border-border-2"}`}>{letter}</span>
+                  <span className={`w-6 h-6 rounded-lg border flex items-center justify-center text-xs font-semibold shrink-0 ${isSelected ? "border-current" : "border-border-2"}`}>{letter}</span>
                   <span>{c.slice(3)}</span>
                   {selected && isRight && <svg className="ml-auto shrink-0 text-green-400" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 7l3.5 3.5L12 3" strokeLinecap="round" strokeLinejoin="round"/></svg>}
                 </button>
@@ -380,8 +380,8 @@ function InteractiveDiagnostic() {
   };
 
   const DIFF_COLOR: Record<string, string> = {
-    Intermediate: "text-yellow-400 border-yellow-400/30 bg-yellow-400/10",
-    Advanced: "text-orange-400 border-orange-400/30 bg-orange-400/10",
+    Intermediate: "text-text-2 border-border-2 bg-white/[0.04]",
+    Advanced: "text-text border-border-2 bg-white/[0.06]",
     Olympiad: "text-accent border-accent/30 bg-accent/10",
   };
 
@@ -435,7 +435,7 @@ function InteractiveDiagnostic() {
                       return (
                         <button key={c} onClick={() => handleSelect(letter)} disabled={!!selected}
                           className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border text-sm text-left transition-all duration-150 ${style}`}>
-                          <span className="w-6 h-6 rounded-lg border border-current/30 flex items-center justify-center text-xs font-mono shrink-0">{letter}</span>
+                          <span className="w-6 h-6 rounded-lg border border-current/30 flex items-center justify-center text-xs font-semibold shrink-0">{letter}</span>
                           <span>{c.slice(3)}</span>
                         </button>
                       );

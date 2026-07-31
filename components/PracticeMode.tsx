@@ -165,7 +165,7 @@ function MCQPractice({ subject, difficulty, topics, onResult }: { subject: Subje
                     : "border-border bg-surface text-muted opacity-50"
                 }`}
               >
-                <span className={`w-6 h-6 rounded-lg border flex items-center justify-center text-xs font-mono shrink-0 transition-colors ${
+                <span className={`w-6 h-6 rounded-lg border flex items-center justify-center text-xs font-semibold shrink-0 transition-colors ${
                   isSelected ? "border-accent bg-accent-muted text-text" : "border-border text-muted"
                 }`}>
                   {letter}
@@ -505,7 +505,7 @@ function OpenPractice({ subject, difficulty, topics, onResult }: { subject: Subj
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <span className={`text-2xs font-mono w-4 text-center ${revealed ? "text-text-2" : "text-subtle"}`}>{n}</span>
+                    <span className={`text-2xs font-medium w-4 text-center ${revealed ? "text-text-2" : "text-subtle"}`}>{n}</span>
                     <span className="font-medium">{meta.label}</span>
                     <span className="text-muted text-xs hidden sm:inline">{meta.sub}</span>
                   </div>
