@@ -6,6 +6,12 @@ import LandingDemo from "@/components/LandingDemo";
 import Reveal from "@/components/Reveal";
 import Faq from "@/components/Faq";
 import FloatingSymbols from "@/components/FloatingSymbols";
+import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
+import Badge from "@/components/ui/Badge";
+import { CheckIcon } from "@/components/icons";
+import { DURATION, transition } from "@/lib/motion";
+import { answerChoiceStyle } from "@/lib/answer-style";
 import { TEAM_MIN_SEATS, TEAM_SEAT_PRICE, PRO_PRICE } from "@/lib/billing";
 
 // ── Data ────────────────────────────────────────────────────────────────────
@@ -42,19 +48,11 @@ const OLYMPIAD_MARQUEE = [
   "USACO", "ACSL", "F=ma", "USNCO", "USABO", "Science Olympiad", "Science Bowl",
 ];
 
-const EASE = [0.16, 1, 0.3, 1] as const;
-
 // ── Sub-components ───────────────────────────────────────────────────────────
 
 function AppWindow({ children }: { children: React.ReactNode }) {
   return (
-    <div
-      className="relative rounded-2xl overflow-hidden"
-      style={{
-        border: "1px solid rgba(255,255,255,0.08)",
-        boxShadow: "0 0 0 1px rgba(255,255,255,0.04), 0 40px 100px rgba(0,0,0,0.85), 0 0 100px rgba(232,168,32,0.07)",
-      }}
-    >
+    <Card accentGlow radius="2xl" className="relative">
       <div className="flex items-center gap-2 px-4 py-3 bg-[#111] border-b border-white/[0.06]">
         <div className="flex gap-1.5">
           <span className="w-3 h-3 rounded-full bg-[#FF5F56]" />
@@ -68,7 +66,7 @@ function AppWindow({ children }: { children: React.ReactNode }) {
         </div>
       </div>
       {children}
-    </div>
+    </Card>
   );
 }
 
@@ -82,7 +80,7 @@ function ChatPreview() {
       </div>
       <div className="flex gap-2">
         <div className="w-4 h-4 rounded-md bg-accent flex items-center justify-center shrink-0 mt-0.5">
-          <svg width="7" height="7" viewBox="0 0 10 10" fill="none" stroke="black" strokeWidth="2.2"><path d="M1 5.5L3.5 8 9 2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <CheckIcon />
         </div>
         <div className="text-xs text-text-2 leading-relaxed">If all 6 letters were distinct, how many arrangements would there be?</div>
       </div>
@@ -91,7 +89,7 @@ function ChatPreview() {
       </div>
       <div className="flex gap-2">
         <div className="w-4 h-4 rounded-md bg-accent flex items-center justify-center shrink-0 mt-0.5">
-          <svg width="7" height="7" viewBox="0 0 10 10" fill="none" stroke="black" strokeWidth="2.2"><path d="M1 5.5L3.5 8 9 2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <CheckIcon />
         </div>
         <div className="text-xs text-text-2 leading-relaxed">Good. Now the two A's are identical — how does that affect the count?</div>
       </div>
@@ -228,7 +226,7 @@ function InteractiveMockTest() {
   };
 
   return (
-    <div className="rounded-2xl border border-white/[0.08] bg-[#0d0d0d] overflow-hidden" style={{ boxShadow: "0 8px 60px rgba(0,0,0,0.6)" }}>
+    <Card accentGlow radius="2xl" bg="bg-[#0d0d0d]" style={{ boxShadow: "0 8px 60px rgba(0,0,0,0.6)" }}>
       {/* Test header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07] bg-surface">
         <div className="flex items-center gap-4">
@@ -256,13 +254,7 @@ function InteractiveMockTest() {
               const letter = c[0];
               const isSelected = selected === letter;
               const isRight = letter === q.correct;
-              let style = "border-border-2 bg-surface text-text-2 hover:border-[#484848] hover:text-text";
-              if (selected) {
-                if (isSelected && isRight) style = "border-green-500/60 bg-green-500/10 text-green-400";
-                else if (isSelected && !isRight) style = "border-red-500/50 bg-red-500/10 text-red-400";
-                else if (!isSelected && isRight) style = "border-green-500/40 bg-green-500/[0.06] text-green-500/70";
-                else style = "border-border bg-surface text-[#444] opacity-50";
-              }
+              const style = answerChoiceStyle(isSelected, isRight, !!selected);
               return (
                 <button
                   key={c}
@@ -282,7 +274,7 @@ function InteractiveMockTest() {
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              transition={transition(DURATION.base)}
               className={`mt-5 p-4 rounded-xl border text-sm leading-relaxed ${isCorrect ? "border-green-500/30 bg-green-500/[0.07] text-green-300/80" : "border-red-500/30 bg-red-500/[0.07] text-red-300/80"}`}
             >
               <p className={`text-xs font-medium mb-1.5 ${isCorrect ? "text-green-400" : "text-red-400"}`}>
@@ -295,7 +287,7 @@ function InteractiveMockTest() {
 
         {/* Sidebar */}
         <div className="space-y-5">
-          <div className="p-5 rounded-xl border border-white/[0.07] bg-surface">
+          <Card elevated={false} radius="xl" className="p-5">
             <p className="text-xs font-medium text-text-2 mb-4">Score</p>
             <div className="text-4xl font-semibold tracking-[-0.04em] mb-1">
               {score.correct}<span className="text-xl text-text-2 font-normal">/{score.total || "–"}</span>
@@ -306,18 +298,18 @@ function InteractiveMockTest() {
                 <div className="h-full bg-accent rounded-full transition-all duration-500" style={{ width: `${(score.correct / score.total) * 100}%` }} />
               </div>
             )}
-          </div>
+          </Card>
 
-          <div className="p-5 rounded-xl border border-white/[0.07] bg-surface">
+          <Card elevated={false} radius="xl" className="p-5">
             <p className="text-xs font-medium text-text-2 mb-3">Instructions</p>
             <p className="text-xs text-text-2 leading-relaxed">Select the best answer. No penalty for guessing. Each correct answer is worth 6 points.</p>
-          </div>
+          </Card>
 
           {revealed && (
             <motion.button
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+              transition={transition(DURATION.fast, 0.15)}
               onClick={next}
               className="w-full py-3 rounded-xl bg-accent text-background text-sm font-semibold hover:bg-accent-hover transition-colors"
             >
@@ -326,7 +318,7 @@ function InteractiveMockTest() {
           )}
         </div>
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -379,14 +371,8 @@ function InteractiveDiagnostic() {
     setSkills(SKILL_INITIAL);
   };
 
-  const DIFF_COLOR: Record<string, string> = {
-    Intermediate: "text-text-2 border-border-2 bg-white/[0.04]",
-    Advanced: "text-text border-border-2 bg-white/[0.06]",
-    Olympiad: "text-accent border-accent/30 bg-accent/10",
-  };
-
   return (
-    <div className="rounded-2xl border border-white/[0.08] bg-[#0d0d0d] overflow-hidden" style={{ boxShadow: "0 8px 60px rgba(0,0,0,0.6)" }}>
+    <Card accentGlow radius="2xl" bg="bg-[#0d0d0d]" style={{ boxShadow: "0 8px 60px rgba(0,0,0,0.6)" }}>
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07] bg-surface">
         <div className="flex items-center gap-3">
@@ -396,9 +382,7 @@ function InteractiveDiagnostic() {
           {done && <span className="text-xs text-green-400">Assessment complete</span>}
         </div>
         {!done && (
-          <span className={`text-2xs font-medium px-2.5 py-1 rounded-full border ${DIFF_COLOR[dq.difficulty] ?? ""}`}>
-            {dq.difficulty}
-          </span>
+          <Badge variant={dq.difficulty === "Olympiad" ? "accent" : "neutral"}>{dq.difficulty}</Badge>
         )}
       </div>
 
@@ -413,7 +397,7 @@ function InteractiveDiagnostic() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -12 }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  transition={transition(DURATION.base)}
                 >
                   <div className="flex items-center gap-2 mb-5">
                     <span className="text-2xs font-medium text-text-2 px-2 py-0.5 rounded-md border border-border-2 bg-surface">{dq.topic}</span>
@@ -425,13 +409,7 @@ function InteractiveDiagnostic() {
                       const letter = c[0];
                       const isSelected = selected === letter;
                       const isRight = letter === dq.correct;
-                      let style = "border-border-2 bg-surface text-text-2 hover:border-[#484848] hover:text-text cursor-pointer";
-                      if (selected) {
-                        if (isSelected && isRight) style = "border-green-500/60 bg-green-500/10 text-green-400";
-                        else if (isSelected && !isRight) style = "border-red-500/50 bg-red-500/10 text-red-400";
-                        else if (isRight) style = "border-green-500/40 text-green-500/60";
-                        else style = "border-border bg-surface text-[#444] opacity-40";
-                      }
+                      const style = answerChoiceStyle(isSelected, isRight, !!selected);
                       return (
                         <button key={c} onClick={() => handleSelect(letter)} disabled={!!selected}
                           className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border text-sm text-left transition-all duration-150 ${style}`}>
@@ -451,7 +429,7 @@ function InteractiveDiagnostic() {
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
+                    transition={transition(DURATION.fast)}
                     className="mt-5 flex items-center gap-3 px-4 py-3 rounded-xl border border-accent/30 bg-accent/[0.07]"
                   >
                     <div className="w-3 h-3 border border-accent border-t-transparent rounded-full animate-spin shrink-0" />
@@ -461,19 +439,19 @@ function InteractiveDiagnostic() {
               </AnimatePresence>
             </>
           ) : (
-            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}>
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={transition(DURATION.slow)}>
               <p className="text-xs font-medium text-accent mb-4">Assessment complete</p>
               <h3 className="text-2xl font-semibold tracking-tight mb-3">Your level: <span className="text-accent">Advanced</span></h3>
               <p className="text-sm text-text-2 leading-relaxed mb-6 max-w-sm">Strong in Algebra and Number Theory. Focus on Geometry proofs and advanced Combinatorics to reach Olympiad level.</p>
-              <button onClick={reset} className="px-4 py-2.5 rounded-xl border border-white/[0.1] text-sm text-text-2 hover:text-text hover:border-white/20 transition-colors">
+              <Button variant="secondary" size="sm" onClick={reset}>
                 Restart diagnostic
-              </button>
+              </Button>
             </motion.div>
           )}
         </div>
 
         {/* Right: live skill bars */}
-        <div className="p-5 rounded-xl border border-white/[0.07] bg-surface self-start">
+        <Card elevated={false} radius="xl" className="p-5 self-start">
           <p className="text-xs font-medium text-text-2 mb-5">Live assessment</p>
           <div className="space-y-5">
             {Object.entries(skills).map(([topic, pct]) => (
@@ -487,7 +465,7 @@ function InteractiveDiagnostic() {
                     className="h-full rounded-full bg-accent"
                     initial={{ width: 0 }}
                     animate={{ width: `${pct}%` }}
-                    transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                    transition={transition(DURATION.slower)}
                   />
                 </div>
               </div>
@@ -500,9 +478,9 @@ function InteractiveDiagnostic() {
               <p className="text-sm font-semibold text-text">{DIAG_SEQUENCE[qIdx - 1]?.difficulty ?? "—"}</p>
             </div>
           )}
-        </div>
+        </Card>
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -585,6 +563,10 @@ const COMPARISON_ROWS: ComparisonRow[] = [
   },
 ];
 
+// Section vertical rhythm convention: py-32 is the standard section pad; hero uses
+// pt-28 pb-0 (flows straight into the AppWindow demo); bottom CTA uses py-36 (largest —
+// deliberate emphasis on the close); Faq keeps its own denser py-20.
+
 // ── Main page ────────────────────────────────────────────────────────────────
 
 export default function LandingPage() {
@@ -632,9 +614,7 @@ export default function LandingPage() {
         </span>
         <div className="flex items-center gap-6">
           <Link href="#pricing" className="text-sm text-text-2 hover:text-text transition-colors duration-150">Pricing</Link>
-          <Link href="/coach" className="text-sm font-semibold px-4 py-2 rounded-lg bg-accent text-background hover:bg-accent-hover transition-all duration-150">
-            Open app →
-          </Link>
+          <Button href="/coach" size="sm">Open app →</Button>
         </div>
       </nav>
 
@@ -651,7 +631,7 @@ export default function LandingPage() {
             className="mb-8 text-sm text-text-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: EASE }}
+            transition={transition(DURATION.slow)}
           >
             Joined by {accountCount.toLocaleString()}+ competitors
           </motion.p>
@@ -662,7 +642,7 @@ export default function LandingPage() {
           className="font-sans text-[clamp(34px,4.2vw,56px)] font-semibold tracking-[-0.03em] leading-[1.1] max-w-4xl text-white"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: EASE, delay: 0.08 }}
+          transition={transition(DURATION.slower, 0.08)}
         >
           Your coach that
           <br />
@@ -673,7 +653,7 @@ export default function LandingPage() {
           className="mt-6 text-base text-white/80 leading-relaxed max-w-lg font-sans"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: EASE, delay: 0.18 }}
+          transition={transition(DURATION.slow, 0.18)}
         >
           Socratic AI coaching for AMC · AIME · USAMO · USACO · USAPhO · USNCO · USABO · Science Olympiad
         </motion.p>
@@ -683,20 +663,10 @@ export default function LandingPage() {
           className="flex flex-wrap items-center justify-center gap-3 mt-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: EASE, delay: 0.28 }}
+          transition={transition(DURATION.slow, 0.28)}
         >
-          <Link
-            href="/coach"
-            className="px-6 py-3 rounded-xl text-sm font-medium bg-accent text-background hover:bg-accent-hover transition-all duration-150"
-          >
-            Start training free
-          </Link>
-          <Link
-            href="#demo"
-            className="px-6 py-3 rounded-xl text-sm font-medium border border-white/10 text-text-2 hover:border-white/20 hover:text-text transition-all duration-150"
-          >
-            See it in action ↓
-          </Link>
+          <Button href="/coach">Start training free</Button>
+          <Button href="#demo" variant="secondary">See it in action ↓</Button>
         </motion.div>
 
         {/* Hero app screenshot */}
@@ -704,7 +674,7 @@ export default function LandingPage() {
           className="relative mt-16 w-full max-w-4xl mx-auto"
           initial={{ opacity: 0, y: 48, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.9, ease: EASE, delay: 0.42 }}
+          transition={transition(DURATION.hero, 0.42)}
         >
           <AppWindow>
             <div className="p-6 bg-[#0d0d0d]">
@@ -718,9 +688,9 @@ export default function LandingPage() {
       <div className="relative z-10 overflow-hidden border-y border-white/[0.06] py-4 mt-4">
         <div className="flex gap-3 marquee-track">
           {[...OLYMPIAD_MARQUEE, ...OLYMPIAD_MARQUEE].map((s, i) => (
-            <span key={i} className="shrink-0 px-3 py-1 rounded-md border border-border-2 bg-surface text-xs text-text-2 whitespace-nowrap">
+            <Badge key={i} variant="neutral" className="shrink-0 whitespace-nowrap">
               {s}
-            </span>
+            </Badge>
           ))}
         </div>
       </div>
@@ -738,7 +708,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-12 gap-4">
             {/* Coaching — large */}
             <Reveal className="col-span-12 md:col-span-7" y={32} delay={0.05}>
-              <div className="h-full rounded-2xl border border-white/[0.08] bg-surface overflow-hidden hover:border-white/[0.14] transition-colors duration-300" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
+              <Card hoverable radius="2xl" className="h-full">
                 <div className="p-6 pb-2">
                   <span className="text-xs font-medium text-accent">Coach mode</span>
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Socratic coaching</h3>
@@ -751,12 +721,12 @@ export default function LandingPage() {
                   </div>
                   <ChatPreview />
                 </div>
-              </div>
+              </Card>
             </Reveal>
 
             {/* Problems — small */}
             <Reveal className="col-span-12 md:col-span-5" y={32} delay={0.12}>
-              <div className="h-full rounded-2xl border border-white/[0.08] bg-surface overflow-hidden hover:border-white/[0.14] transition-colors duration-300" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
+              <Card hoverable radius="2xl" className="h-full">
                 <div className="p-6 pb-2">
                   <span className="text-xs font-medium text-accent">Practice mode</span>
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Competition-caliber problems</h3>
@@ -765,12 +735,12 @@ export default function LandingPage() {
                 <div className="mx-4 mb-4 mt-4 rounded-xl border border-border-2 bg-[#0d0d0d]">
                   <ProblemPreview />
                 </div>
-              </div>
+              </Card>
             </Reveal>
 
             {/* Interactive Mock Test — full width */}
             <Reveal className="col-span-12" y={32} delay={0.16}>
-              <div className="rounded-2xl border border-white/[0.08] bg-surface overflow-hidden" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
+              <Card radius="2xl">
                 <div className="px-6 pt-6 pb-4 border-b border-white/[0.06]">
                   <span className="text-xs font-medium text-accent">Mock test</span>
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Full AMC practice, built in.</h3>
@@ -779,12 +749,12 @@ export default function LandingPage() {
                 <div className="p-6">
                   <InteractiveMockTest />
                 </div>
-              </div>
+              </Card>
             </Reveal>
 
             {/* Interactive Diagnostic — full width */}
             <Reveal className="col-span-12" y={32} delay={0.2}>
-              <div className="rounded-2xl border border-white/[0.08] bg-surface overflow-hidden" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
+              <Card radius="2xl">
                 <div className="px-6 pt-6 pb-4 border-b border-white/[0.06]">
                   <span className="text-xs font-medium text-accent">Diagnostic assessment</span>
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Knows exactly where you stand.</h3>
@@ -793,12 +763,12 @@ export default function LandingPage() {
                 <div className="p-6">
                   <InteractiveDiagnostic />
                 </div>
-              </div>
+              </Card>
             </Reveal>
 
             {/* Diagnostic — small */}
             <Reveal className="col-span-12 md:col-span-5" y={32} delay={0.24}>
-              <div className="h-full rounded-2xl border border-white/[0.08] bg-surface overflow-hidden hover:border-white/[0.14] transition-colors duration-300" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
+              <Card hoverable radius="2xl" className="h-full">
                 <div className="p-6 pb-2">
                   <span className="text-xs font-medium text-accent">Diagnose mode</span>
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Adaptive diagnostic</h3>
@@ -807,12 +777,12 @@ export default function LandingPage() {
                 <div className="mx-4 mb-4 mt-4 rounded-xl border border-border-2 bg-[#0d0d0d]">
                   <DiagnosticPreview />
                 </div>
-              </div>
+              </Card>
             </Reveal>
 
             {/* Prep campaign — large */}
             <Reveal className="col-span-12 md:col-span-7" y={32} delay={0.3}>
-              <div className="h-full rounded-2xl border border-white/[0.08] bg-surface overflow-hidden hover:border-white/[0.14] transition-colors duration-300" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
+              <Card hoverable radius="2xl" className="h-full">
                 <div className="p-6 pb-2">
                   <span className="text-xs font-medium text-accent">Prep campaign</span>
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Day-by-day study plan</h3>
@@ -821,7 +791,7 @@ export default function LandingPage() {
                 <div className="mx-4 mb-4 mt-4 rounded-xl border border-border-2 bg-[#0d0d0d]">
                   <CalendarPreview />
                 </div>
-              </div>
+              </Card>
             </Reveal>
           </div>
         </div>
@@ -869,8 +839,6 @@ export default function LandingPage() {
 
       {/* ── Testimonials ── */}
       <section className="relative z-10 px-8 py-32">
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        </div>
         <div className="max-w-6xl mx-auto">
           <Reveal>
             <div className="text-center mb-20">
@@ -883,10 +851,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {TESTIMONIALS.map((t, i) => (
               <Reveal key={t.name} y={40} delay={i * 0.12}>
-                <div
-                  className="relative flex flex-col h-full p-8 rounded-2xl border border-white/[0.08] bg-surface hover:border-white/[0.14] transition-all duration-300 overflow-hidden"
-                  style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}
-                >
+                <Card hoverable radius="2xl" className="relative flex flex-col h-full p-8">
                   <div className="text-6xl text-accent/40 font-serif leading-none mb-5 select-none">&ldquo;</div>
                   <p className="text-base text-text leading-relaxed flex-1 mb-8">{t.quote}</p>
                   <div className="flex items-center gap-3 pt-5 border-t border-white/[0.07]">
@@ -898,7 +863,7 @@ export default function LandingPage() {
                       <p className="text-xs text-text-2">{t.role}</p>
                     </div>
                   </div>
-                </div>
+                </Card>
               </Reveal>
             ))}
           </div>
@@ -917,14 +882,11 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {STATS.map((s, i) => (
               <Reveal key={s.stat} y={32} delay={i * 0.12}>
-                <div
-                  className="p-8 rounded-2xl border border-white/[0.08] bg-surface h-full"
-                  style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}
-                >
+                <Card radius="2xl" className="p-8 h-full">
                   <div className="text-4xl font-semibold tracking-[-0.04em] mb-4 text-accent">{s.stat}</div>
                   <p className="text-sm text-text-2 leading-relaxed mb-4">{s.desc}</p>
                   <p className="text-2xs text-[#555]">{s.source}</p>
-                </div>
+                </Card>
               </Reveal>
             ))}
           </div>
@@ -947,7 +909,7 @@ export default function LandingPage() {
           </Reveal>
 
           <Reveal y={32} delay={0.1}>
-            <div className="rounded-2xl border border-white/[0.08] bg-surface overflow-hidden" style={{ boxShadow: "0 4px 60px rgba(0,0,0,0.5), 0 0 80px rgba(232,168,32,0.04)" }}>
+            <Card accentGlow radius="2xl">
               {/* Table header strip */}
               <div className="px-8 pt-8 pb-6 border-b border-white/[0.06]">
                 <div className="grid gap-4" style={{ gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr" }}>
@@ -956,9 +918,7 @@ export default function LandingPage() {
                     <div key={c.name} className={`text-center ${c.highlight ? "" : ""}`}>
                       {c.highlight ? (
                         <div className="inline-flex flex-col items-center gap-1.5">
-                          <span className="px-3 py-1 rounded-full bg-accent/15 border border-accent/30 text-xs font-semibold text-accent">
-                            PolyTeach
-                          </span>
+                          <Badge variant="accent">PolyTeach</Badge>
                         </div>
                       ) : (
                         <span className="text-xs text-[#555] font-medium">{c.name}</span>
@@ -1037,7 +997,7 @@ export default function LandingPage() {
                 </div>
                 <p className="text-2xs text-[#444] ml-auto">Competitor features based on publicly available information as of 2026.</p>
               </div>
-            </div>
+            </Card>
           </Reveal>
         </div>
       </section>
@@ -1062,7 +1022,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {/* Free */}
             <Reveal y={32} delay={0.05}>
-              <div className="h-full p-7 rounded-2xl border border-white/[0.08] bg-surface flex flex-col" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
+              <Card radius="2xl" className="h-full p-7 flex flex-col">
                 <p className="text-sm font-medium text-text-2">Free</p>
                 <div className="mt-4 mb-1">
                   <span className="text-4xl font-semibold tracking-[-0.03em]">$0</span>
@@ -1076,18 +1036,18 @@ export default function LandingPage() {
                     </li>
                   ))}
                 </ul>
-                <Link href="/coach" className="px-4 py-2.5 rounded-xl text-sm font-medium text-center border border-white/[0.1] text-text-2 hover:border-white/[0.2] hover:text-text transition-all duration-150">
+                <Button href="/coach" variant="secondary" className="text-center">
                   Start training
-                </Link>
-              </div>
+                </Button>
+              </Card>
             </Reveal>
 
             {/* Pro */}
             <Reveal y={32} delay={0.12}>
-              <div className="relative h-full p-7 rounded-2xl border border-accent bg-surface-2 flex flex-col" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.5), 0 0 40px rgba(232,168,32,0.08)" }}>
+              <Card accentGlow radius="2xl" border="border-accent" bg="bg-surface-2" className="relative h-full p-7 flex flex-col">
                 <div className="flex items-center justify-between mb-0.5">
                   <p className="text-sm font-medium text-accent">Pro</p>
-                  <span className="text-2xs text-text-2 px-2 py-0.5 rounded-full border border-white/[0.1]">Most popular</span>
+                  <Badge variant="neutral">Most popular</Badge>
                 </div>
                 <div className="mt-4 mb-1">
                   <span className="text-4xl font-semibold tracking-[-0.03em]">${PRO_PRICE}</span>
@@ -1102,15 +1062,15 @@ export default function LandingPage() {
                     </li>
                   ))}
                 </ul>
-                <button onClick={() => subscribe("pro")} disabled={checkoutLoading !== null} className="px-4 py-2.5 rounded-xl text-sm font-semibold bg-accent text-background hover:bg-accent-hover disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-150">
+                <Button onClick={() => subscribe("pro")} disabled={checkoutLoading !== null}>
                   {checkoutLoading === "pro" ? "Redirecting…" : "Subscribe"}
-                </button>
-              </div>
+                </Button>
+              </Card>
             </Reveal>
 
             {/* Team */}
             <Reveal y={32} delay={0.18}>
-              <div className="h-full p-7 rounded-2xl border border-white/[0.08] bg-surface flex flex-col" style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
+              <Card radius="2xl" className="h-full p-7 flex flex-col">
                 <p className="text-sm font-medium text-text-2">Team / School</p>
                 <div className="mt-4 mb-1">
                   <span className="text-4xl font-semibold tracking-[-0.03em]">${TEAM_SEAT_PRICE}</span>
@@ -1137,10 +1097,10 @@ export default function LandingPage() {
                   />
                   <span className="text-xs text-text-2">= ${seats * TEAM_SEAT_PRICE}/mo</span>
                 </div>
-                <button onClick={() => subscribe("team")} disabled={checkoutLoading !== null} className="px-4 py-2.5 rounded-xl text-sm font-medium border border-white/[0.1] text-text-2 hover:border-white/[0.2] hover:text-text disabled:opacity-50 transition-all duration-150">
+                <Button onClick={() => subscribe("team")} disabled={checkoutLoading !== null} variant="secondary">
                   {checkoutLoading === "team" ? "Redirecting…" : "Subscribe"}
-                </button>
-              </div>
+                </Button>
+              </Card>
             </Reveal>
           </div>
 
@@ -1159,7 +1119,8 @@ export default function LandingPage() {
 
       {/* ── Bottom CTA ── */}
       <section className="relative z-10 px-8 py-36 text-center overflow-hidden">
-        <div className="pointer-events-none absolute inset-0">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] rounded-full bg-accent/[0.06] blur-[140px]" />
         </div>
         <Reveal>
           <h2 className="text-[clamp(28px,4vw,54px)] font-semibold tracking-[-0.03em] mb-5">

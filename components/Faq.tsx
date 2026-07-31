@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Reveal from "./Reveal";
 import TypeText from "./TypeText";
+import Card from "./ui/Card";
+import { transition, DURATION } from "@/lib/motion";
 
 const FAQ_ITEMS = [
   {
@@ -35,8 +37,8 @@ function FaqRow({ q, a, delay }: { q: string; a: string; delay: number }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <Reveal y={16} transition={{ duration: 0.4, delay }}>
-      <div className="rounded-xl border border-white/[0.08] bg-surface overflow-hidden">
+    <Reveal y={16} transition={transition(DURATION.base, delay)}>
+      <Card radius="xl">
         <button
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
@@ -68,7 +70,7 @@ function FaqRow({ q, a, delay }: { q: string; a: string; delay: number }) {
             <p className="px-5 pb-4 text-sm text-text-2 leading-relaxed">{a}</p>
           </div>
         </div>
-      </div>
+      </Card>
     </Reveal>
   );
 }
@@ -77,7 +79,7 @@ export default function Faq() {
   return (
     <section className="relative z-10 px-8 py-20 border-t border-border">
       <div className="max-w-2xl mx-auto">
-        <Reveal transition={{ duration: 0.5, delay: 0.1 }}>
+        <Reveal transition={transition(DURATION.slow, 0.1)}>
           <div className="text-center mb-12">
             <h2 className="text-xl font-semibold tracking-[-0.025em]">
               <TypeText text="Frequently asked questions" delay={0.1} />

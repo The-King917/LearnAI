@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import Card from "@/components/ui/Card";
+import Badge from "@/components/ui/Badge";
 
 interface MockTestEntry {
   id: string;
@@ -48,6 +50,20 @@ interface DashboardData {
   studyPlans: StudyPlan[];
 }
 
+interface Milestone {
+  id: string;
+  label: string;
+  detail: string;
+}
+
+interface StreakData {
+  currentStreak: number;
+  longestStreak: number;
+  totalActiveDays: number;
+  last7Days: boolean[];
+  milestones: Milestone[];
+}
+
 function MiniSparkline({ values, color = "white" }: { values: number[]; color?: string }) {
   if (values.length < 2) return <span className="text-2xs text-text-2">—</span>;
   const min = Math.min(...values);
@@ -85,15 +101,22 @@ function levelColor(level: string) {
 export default function ProgressPage() {
   const { data: session, status } = useSession();
   const [data, setData] = useState<DashboardData | null>(null);
+  const [streak, setStreak] = useState<StreakData | null>(null);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<"overview" | "tests" | "concepts">("overview");
 
   useEffect(() => {
     if (status === "unauthenticated") { setLoading(false); return; }
     if (status !== "authenticated") return;
-    fetch("/api/progress/dashboard")
-      .then((r) => r.json())
-      .then((d: DashboardData) => { setData(d); setLoading(false); })
+    Promise.all([
+      fetch("/api/progress/dashboard").then((r) => r.json()),
+      fetch("/api/progress/streak").then((r) => r.json()),
+    ])
+      .then(([d, s]: [DashboardData, StreakData]) => {
+        setData(d);
+        setStreak(s);
+        setLoading(false);
+      })
       .catch(() => setLoading(false));
   }, [status]);
 
@@ -151,19 +174,39 @@ export default function ProgressPage() {
 
       <div className="max-w-5xl mx-auto px-6 py-10">
         {/* Summary strip */}
-        <div className="grid grid-cols-3 gap-4 mb-10">
-          <div className="p-5 rounded-xl border border-border bg-surface text-center">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+          <Card elevated={false} radius="xl" className="p-5 text-center">
             <p className="text-3xl font-semibold tracking-[-0.03em]">{totalTests}</p>
             <p className="text-xs text-text-2 mt-1">mock tests completed</p>
-          </div>
-          <div className="p-5 rounded-xl border border-border bg-surface text-center">
+          </Card>
+          <Card elevated={false} radius="xl" className="p-5 text-center">
             <p className="text-3xl font-semibold tracking-[-0.03em]">{avgPercentile !== null ? `~${avgPercentile}th` : "—"}</p>
             <p className="text-xs text-text-2 mt-1">avg percentile estimate</p>
-          </div>
-          <div className="p-5 rounded-xl border border-border bg-surface text-center">
+          </Card>
+          <Card elevated={false} radius="xl" className="p-5 text-center">
             <p className="text-3xl font-semibold tracking-[-0.03em]">{studentModels.length}</p>
             <p className="text-xs text-text-2 mt-1">competitions tracked</p>
-          </div>
+          </Card>
+          <Card elevated={false} radius="xl" className="p-5 text-center">
+            <p className="text-3xl font-semibold tracking-[-0.03em]">{streak?.currentStreak ?? 0}</p>
+            <p className="text-xs text-text-2 mt-1">day streak</p>
+            <div className="flex justify-center gap-1 mt-3">
+              {(streak?.last7Days ?? Array(7).fill(false)).map((active, i) => (
+                <span key={i} className={`w-1.5 h-1.5 rounded-full ${active ? "bg-accent" : "bg-surface-2"}`} />
+              ))}
+            </div>
+          </Card>
+        </div>
+
+        {/* Milestones */}
+        <div className="mb-10">
+          {streak && streak.milestones.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {streak.milestones.map((m) => (
+                <Badge key={m.id} variant="neutral" title={m.detail}>{m.label}</Badge>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Overview tab */}

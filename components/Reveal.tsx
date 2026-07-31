@@ -2,9 +2,9 @@
 
 import { motion, type Transition } from "framer-motion";
 import type { ReactNode } from "react";
+import { transition as motionTransition, DURATION } from "@/lib/motion";
 
-// Expo ease-out — fast start, smooth deceleration (Scale AI / Linear style)
-const EASE_OUT: Transition = { duration: 0.7, ease: [0.16, 1, 0.3, 1] };
+const EASE_OUT: Transition = motionTransition(DURATION.slower);
 
 export default function Reveal({
   children,
