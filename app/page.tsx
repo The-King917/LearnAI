@@ -6,6 +6,7 @@ import LandingDemo from "@/components/LandingDemo";
 import Reveal from "@/components/Reveal";
 import Faq from "@/components/Faq";
 import FloatingSymbols from "@/components/FloatingSymbols";
+import Logomark from "@/components/Logomark";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
@@ -605,21 +606,26 @@ export default function LandingPage() {
     <div className="min-h-screen bg-background text-text overflow-x-hidden">
       {/* Static dot grid */}
       <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
+      {/* Fine grain texture */}
+      <div className="fixed inset-0 pointer-events-none z-0 bg-grain" style={{ backgroundSize: "3px 3px" }} />
       <FloatingSymbols />
 
       {/* ── Nav ── */}
-      <nav className="relative z-50 flex items-center justify-between px-8 py-5 border-b border-white/[0.06] backdrop-blur-md bg-background/80">
-        <span className="flex items-center text-sm font-semibold tracking-tight">
-          <span className="text-text">Poly</span><span className="text-accent">Teach</span>
-        </span>
-        <div className="flex items-center gap-6">
-          <Link href="#pricing" className="text-sm text-text-2 hover:text-text transition-colors duration-150">Pricing</Link>
-          <Button href="/coach" size="sm">Open app →</Button>
+      <nav className="fixed top-4 inset-x-4 md:inset-x-8 z-[60]">
+        <div className="max-w-6xl mx-auto flex items-center justify-between px-5 py-2.5 rounded-full border border-white/[0.08] backdrop-blur-md bg-background/70">
+          <span className="flex items-center gap-2 text-sm font-semibold tracking-tight">
+            <Logomark size={24} />
+            <span><span className="text-text">Poly</span><span className="text-accent">Teach</span></span>
+          </span>
+          <div className="flex items-center gap-6">
+            <Link href="#pricing" className="text-sm text-text-2 hover:text-text transition-colors duration-150">Pricing</Link>
+            <Button href="/coach" size="sm">Open app →</Button>
+          </div>
         </div>
       </nav>
 
       {/* ── Hero ── */}
-      <section className="relative z-10 flex flex-col items-center text-center px-6 pt-28 pb-0">
+      <section className="relative z-10 flex flex-col items-center text-center px-6 pt-36 pb-0">
         {/* Ambient glow */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute left-1/2 top-8 -translate-x-1/2 w-[900px] h-[440px] rounded-full bg-white/[0.035] blur-[140px]" />
@@ -628,7 +634,7 @@ export default function LandingPage() {
         {/* Social proof */}
         {accountCount !== null && (
           <motion.p
-            className="mb-8 text-sm text-text-2"
+            className="mb-6 text-sm text-text-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={transition(DURATION.slow)}
@@ -639,7 +645,7 @@ export default function LandingPage() {
 
         {/* Headline */}
         <motion.h1
-          className="font-sans text-[clamp(34px,4.2vw,56px)] font-semibold tracking-[-0.03em] leading-[1.1] max-w-4xl text-white"
+          className="font-sans text-[clamp(40px,6.2vw,76px)] font-semibold tracking-[-0.03em] leading-[1.08] max-w-4xl text-white"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={transition(DURATION.slower, 0.08)}
@@ -650,7 +656,7 @@ export default function LandingPage() {
         </motion.h1>
 
         <motion.p
-          className="mt-6 text-base text-white/80 leading-relaxed max-w-lg font-sans"
+          className="mt-5 text-base text-white/80 leading-relaxed max-w-lg font-sans"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={transition(DURATION.slow, 0.18)}
@@ -660,7 +666,7 @@ export default function LandingPage() {
 
         {/* CTAs */}
         <motion.div
-          className="flex flex-wrap items-center justify-center gap-3 mt-10"
+          className="flex flex-wrap items-center justify-center gap-3 mt-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={transition(DURATION.slow, 0.28)}
@@ -671,7 +677,7 @@ export default function LandingPage() {
 
         {/* Hero app screenshot */}
         <motion.div
-          className="relative mt-16 w-full max-w-4xl mx-auto"
+          className="relative mt-12 w-full max-w-4xl mx-auto"
           initial={{ opacity: 0, y: 48, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={transition(DURATION.hero, 0.42)}
@@ -696,7 +702,7 @@ export default function LandingPage() {
       </div>
 
       {/* ── Feature bento grid ── */}
-      <section className="relative z-10 px-8 pb-32">
+      <section className="relative z-10 px-8 pt-20 pb-32 bg-[#0c0c0c] border-b border-white/[0.06]">
         <div className="max-w-6xl mx-auto">
           <Reveal>
             <div className="text-center mb-14">
@@ -705,16 +711,16 @@ export default function LandingPage() {
             </div>
           </Reveal>
 
-          <div className="grid grid-cols-12 gap-4">
+          <div className="grid grid-cols-12 gap-6">
             {/* Coaching — large */}
             <Reveal className="col-span-12 md:col-span-7" y={32} delay={0.05}>
               <Card hoverable radius="2xl" className="h-full">
-                <div className="p-6 pb-2">
+                <div className="p-7 pb-3">
                   <span className="text-xs font-medium text-accent">Coach mode</span>
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Socratic coaching</h3>
                   <p className="text-sm text-text-2 leading-relaxed max-w-xs">Never hands you the answer. Asks the exact question that unblocks your thinking — at any hour.</p>
                 </div>
-                <div className="mx-4 mb-4 mt-4 rounded-xl border border-border-2 bg-[#0d0d0d] overflow-hidden">
+                <div className="mx-5 mb-5 mt-5 rounded-xl border border-border-2 bg-[#0d0d0d] overflow-hidden">
                   <div className="flex items-center gap-2 px-3 py-2 border-b border-border bg-surface-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-accent" />
                     <span className="text-2xs text-text-2">AMC 12 · Counting &amp; Probability</span>
@@ -727,12 +733,12 @@ export default function LandingPage() {
             {/* Problems — small */}
             <Reveal className="col-span-12 md:col-span-5" y={32} delay={0.12}>
               <Card hoverable radius="2xl" className="h-full">
-                <div className="p-6 pb-2">
+                <div className="p-7 pb-3">
                   <span className="text-xs font-medium text-accent">Practice mode</span>
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Competition-caliber problems</h3>
                   <p className="text-sm text-text-2 leading-relaxed">Problems matched to real contest difficulty — not generic textbook exercises.</p>
                 </div>
-                <div className="mx-4 mb-4 mt-4 rounded-xl border border-border-2 bg-[#0d0d0d]">
+                <div className="mx-5 mb-5 mt-5 rounded-xl border border-border-2 bg-[#0d0d0d]">
                   <ProblemPreview />
                 </div>
               </Card>
@@ -741,12 +747,12 @@ export default function LandingPage() {
             {/* Interactive Mock Test — full width */}
             <Reveal className="col-span-12" y={32} delay={0.16}>
               <Card radius="2xl">
-                <div className="px-6 pt-6 pb-4 border-b border-white/[0.06]">
+                <div className="px-7 pt-7 pb-5 border-b border-white/[0.06]">
                   <span className="text-xs font-medium text-accent">Mock test</span>
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Full AMC practice, built in.</h3>
                   <p className="text-sm text-text-2 leading-relaxed max-w-xl">Timed, scored, and instantly debriefed — just like the real exam. Try a live question below.</p>
                 </div>
-                <div className="p-6">
+                <div className="p-7">
                   <InteractiveMockTest />
                 </div>
               </Card>
@@ -755,12 +761,12 @@ export default function LandingPage() {
             {/* Interactive Diagnostic — full width */}
             <Reveal className="col-span-12" y={32} delay={0.2}>
               <Card radius="2xl">
-                <div className="px-6 pt-6 pb-4 border-b border-white/[0.06]">
+                <div className="px-7 pt-7 pb-5 border-b border-white/[0.06]">
                   <span className="text-xs font-medium text-accent">Diagnostic assessment</span>
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Knows exactly where you stand.</h3>
                   <p className="text-sm text-text-2 leading-relaxed max-w-xl">Answer a few questions and watch the system pinpoint your strengths and gaps in real time.</p>
                 </div>
-                <div className="p-6">
+                <div className="p-7">
                   <InteractiveDiagnostic />
                 </div>
               </Card>
@@ -769,12 +775,12 @@ export default function LandingPage() {
             {/* Diagnostic — small */}
             <Reveal className="col-span-12 md:col-span-5" y={32} delay={0.24}>
               <Card hoverable radius="2xl" className="h-full">
-                <div className="p-6 pb-2">
+                <div className="p-7 pb-3">
                   <span className="text-xs font-medium text-accent">Diagnose mode</span>
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Adaptive diagnostic</h3>
                   <p className="text-sm text-text-2 leading-relaxed">10 questions that map your knowledge ceiling concept-by-concept and generate a study plan.</p>
                 </div>
-                <div className="mx-4 mb-4 mt-4 rounded-xl border border-border-2 bg-[#0d0d0d]">
+                <div className="mx-5 mb-5 mt-5 rounded-xl border border-border-2 bg-[#0d0d0d]">
                   <DiagnosticPreview />
                 </div>
               </Card>
@@ -783,12 +789,12 @@ export default function LandingPage() {
             {/* Prep campaign — large */}
             <Reveal className="col-span-12 md:col-span-7" y={32} delay={0.3}>
               <Card hoverable radius="2xl" className="h-full">
-                <div className="p-6 pb-2">
+                <div className="p-7 pb-3">
                   <span className="text-xs font-medium text-accent">Prep campaign</span>
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Day-by-day study plan</h3>
                   <p className="text-sm text-text-2 leading-relaxed max-w-xs">Set a competition date. The agent builds a day-by-day plan and adjusts after each session based on what you actually understood.</p>
                 </div>
-                <div className="mx-4 mb-4 mt-4 rounded-xl border border-border-2 bg-[#0d0d0d]">
+                <div className="mx-5 mb-5 mt-5 rounded-xl border border-border-2 bg-[#0d0d0d]">
                   <CalendarPreview />
                 </div>
               </Card>
@@ -798,7 +804,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Live Demo ── */}
-      <section id="demo" className="relative z-10 px-8 py-32">
+      <section id="demo" className="relative z-10 px-8 py-32 scroll-mt-24">
         <div className="max-w-5xl mx-auto">
           <Reveal>
             <div className="text-center mb-20">
@@ -894,7 +900,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Comparison table ── */}
-      <section className="relative z-10 px-8 py-32">
+      <section className="relative z-10 px-8 py-32 bg-[#0c0c0c] border-y border-white/[0.06]">
         <div className="max-w-6xl mx-auto">
           <Reveal>
             <div className="text-center mb-16">
@@ -1003,7 +1009,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Pricing ── */}
-      <section id="pricing" className="relative z-10 px-8 py-32">
+      <section id="pricing" className="relative z-10 px-8 py-32 scroll-mt-24">
         <div className="max-w-5xl mx-auto">
           <Reveal>
             <div className="text-center mb-16">
@@ -1148,8 +1154,9 @@ export default function LandingPage() {
           <div className="grid grid-cols-2 md:grid-cols-6 gap-10 pb-14 border-b border-white/[0.06]">
             {/* Brand col */}
             <div className="col-span-2 md:col-span-2">
-              <span className="flex items-center text-sm font-semibold tracking-tight mb-4">
-                <span className="text-text">Poly</span><span className="text-accent">Teach</span>
+              <span className="flex items-center gap-2 text-sm font-semibold tracking-tight mb-4">
+                <Logomark size={22} />
+                <span><span className="text-text">Poly</span><span className="text-accent">Teach</span></span>
               </span>
               <p className="text-xs text-[#555] leading-relaxed max-w-[220px]">
                 AI Socratic coaching for every major math, CS, and science olympiad — available 24/7.
