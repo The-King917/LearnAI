@@ -48,10 +48,13 @@ const config: Config = {
           "radial-gradient(ellipse 70% 42% at 50% 0%, rgba(232,168,32,0.09), transparent 65%), " +
           "radial-gradient(ellipse 38% 32% at 84% 22%, rgba(255,255,255,0.05), transparent 62%), " +
           "radial-gradient(ellipse 46% 36% at 14% 28%, rgba(232,168,32,0.045), transparent 65%)",
-        // Same warm light source, toned down — reused at the top of every major
-        // section so the hero's depth carries through the whole page instead of
-        // stopping after the fold.
-        "mesh-section": "radial-gradient(ellipse 65% 100% at 50% 0%, rgba(232,168,32,0.05), transparent 70%)",
+        // Same multi-source mesh as the hero, at matching strength — reused at the
+        // top of every major section so the hero's depth carries through the whole
+        // page instead of stopping after the fold.
+        "mesh-section":
+          "radial-gradient(ellipse 75% 90% at 50% 0%, rgba(232,168,32,0.10), transparent 68%), " +
+          "radial-gradient(ellipse 40% 55% at 85% 15%, rgba(255,255,255,0.05), transparent 62%), " +
+          "radial-gradient(ellipse 48% 60% at 12% 20%, rgba(232,168,32,0.05), transparent 65%)",
       },
       fontFamily: {
         sans: ["var(--font-geist-sans)", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],

@@ -717,14 +717,14 @@ export default function LandingPage() {
 
       {/* ── Problem ── */}
       <section className="relative z-10 px-8 py-28 border-b border-white/[0.06]">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-mesh-section" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-mesh-section" />
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 md:gap-14 items-start">
           <Reveal className="shrink-0">
             <span className="block text-[96px] leading-none font-semibold tracking-[-0.04em] text-white/[0.08] select-none">01</span>
           </Reveal>
           <Reveal y={24} delay={0.08}>
             <h2 className="text-[clamp(26px,3.6vw,44px)] font-semibold tracking-[-0.035em] leading-[1.15] mb-5 max-w-xl">
-              Most studying plateaus because it&apos;s built around answers, not questions.
+              Most studying plateaus because it&apos;s built around answers, not <span className="font-serif font-normal">questions</span>.
             </h2>
             <p className="text-sm text-text-2 leading-relaxed max-w-lg">
               Watching a worked solution feels like progress. It isn&apos;t. The skill that actually shows up on test day — noticing which idea to reach for, on a problem you&apos;ve never seen — only develops when you&apos;re forced to find it yourself. Most prep resources skip straight to the answer key.
@@ -735,7 +735,7 @@ export default function LandingPage() {
 
       {/* ── Why AI alone isn't enough ── */}
       <section className="relative z-10 px-8 py-28 bg-[#0c0c0c] border-b border-white/[0.06]">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-mesh-section" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-mesh-section" />
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 md:gap-14 items-start mb-14">
             <Reveal className="shrink-0">
@@ -743,7 +743,7 @@ export default function LandingPage() {
             </Reveal>
             <Reveal y={24} delay={0.08}>
               <h2 className="text-[clamp(26px,3.6vw,44px)] font-semibold tracking-[-0.035em] leading-[1.15] mb-5 max-w-xl">
-                A general chatbot won&apos;t fix that — it&apos;s built to be helpful, which means it just tells you.
+                A general chatbot won&apos;t fix that — it&apos;s built to be helpful, which means it just <span className="font-serif font-normal">tells you</span>.
               </h2>
               <p className="text-sm text-text-2 leading-relaxed max-w-lg">
                 Ask a generic AI for help and it optimizes for the fastest correct answer. PolyTeach is built around one constraint instead: never tell, always ask.
@@ -756,7 +756,7 @@ export default function LandingPage() {
 
       {/* ── Feature bento grid ── */}
       <section className="relative z-10 px-8 pt-20 pb-32 bg-[#0c0c0c] border-b border-white/[0.06]">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-mesh-section" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-mesh-section" />
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 md:gap-14 items-start mb-14">
             <Reveal className="shrink-0">
@@ -764,7 +764,7 @@ export default function LandingPage() {
             </Reveal>
             <Reveal y={24} delay={0.08}>
               <p className="text-xs font-semibold uppercase tracking-[0.09em] text-accent mb-3">How PolyTeach differs</p>
-              <h2 className="text-[clamp(24px,3.4vw,44px)] font-semibold tracking-[-0.035em] leading-[1.15] max-w-xl">Built for students serious about competitive academics</h2>
+              <h2 className="text-[clamp(24px,3.4vw,44px)] font-semibold tracking-[-0.035em] leading-[1.15] max-w-xl">Built for students serious about <span className="font-serif font-normal">competitive academics</span></h2>
             </Reveal>
           </div>
 
@@ -862,12 +862,12 @@ export default function LandingPage() {
 
       {/* ── Live Demo ── */}
       <section id="demo" className="relative z-10 px-8 py-32 scroll-mt-24">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-mesh-section" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-mesh-section" />
         <div className="max-w-5xl mx-auto">
           <Reveal>
             <div className="text-center mb-20">
               <p className="text-xs font-semibold uppercase tracking-[0.09em] text-accent mb-3">Live demo</p>
-              <h2 className="text-[clamp(26px,3.8vw,48px)] font-semibold tracking-[-0.035em]">What a session looks like</h2>
+              <h2 className="text-[clamp(26px,3.8vw,48px)] font-semibold tracking-[-0.035em]">What a <span className="font-serif font-normal">session</span> looks like</h2>
               <p className="text-sm text-text-2 mt-4 max-w-md mx-auto leading-relaxed">The coach never gives you the answer. It asks the question that makes you find it.</p>
             </div>
           </Reveal>
@@ -903,12 +903,12 @@ export default function LandingPage() {
 
       {/* ── Testimonials ── */}
       <section className="relative z-10 px-8 py-32">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-mesh-section" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-mesh-section" />
         <div className="max-w-6xl mx-auto">
           <Reveal>
             <div className="text-center mb-20">
               <p className="text-xs font-semibold uppercase tracking-[0.09em] text-accent mb-3">Student results</p>
-              <h2 className="text-[clamp(26px,3.8vw,48px)] font-semibold tracking-[-0.035em]">Students who qualified</h2>
+              <h2 className="text-[clamp(26px,3.8vw,48px)] font-semibold tracking-[-0.035em]">Students who <span className="font-serif font-normal">qualified</span></h2>
               <p className="text-sm text-text-2 mt-4">What changes once you stop looking up solutions.</p>
             </div>
           </Reveal>
@@ -934,12 +934,12 @@ export default function LandingPage() {
 
       {/* ── Stats ── */}
       <section className="relative z-10 px-8 py-32">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-mesh-section" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-mesh-section" />
         <div className="max-w-5xl mx-auto">
           <Reveal>
             <div className="text-center mb-20">
               <p className="text-xs font-semibold uppercase tracking-[0.09em] text-accent mb-3">The research</p>
-              <h2 className="text-[clamp(26px,3.8vw,48px)] font-semibold tracking-[-0.035em]">Why Socratic coaching produces competitors</h2>
+              <h2 className="text-[clamp(26px,3.8vw,48px)] font-semibold tracking-[-0.035em]">Why Socratic coaching produces <span className="font-serif font-normal">competitors</span></h2>
             </div>
           </Reveal>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
@@ -958,13 +958,13 @@ export default function LandingPage() {
 
       {/* ── Comparison table ── */}
       <section className="relative z-10 px-8 py-32 bg-[#0c0c0c] border-y border-white/[0.06]">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-mesh-section" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-mesh-section" />
         <div className="max-w-6xl mx-auto">
           <Reveal>
             <div className="text-center mb-16">
               <p className="text-xs font-semibold uppercase tracking-[0.09em] text-accent mb-3">How we compare</p>
               <h2 className="text-[clamp(26px,3.8vw,48px)] font-semibold tracking-[-0.035em]">
-                The only platform built<br/>for every major olympiad
+                The only platform built<br/><span className="font-serif font-normal">for every major olympiad</span>
               </h2>
               <p className="text-sm text-text-2 mt-5 max-w-lg mx-auto leading-relaxed">
                 AoPS pioneered math olympiad prep. USACO Guide owns competitive programming. But no single platform coaches you across math, CS, physics, chemistry, and biology — until now.
@@ -1054,12 +1054,12 @@ export default function LandingPage() {
 
       {/* ── Pricing ── */}
       <section id="pricing" className="relative z-10 px-8 py-32 scroll-mt-24">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-mesh-section" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-mesh-section" />
         <div className="max-w-5xl mx-auto">
           <Reveal>
             <div className="text-center mb-16">
               <p className="text-xs font-semibold uppercase tracking-[0.09em] text-accent mb-3">Pricing</p>
-              <h2 className="text-[clamp(26px,3.8vw,48px)] font-semibold tracking-[-0.035em]">Simple pricing for serious competitors</h2>
+              <h2 className="text-[clamp(26px,3.8vw,48px)] font-semibold tracking-[-0.035em]">Simple pricing for <span className="font-serif font-normal">serious competitors</span></h2>
               <p className="text-sm text-text-2 mt-4 max-w-sm mx-auto leading-relaxed">
                 AIME qualification is worth $0 to a college if you can&apos;t explain how you solved the problem.
               </p>
@@ -1170,7 +1170,7 @@ export default function LandingPage() {
 
       {/* ── Bottom CTA ── */}
       <section className="relative z-10 px-8 py-36 text-center overflow-hidden">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-mesh-section" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-mesh-section" />
         <div className="pointer-events-none absolute left-1/2 top-10 -translate-x-1/2 text-[120px] leading-none font-semibold tracking-[-0.04em] text-white/[0.04] select-none">
           03
         </div>
