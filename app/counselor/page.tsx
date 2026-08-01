@@ -15,8 +15,8 @@ export default function CounselorWaitlistPage() {
 
   return (
     <div className="min-h-screen bg-background text-text flex flex-col">
-      <div className="fixed inset-0 pointer-events-none" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
-      <div className="fixed inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 80% 55% at 50% -5%, rgba(255,255,255,0.08) 0%, transparent 65%)" }} />
+      <div className="fixed inset-0 pointer-events-none" style={{ backgroundImage: "radial-gradient(rgba(27,27,24,0.025) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
+      <div className="fixed inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 80% 55% at 50% -5%, rgba(31,59,115,0.08) 0%, transparent 65%)" }} />
 
       <nav className="relative z-10 flex items-center justify-between px-8 py-5 border-b border-border/60 backdrop-blur-sm bg-background/70">
         <Link href="/" className="flex items-center text-sm font-semibold tracking-[-0.01em]">
@@ -31,7 +31,7 @@ export default function CounselorWaitlistPage() {
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-24 text-center">
         <div className="max-w-md w-full">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-surface text-xs text-muted mb-8">
-            <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
+            <span className="w-1.5 h-1.5 rounded-full bg-muted" />
             Coming soon
           </div>
 

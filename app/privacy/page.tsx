@@ -22,7 +22,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 export default function PrivacyPage() {
   return (
     <div className="min-h-screen bg-background text-text">
-      <nav className="flex items-center justify-between px-8 py-5 border-b border-white/[0.06]">
+      <nav className="flex items-center justify-between px-8 py-5 border-b border-border">
         <Link href="/" className="flex items-center text-sm font-semibold tracking-tight">
           <span className="text-text">Poly</span><span className="text-accent">Teach</span>
         </Link>
@@ -32,7 +32,7 @@ export default function PrivacyPage() {
       <main className="max-w-2xl mx-auto px-8 py-20">
         <p className="text-sm font-medium text-accent mb-3">Legal</p>
         <h1 className="text-3xl font-semibold tracking-[-0.03em] mb-3">Privacy Policy</h1>
-        <p className="text-sm text-[#555] mb-14">Effective date: {EFFECTIVE_DATE}</p>
+        <p className="text-sm text-muted mb-14">Effective date: {EFFECTIVE_DATE}</p>
 
         <Section title="Who we are">
           <p>PolyTeach ("we", "us", "our") operates the website and application at polyteach.app. We build AI-powered Socratic coaching tools for students preparing for academic olympiads.</p>

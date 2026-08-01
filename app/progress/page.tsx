@@ -77,13 +77,13 @@ function MiniSparkline({ values, color = "white" }: { values: number[]; color?: 
     return `${x},${y}`;
   });
   const trend = values[values.length - 1] > values[0];
-  const lineColor = trend ? "#4ade80" : "#f87171";
+  const lineColor = trend ? "#16a34a" : "#dc2626";
   return (
     <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} className="inline-block">
       <polyline
         points={pts.join(" ")}
         fill="none"
-        stroke={color === "trend" ? lineColor : "rgba(255,255,255,0.5)"}
+        stroke={color === "trend" ? lineColor : "rgba(27,27,24,0.3)"}
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -160,7 +160,7 @@ export default function ProgressPage() {
               key={t}
               onClick={() => setTab(t)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium capitalize transition-all cursor-pointer ${
-                tab === t ? "bg-accent/10 text-accent border border-accent/30" : "text-text-2 hover:text-text hover:bg-white/5"
+                tab === t ? "bg-accent/10 text-accent border border-accent/30" : "text-text-2 hover:text-text hover:bg-surface-3"
               }`}
             >
               {t}
@@ -237,7 +237,7 @@ export default function ProgressPage() {
                           {c.weakTopics.length > 0 && (
                             <div className="flex flex-wrap gap-1">
                               {c.weakTopics.slice(0, 3).map((t) => (
-                                <span key={t} className="text-2xs px-1.5 py-0.5 rounded border border-red-500/20 text-red-400 bg-red-500/5">
+                                <span key={t} className="text-2xs px-1.5 py-0.5 rounded border border-red-500/20 text-red-600 bg-red-500/5">
                                   {t.replace(/_/g, " ")}
                                 </span>
                               ))}

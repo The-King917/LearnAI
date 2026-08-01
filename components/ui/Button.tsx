@@ -12,8 +12,8 @@ const VARIANT: Record<Variant, string> = {
 };
 
 const SIZE: Record<Size, string> = {
-  sm: "px-4 py-2 rounded-lg text-sm",
-  md: "px-6 py-3 rounded-xl text-sm",
+  sm: "px-4 py-2 rounded-full text-sm",
+  md: "px-6 py-3 rounded-full text-sm",
 };
 
 const BASE =

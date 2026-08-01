@@ -84,10 +84,8 @@ export default function LandingDemo() {
   return (
     <div className="rounded-xl border border-border bg-surface shadow-panel overflow-hidden">
       <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-surface-2">
-        <span className="w-2 h-2 rounded-full bg-white/20" />
-        <span className="w-2 h-2 rounded-full bg-white/20" />
-        <span className="w-2 h-2 rounded-full bg-white/20" />
-        <span className="ml-2 text-xs text-muted">Coach — AMC/AIME Number Theory</span>
+        <span className="w-[7px] h-[7px] rounded-full bg-accent" />
+        <span className="text-xs font-medium text-muted">Coach — AMC/AIME Number Theory</span>
       </div>
 
       <div className="px-5 py-6 space-y-4 min-h-[340px]">
@@ -132,7 +130,7 @@ export default function LandingDemo() {
         {thinking && (
           <div className="flex gap-3">
             <div className="w-5 h-5 rounded-lg bg-accent flex items-center justify-center shrink-0 mt-0.5">
-              <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="black" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#F7F4EE" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 5.5L3.5 8 9 2" />
               </svg>
             </div>

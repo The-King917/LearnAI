@@ -44,7 +44,7 @@ const CONTACTS = [
 export default function ContactPage() {
   return (
     <div className="min-h-screen bg-background text-text">
-      <nav className="flex items-center justify-between px-8 py-5 border-b border-white/[0.06]">
+      <nav className="flex items-center justify-between px-8 py-5 border-b border-border">
         <Link href="/" className="flex items-center text-sm font-semibold tracking-tight">
           <span className="text-text">Poly</span><span className="text-accent">Teach</span>
         </Link>
@@ -66,7 +66,7 @@ export default function ContactPage() {
             <svg width="15" height="15" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.4"><rect x="1" y="3" width="12" height="8" rx="1.5"/><path d="M1 4l6 4 6-4" strokeLinecap="round"/></svg>
             asubramanian2000@gmail.com
           </a>
-          <span className="text-[#333]">·</span>
+          <span className="text-subtle">·</span>
           <a
             href="tel:+16303640643"
             className="flex items-center gap-2.5 text-sm text-text-2 hover:text-accent transition-colors duration-150"
@@ -81,15 +81,15 @@ export default function ContactPage() {
             <a
               key={email}
               href={`mailto:${email}`}
-              className="group flex items-start justify-between gap-6 p-6 rounded-2xl border border-white/[0.07] bg-surface hover:border-white/[0.14] hover:bg-surface-2 transition-all duration-200"
+              className="group flex items-start justify-between gap-6 p-6 rounded-2xl border border-border-2 bg-surface hover:border-border-3 hover:bg-surface-2 transition-all duration-200"
             >
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-text mb-1.5 group-hover:text-white transition-colors">{category}</p>
-                <p className="text-xs text-[#555] leading-relaxed">{desc}</p>
+                <p className="text-sm font-semibold text-text mb-1.5 group-hover:text-accent transition-colors">{category}</p>
+                <p className="text-xs text-muted leading-relaxed">{desc}</p>
                 <p className="text-xs text-accent mt-3">{email}</p>
               </div>
               <svg
-                className="shrink-0 mt-0.5 text-[#444] group-hover:text-accent transition-colors duration-200"
+                className="shrink-0 mt-0.5 text-muted group-hover:text-accent transition-colors duration-200"
                 width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"
               >
                 <path d="M3 8h10M9 4l4 4-4 4" strokeLinecap="round" strokeLinejoin="round"/>
@@ -98,7 +98,7 @@ export default function ContactPage() {
           ))}
         </div>
 
-        <div className="mt-16 p-7 rounded-2xl border border-white/[0.06] bg-surface">
+        <div className="mt-16 p-7 rounded-2xl border border-border bg-surface">
           <h2 className="text-sm font-semibold text-text mb-3">Frequently asked questions</h2>
           <p className="text-xs text-text-2 leading-relaxed mb-4">
             Before reaching out, check our FAQ — most questions about how the AI coach works, what competitions we cover, and how billing works are answered there.

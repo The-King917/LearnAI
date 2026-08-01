@@ -51,17 +51,9 @@ const OLYMPIAD_MARQUEE = [
 function AppWindow({ children, glow = false }: { children: React.ReactNode; glow?: boolean }) {
   return (
     <Card accentGlow={glow} radius="3xl" className="relative">
-      <div className="flex items-center gap-2 px-4 py-3 bg-[#111] border-b border-white/[0.06]">
-        <div className="flex gap-1.5">
-          <span className="w-3 h-3 rounded-full bg-[#FF5F56]" />
-          <span className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
-          <span className="w-3 h-3 rounded-full bg-[#27C93F]" />
-        </div>
-        <div className="flex-1 flex justify-center">
-          <div className="px-6 py-1 rounded-[5px] bg-white/[0.04] border border-white/[0.07] text-[11px] text-white/30 tracking-wide">
-            polyteach.app
-          </div>
-        </div>
+      <div className="flex items-center gap-2 px-5 py-3.5 border-b border-border">
+        <span className="w-[7px] h-[7px] rounded-full bg-accent shrink-0" />
+        <span className="text-[12px] font-medium text-muted tracking-wide">polyteach.app</span>
       </div>
       {children}
     </Card>
@@ -140,7 +132,7 @@ function CalendarPreview() {
       <p className="text-xs text-accent font-medium mb-3">AMC 12 prep · 44 days left</p>
       <div className="grid grid-cols-7 gap-1 mb-2">
         {["M","T","W","T","F","S","S"].map((d, i) => (
-          <div key={i} className="text-center text-2xs text-[#555]">{d}</div>
+          <div key={i} className="text-center text-2xs text-muted">{d}</div>
         ))}
       </div>
       <div className="grid grid-cols-7 gap-1">
@@ -224,20 +216,20 @@ function InteractiveMockTest() {
   };
 
   return (
-    <Card radius="2xl" bg="bg-[#0d0d0d]">
+    <Card radius="2xl" bg="bg-surface-2">
       {/* Test header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07] bg-surface">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-border-2 bg-surface">
         <div className="flex items-center gap-4">
           <span className="text-xs font-medium text-accent">AMC 10</span>
-          <span className="text-xs text-[#555]">·</span>
+          <span className="text-xs text-muted">·</span>
           <span className="text-xs text-text-2">Question {qIdx + 8} of 30</span>
           <div className="flex gap-1 ml-2">
             {MOCK_QUESTIONS.map((_, i) => (
-              <div key={i} className={`w-4 h-1 rounded-full transition-colors ${i < score.total ? (score.correct > i ? "bg-accent/60" : "bg-red-500/40") : "bg-white/[0.08]"}`} />
+              <div key={i} className={`w-4 h-1 rounded-full transition-colors ${i < score.total ? (score.correct > i ? "bg-accent/60" : "bg-red-500/40") : "bg-border-2"}`} />
             ))}
           </div>
         </div>
-        <div className={`flex items-center gap-2 text-sm font-semibold tabular-nums ${time < 300 ? "text-red-400" : "text-text"}`}>
+        <div className={`flex items-center gap-2 text-sm font-semibold tabular-nums ${time < 300 ? "text-red-600" : "text-text"}`}>
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="7" cy="7" r="6"/><path d="M7 4v3.5l2 1.5" strokeLinecap="round"/></svg>
           {mins}:{secs}
         </div>
@@ -262,7 +254,7 @@ function InteractiveMockTest() {
                 >
                   <span className={`w-6 h-6 rounded-lg border flex items-center justify-center text-xs font-semibold shrink-0 ${isSelected ? "border-current" : "border-border-2"}`}>{letter}</span>
                   <span>{c.slice(3)}</span>
-                  {selected && isRight && <svg className="ml-auto shrink-0 text-green-400" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 7l3.5 3.5L12 3" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                  {selected && isRight && <svg className="ml-auto shrink-0 text-green-600" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 7l3.5 3.5L12 3" strokeLinecap="round" strokeLinejoin="round"/></svg>}
                 </button>
               );
             })}
@@ -273,9 +265,9 @@ function InteractiveMockTest() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={transition(DURATION.base)}
-              className={`mt-5 p-4 rounded-xl border text-sm leading-relaxed ${isCorrect ? "border-green-500/30 bg-green-500/[0.07] text-green-300/80" : "border-red-500/30 bg-red-500/[0.07] text-red-300/80"}`}
+              className={`mt-5 p-4 rounded-xl border text-sm leading-relaxed ${isCorrect ? "border-green-500/30 bg-green-500/[0.07] text-green-700/80" : "border-red-500/30 bg-red-500/[0.07] text-red-700/80"}`}
             >
-              <p className={`text-xs font-medium mb-1.5 ${isCorrect ? "text-green-400" : "text-red-400"}`}>
+              <p className={`text-xs font-medium mb-1.5 ${isCorrect ? "text-green-700" : "text-red-700"}`}>
                 {isCorrect ? "Correct" : `Incorrect — Answer is ${q.correct}`}
               </p>
               {q.explanation}
@@ -370,14 +362,14 @@ function InteractiveDiagnostic() {
   };
 
   return (
-    <Card radius="2xl" bg="bg-[#0d0d0d]">
+    <Card radius="2xl" bg="bg-surface-2">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07] bg-surface">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-border-2 bg-surface">
         <div className="flex items-center gap-3">
           <span className="text-xs font-medium text-accent">AMC 10 Diagnostic</span>
-          <span className="text-xs text-[#555]">·</span>
+          <span className="text-xs text-muted">·</span>
           {!done && <span className="text-xs text-text-2">Question {qIdx + 1} of {DIAG_SEQUENCE.length}</span>}
-          {done && <span className="text-xs text-green-400">Assessment complete</span>}
+          {done && <span className="text-xs text-green-600">Assessment complete</span>}
         </div>
         {!done && (
           <Badge variant={dq.difficulty === "Olympiad" ? "accent" : "neutral"}>{dq.difficulty}</Badge>
@@ -399,7 +391,7 @@ function InteractiveDiagnostic() {
                 >
                   <div className="flex items-center gap-2 mb-5">
                     <span className="text-2xs font-medium text-text-2 px-2 py-0.5 rounded-md border border-border-2 bg-surface">{dq.topic}</span>
-                    <span className="text-2xs text-[#555]">↑ Difficulty adjusting based on your answers</span>
+                    <span className="text-2xs text-muted">↑ Difficulty adjusting based on your answers</span>
                   </div>
                   <p className="text-base text-text leading-relaxed mb-7">{dq.q}</p>
                   <div className="space-y-2.5">
@@ -621,7 +613,7 @@ export default function LandingPage() {
       {/* ── Nav ── */}
       <nav
         className={`fixed top-0 inset-x-0 z-[60] transition-colors duration-300 ${
-          scrolled ? "border-b border-white/[0.07] bg-background/90 backdrop-blur-sm" : "border-b border-transparent"
+          scrolled ? "border-b border-border-2 bg-background/90 backdrop-blur-sm" : "border-b border-transparent"
         }`}
       >
         <div className="max-w-6xl mx-auto flex items-center justify-between px-6 md:px-8 py-4">
@@ -657,7 +649,7 @@ export default function LandingPage() {
 
         {/* Headline */}
         <motion.h1
-          className="font-sans text-[clamp(42px,6.6vw,84px)] font-medium tracking-[-0.045em] leading-[1.06] max-w-4xl text-white"
+          className="font-sans text-[clamp(42px,6.6vw,84px)] font-medium tracking-[-0.045em] leading-[1.06] max-w-4xl text-text"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={transition(DURATION.slower, 0.08)}
@@ -668,7 +660,7 @@ export default function LandingPage() {
         </motion.h1>
 
         <motion.p
-          className="mt-6 text-base text-white/80 leading-[1.7] max-w-md font-sans"
+          className="mt-6 text-base text-text-2 leading-[1.7] max-w-md font-sans"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={transition(DURATION.slow, 0.18)}
@@ -696,7 +688,7 @@ export default function LandingPage() {
           style={prefersReducedMotion ? undefined : { y: heroParallaxY }}
         >
           <AppWindow glow>
-            <div className="p-6 bg-[#0d0d0d]">
+            <div className="p-6 bg-surface-2">
               <LandingDemo />
             </div>
           </AppWindow>
@@ -704,23 +696,23 @@ export default function LandingPage() {
       </section>
 
       {/* ── Competitions covered — static, editorial, no ticker ── */}
-      <div className="relative z-10 border-y border-white/[0.06] py-5 mt-4">
+      <div className="relative z-10 border-y border-border py-5 mt-4">
         <div className="max-w-4xl mx-auto px-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
           {OLYMPIAD_MARQUEE.map((s, i) => (
             <span key={s} className="flex items-center gap-3 text-2xs text-text-2 tracking-wide">
               {s}
-              {i < OLYMPIAD_MARQUEE.length - 1 && <span className="text-[#333]">·</span>}
+              {i < OLYMPIAD_MARQUEE.length - 1 && <span className="text-border-3">·</span>}
             </span>
           ))}
         </div>
       </div>
 
       {/* ── Problem ── */}
-      <section className="relative z-10 px-8 py-28 border-b border-white/[0.06]">
+      <section className="relative z-10 px-8 py-28 border-b border-border">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-mesh-section" />
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 md:gap-14 items-start">
           <Reveal className="shrink-0">
-            <span className="block text-[96px] leading-none font-semibold tracking-[-0.04em] text-white/[0.08] select-none">01</span>
+            <span className="block text-[96px] leading-none font-semibold tracking-[-0.04em] text-black/[0.05] select-none">01</span>
           </Reveal>
           <Reveal y={24} delay={0.08}>
             <h2 className="text-[clamp(26px,3.6vw,44px)] font-semibold tracking-[-0.035em] leading-[1.15] mb-5 max-w-xl">
@@ -734,12 +726,12 @@ export default function LandingPage() {
       </section>
 
       {/* ── Why AI alone isn't enough ── */}
-      <section className="relative z-10 px-8 py-28 bg-[#0c0c0c] border-b border-white/[0.06]">
+      <section className="relative z-10 px-8 py-28 bg-surface-2 border-b border-border">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-mesh-section" />
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 md:gap-14 items-start mb-14">
             <Reveal className="shrink-0">
-              <span className="block text-[96px] leading-none font-semibold tracking-[-0.04em] text-white/[0.08] select-none">02</span>
+              <span className="block text-[96px] leading-none font-semibold tracking-[-0.04em] text-black/[0.05] select-none">02</span>
             </Reveal>
             <Reveal y={24} delay={0.08}>
               <h2 className="text-[clamp(26px,3.6vw,44px)] font-semibold tracking-[-0.035em] leading-[1.15] mb-5 max-w-xl">
@@ -755,12 +747,12 @@ export default function LandingPage() {
       </section>
 
       {/* ── Feature bento grid ── */}
-      <section className="relative z-10 px-8 pt-20 pb-32 bg-[#0c0c0c] border-b border-white/[0.06]">
+      <section className="relative z-10 px-8 pt-20 pb-32 bg-surface-2 border-b border-border">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-mesh-section" />
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 md:gap-14 items-start mb-14">
             <Reveal className="shrink-0">
-              <span className="block text-[96px] leading-none font-semibold tracking-[-0.04em] text-white/[0.08] select-none">03</span>
+              <span className="block text-[96px] leading-none font-semibold tracking-[-0.04em] text-black/[0.05] select-none">03</span>
             </Reveal>
             <Reveal y={24} delay={0.08}>
               <p className="text-xs font-semibold uppercase tracking-[0.09em] text-accent mb-3">How PolyTeach differs</p>
@@ -777,7 +769,7 @@ export default function LandingPage() {
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Socratic coaching</h3>
                   <p className="text-sm text-text-2 leading-relaxed max-w-xs">Never hands you the answer. Asks the exact question that unblocks your thinking — at any hour.</p>
                 </div>
-                <div className="mx-5 mb-5 mt-5 rounded-xl border border-border-2 bg-[#0d0d0d] overflow-hidden">
+                <div className="mx-5 mb-5 mt-5 rounded-xl border border-border-2 bg-surface-2 overflow-hidden">
                   <div className="flex items-center gap-2 px-3 py-2 border-b border-border bg-surface-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-accent" />
                     <span className="text-2xs text-text-2">AMC 12 · Counting &amp; Probability</span>
@@ -795,7 +787,7 @@ export default function LandingPage() {
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Competition-caliber problems</h3>
                   <p className="text-sm text-text-2 leading-relaxed">Problems matched to real contest difficulty — not generic textbook exercises.</p>
                 </div>
-                <div className="mx-5 mb-5 mt-5 rounded-xl border border-border-2 bg-[#0d0d0d]">
+                <div className="mx-5 mb-5 mt-5 rounded-xl border border-border-2 bg-surface-2">
                   <ProblemPreview />
                 </div>
               </Card>
@@ -804,7 +796,7 @@ export default function LandingPage() {
             {/* Interactive Mock Test — full width */}
             <Reveal className="col-span-12" y={32} delay={0.16}>
               <Card radius="2xl">
-                <div className="px-7 pt-7 pb-5 border-b border-white/[0.06]">
+                <div className="px-7 pt-7 pb-5 border-b border-border">
                   <span className="text-xs font-medium text-accent">Mock test</span>
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Full AMC practice, built in.</h3>
                   <p className="text-sm text-text-2 leading-relaxed max-w-xl">Timed, scored, and instantly debriefed — just like the real exam. Try a live question below.</p>
@@ -818,7 +810,7 @@ export default function LandingPage() {
             {/* Interactive Diagnostic — full width */}
             <Reveal className="col-span-12" y={32} delay={0.2}>
               <Card radius="2xl">
-                <div className="px-7 pt-7 pb-5 border-b border-white/[0.06]">
+                <div className="px-7 pt-7 pb-5 border-b border-border">
                   <span className="text-xs font-medium text-accent">Diagnostic assessment</span>
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Knows exactly where you stand.</h3>
                   <p className="text-sm text-text-2 leading-relaxed max-w-xl">Answer a few questions and watch the system pinpoint your strengths and gaps in real time.</p>
@@ -837,7 +829,7 @@ export default function LandingPage() {
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Adaptive diagnostic</h3>
                   <p className="text-sm text-text-2 leading-relaxed">10 questions that map your knowledge ceiling concept-by-concept and generate a study plan.</p>
                 </div>
-                <div className="mx-5 mb-5 mt-5 rounded-xl border border-border-2 bg-[#0d0d0d]">
+                <div className="mx-5 mb-5 mt-5 rounded-xl border border-border-2 bg-surface-2">
                   <DiagnosticPreview />
                 </div>
               </Card>
@@ -851,7 +843,7 @@ export default function LandingPage() {
                   <h3 className="text-lg font-semibold tracking-tight mt-2 mb-1">Day-by-day study plan</h3>
                   <p className="text-sm text-text-2 leading-relaxed max-w-xs">Set a competition date. The agent builds a day-by-day plan and adjusts after each session based on what you actually understood.</p>
                 </div>
-                <div className="mx-5 mb-5 mt-5 rounded-xl border border-border-2 bg-[#0d0d0d]">
+                <div className="mx-5 mb-5 mt-5 rounded-xl border border-border-2 bg-surface-2">
                   <CalendarPreview />
                 </div>
               </Card>
@@ -881,7 +873,7 @@ export default function LandingPage() {
               ].map((item, i) => (
                 <Reveal key={item.step} delay={i * 0.1}>
                   <div className="flex gap-6">
-                    <span className="text-3xl font-semibold tracking-[-0.04em] shrink-0 w-10 text-white/10 tabular-nums">{item.step}</span>
+                    <span className="text-3xl font-semibold tracking-[-0.04em] shrink-0 w-10 text-black/[0.05] tabular-nums">{item.step}</span>
                     <div>
                       <h3 className="text-base font-semibold text-text mb-1.5">{item.title}</h3>
                       <p className="text-sm text-text-2 leading-relaxed">{item.desc}</p>
@@ -892,7 +884,7 @@ export default function LandingPage() {
             </div>
             <Reveal y={40} delay={0.1} className="order-1 lg:order-2">
               <AppWindow>
-                <div className="p-6 bg-[#0d0d0d]">
+                <div className="p-6 bg-surface-2">
                   <LandingDemo />
                 </div>
               </AppWindow>
@@ -917,11 +909,11 @@ export default function LandingPage() {
             {TESTIMONIALS.map((t, i) => (
               <Reveal key={t.name} y={40} delay={i * 0.12}>
                 <Card hoverable radius="2xl" className="relative flex flex-col h-full p-8">
-                  <span className="text-3xl font-semibold tracking-[-0.04em] text-white/[0.1] select-none mb-4 tabular-nums">
+                  <span className="text-3xl font-semibold tracking-[-0.04em] text-black/[0.05] select-none mb-4 tabular-nums">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <p className="text-base text-text leading-relaxed flex-1 mb-8">{t.quote}</p>
-                  <div className="pt-5 border-t border-white/[0.07]">
+                  <div className="pt-5 border-t border-border-2">
                     <p className="text-sm font-semibold text-text">{t.name}</p>
                     <p className="text-xs text-text-2">{t.role}</p>
                   </div>
@@ -946,9 +938,9 @@ export default function LandingPage() {
             {STATS.map((s, i) => (
               <Reveal key={s.stat} y={32} delay={i * 0.12}>
                 <Card hoverable radius="2xl" className="p-8 h-full">
-                  <div className="text-5xl font-semibold tracking-[-0.045em] mb-4 tabular-nums bg-gradient-to-br from-accent to-[#F4CD6B] bg-clip-text text-transparent">{s.stat}</div>
+                  <div className="text-5xl font-semibold tracking-[-0.045em] mb-4 tabular-nums bg-gradient-to-br from-accent to-[#3D5FA3] bg-clip-text text-transparent">{s.stat}</div>
                   <p className="text-sm text-text-2 leading-relaxed mb-4">{s.desc}</p>
-                  <p className="text-2xs text-[#555]">{s.source}</p>
+                  <p className="text-2xs text-muted">{s.source}</p>
                 </Card>
               </Reveal>
             ))}
@@ -957,7 +949,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Comparison table ── */}
-      <section className="relative z-10 px-8 py-32 bg-[#0c0c0c] border-y border-white/[0.06]">
+      <section className="relative z-10 px-8 py-32 bg-surface-2 border-y border-border">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-mesh-section" />
         <div className="max-w-6xl mx-auto">
           <Reveal>
@@ -977,7 +969,7 @@ export default function LandingPage() {
               <div className="overflow-x-auto">
                 <div className="min-w-[720px]">
                   {/* Table header strip */}
-                  <div className="px-8 pt-8 pb-6 border-b border-white/[0.06]">
+                  <div className="px-8 pt-8 pb-6 border-b border-border">
                     <div className="grid gap-4" style={{ gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr" }}>
                       <div />
                       {COMPETITORS.map((c) => (
@@ -987,7 +979,7 @@ export default function LandingPage() {
                               <Badge variant="accent">PolyTeach</Badge>
                             </div>
                           ) : (
-                            <span className="text-xs text-[#555] font-medium">{c.name}</span>
+                            <span className="text-xs text-muted font-medium">{c.name}</span>
                           )}
                         </div>
                       ))}
@@ -1006,12 +998,12 @@ export default function LandingPage() {
                   return (
                     <div
                       key={row.feature}
-                      className={`grid gap-4 py-5 ${i < COMPARISON_ROWS.length - 1 ? "border-b border-white/[0.05]" : ""} group`}
+                      className={`grid gap-4 py-5 ${i < COMPARISON_ROWS.length - 1 ? "border-b border-border" : ""} group`}
                       style={{ gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr" }}
                     >
                       <div>
-                        <p className="text-sm font-medium text-text group-hover:text-white transition-colors duration-150">{row.feature}</p>
-                        <p className="text-xs text-[#555] mt-1 leading-relaxed">{row.desc}</p>
+                        <p className="text-sm font-medium text-text group-hover:text-accent transition-colors duration-150">{row.feature}</p>
+                        <p className="text-xs text-muted mt-1 leading-relaxed">{row.desc}</p>
                       </div>
                       {row.values.map((val, j) => (
                         <div
@@ -1032,20 +1024,20 @@ export default function LandingPage() {
               </div>
 
               {/* Footer legend */}
-              <div className="px-8 py-5 border-t border-white/[0.06] bg-surface-2 flex flex-wrap items-center gap-6">
+              <div className="px-8 py-5 border-t border-border bg-surface-2 flex flex-wrap items-center gap-6">
                 <div className="flex items-center gap-2">
                   <CellCheckIcon size={14} />
-                  <span className="text-2xs text-[#555]">Full support</span>
+                  <span className="text-2xs text-muted">Full support</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CellPartialIcon size={14} />
-                  <span className="text-2xs text-[#555]">Partial / limited</span>
+                  <span className="text-2xs text-muted">Partial / limited</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CellCrossIcon size={14} />
-                  <span className="text-2xs text-[#555]">Not available</span>
+                  <span className="text-2xs text-muted">Not available</span>
                 </div>
-                <p className="text-2xs text-[#444] ml-auto">Competitor features based on publicly available information as of 2026.</p>
+                <p className="text-2xs text-muted ml-auto">Competitor features based on publicly available information as of 2026.</p>
               </div>
             </Card>
           </Reveal>
@@ -1067,7 +1059,7 @@ export default function LandingPage() {
           </Reveal>
 
           {checkoutError && (
-            <p className="text-center text-sm text-red-400 mb-6">{checkoutError}</p>
+            <p className="text-center text-sm text-red-600 mb-6">{checkoutError}</p>
           )}
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
@@ -1144,7 +1136,7 @@ export default function LandingPage() {
                     min={TEAM_MIN_SEATS}
                     value={seats}
                     onChange={(e) => setSeats(Math.max(TEAM_MIN_SEATS, Number(e.target.value) || TEAM_MIN_SEATS))}
-                    className="w-16 bg-background border border-white/[0.1] rounded-lg px-2 py-1.5 text-sm text-text outline-none focus:border-accent transition-colors"
+                    className="w-16 bg-background border border-border-2 rounded-lg px-2 py-1.5 text-sm text-text outline-none focus:border-accent transition-colors"
                   />
                   <span className="text-xs text-text-2">= ${seats * TEAM_SEAT_PRICE}/mo</span>
                 </div>
@@ -1156,7 +1148,7 @@ export default function LandingPage() {
           </div>
 
           <Reveal delay={0.2}>
-            <div className="mt-8 p-6 rounded-2xl border border-white/[0.06] bg-surface text-center">
+            <div className="mt-8 p-6 rounded-2xl border border-border bg-surface text-center">
               <p className="text-sm text-text-2 leading-relaxed max-w-2xl mx-auto">
                 At ${PRO_PRICE}/month during a 4-month prep window, the cost is less than a single hour with a private math tutor — and you get unlimited sessions.
               </p>
@@ -1171,7 +1163,7 @@ export default function LandingPage() {
       {/* ── Bottom CTA ── */}
       <section className="relative z-10 px-8 py-36 text-center overflow-hidden">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-mesh-section" />
-        <div className="pointer-events-none absolute left-1/2 top-10 -translate-x-1/2 text-[120px] leading-none font-semibold tracking-[-0.04em] text-white/[0.04] select-none">
+        <div className="pointer-events-none absolute left-1/2 top-10 -translate-x-1/2 text-[120px] leading-none font-semibold tracking-[-0.04em] text-black/[0.04] select-none">
           03
         </div>
         <Reveal>
@@ -1194,17 +1186,17 @@ export default function LandingPage() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="relative z-10 border-t border-white/[0.06] px-8 pt-16 pb-10">
+      <footer className="relative z-10 border-t border-border px-8 pt-16 pb-10">
         <div className="max-w-6xl mx-auto">
           {/* Top row */}
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-10 pb-14 border-b border-white/[0.06]">
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-10 pb-14 border-b border-border">
             {/* Brand col */}
             <div className="col-span-2 md:col-span-2">
               <span className="flex items-center gap-2 text-sm font-semibold tracking-tight mb-4">
                 <Logomark size={22} />
                 <span><span className="text-text">Poly</span><span className="text-accent">Teach</span></span>
               </span>
-              <p className="text-xs text-[#555] leading-relaxed max-w-[220px]">
+              <p className="text-xs text-muted leading-relaxed max-w-[220px]">
                 AI Socratic coaching for every major math, CS, and science olympiad — available 24/7.
               </p>
               <a
@@ -1227,7 +1219,7 @@ export default function LandingPage() {
                   { label: "Pricing", href: "#pricing" },
                 ].map(({ label, href }) => (
                   <li key={label}>
-                    <Link href={href} className="text-xs text-[#555] hover:text-text transition-colors duration-150">{label}</Link>
+                    <Link href={href} className="text-xs text-muted hover:text-text transition-colors duration-150">{label}</Link>
                   </li>
                 ))}
               </ul>
@@ -1239,7 +1231,7 @@ export default function LandingPage() {
               <ul className="space-y-3">
                 {["AMC · AIME · USAMO", "USACO · ACSL", "USAPhO · F=ma", "USNCO", "USABO", "Science Olympiad"].map((c) => (
                   <li key={c}>
-                    <Link href="/coach" className="text-xs text-[#555] hover:text-text transition-colors duration-150">{c}</Link>
+                    <Link href="/coach" className="text-xs text-muted hover:text-text transition-colors duration-150">{c}</Link>
                   </li>
                 ))}
               </ul>
@@ -1251,25 +1243,25 @@ export default function LandingPage() {
               <div className="space-y-3">
                 <Link
                   href="/download"
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl border border-white/[0.08] bg-surface hover:border-white/[0.18] hover:bg-surface-2 transition-all duration-150 group"
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl border border-border-2 bg-surface hover:border-border-3 hover:bg-surface-2 transition-all duration-150 group"
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" className="text-text-2 group-hover:text-text transition-colors shrink-0">
                     <path d="M11.182 3C9.91 3 9.09 3.674 8 3.674c-1.044 0-2.04-.674-3.182-.674C3.07 3 1 4.948 1 7.98c0 2.01.77 4.133 1.818 5.5.876 1.168 1.636 2.02 2.727 2.02.99 0 1.416-.643 2.455-.643 1.055 0 1.447.643 2.455.643 1.09 0 1.9-.906 2.727-2.02C14.23 12.113 15 9.99 15 7.98 15 4.948 12.93 3 11.182 3ZM8 3.266c.664-.768 1.636-1.266 2.182-1.266.072.874-.19 1.752-.736 2.42C8.937 5.07 7.98 5.62 7.273 5.58 7.18 4.72 7.49 3.862 8 3.266Z"/>
                   </svg>
                   <div>
-                    <p className="text-2xs text-[#555]">Coming soon</p>
+                    <p className="text-2xs text-muted">Coming soon</p>
                     <p className="text-xs text-text-2 font-medium group-hover:text-text transition-colors">Mac</p>
                   </div>
                 </Link>
                 <Link
                   href="/download"
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl border border-white/[0.08] bg-surface hover:border-white/[0.18] hover:bg-surface-2 transition-all duration-150 group"
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl border border-border-2 bg-surface hover:border-border-3 hover:bg-surface-2 transition-all duration-150 group"
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" className="text-text-2 group-hover:text-text transition-colors shrink-0">
                     <path d="M6.555 1.375 0 2.237v5.45h6.555V1.375ZM0 13.795l6.555.933V8.313H0v5.482ZM7.278 1.268v6.42H16V.125L7.278 1.268ZM16 8.313H7.278V14.9L16 16V8.313Z"/>
                   </svg>
                   <div>
-                    <p className="text-2xs text-[#555]">Coming soon</p>
+                    <p className="text-2xs text-muted">Coming soon</p>
                     <p className="text-xs text-text-2 font-medium group-hover:text-text transition-colors">Windows</p>
                   </div>
                 </Link>
@@ -1286,7 +1278,7 @@ export default function LandingPage() {
                   { label: "Getting started", href: "/coach" },
                 ].map(({ label, href }) => (
                   <li key={label}>
-                    <Link href={href} className="text-xs text-[#555] hover:text-text transition-colors duration-150">{label}</Link>
+                    <Link href={href} className="text-xs text-muted hover:text-text transition-colors duration-150">{label}</Link>
                   </li>
                 ))}
               </ul>
@@ -1297,7 +1289,7 @@ export default function LandingPage() {
                   { label: "Terms of Service", href: "/terms" },
                 ].map(({ label, href }) => (
                   <li key={label}>
-                    <Link href={href} className="text-xs text-[#555] hover:text-text transition-colors duration-150">{label}</Link>
+                    <Link href={href} className="text-xs text-muted hover:text-text transition-colors duration-150">{label}</Link>
                   </li>
                 ))}
               </ul>
@@ -1306,8 +1298,8 @@ export default function LandingPage() {
 
           {/* Bottom row */}
           <div className="pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <p className="text-xs text-[#3a3a3a]">© 2026 PolyTeach. All rights reserved.</p>
-            <p className="text-xs text-[#3a3a3a]">Not affiliated with AMC, USACO, ACS, AAPT, or USABO.</p>
+            <p className="text-xs text-subtle">© 2026 PolyTeach. All rights reserved.</p>
+            <p className="text-xs text-subtle">Not affiliated with AMC, USACO, ACS, AAPT, or USABO.</p>
           </div>
         </div>
       </footer>

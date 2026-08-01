@@ -27,7 +27,7 @@ export default function SciOlyDropdown({ value, onChange }: SciOlyDropdownProps)
         className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl border text-sm transition-all duration-150 cursor-pointer ${
           value
             ? "border-accent bg-accent/10 text-accent"
-            : "border-border-2 bg-surface-2 text-text-2 hover:border-[#484848] hover:text-text"
+            : "border-border-2 bg-surface-2 text-text-2 hover:border-border-3 hover:text-text"
         }`}
       >
         <span>{value ? value.name : "Pick an event…"}</span>
@@ -41,7 +41,7 @@ export default function SciOlyDropdown({ value, onChange }: SciOlyDropdownProps)
       </button>
 
       {open && (
-        <div className="absolute z-50 top-full left-0 right-0 mt-1.5 rounded-xl border border-border-2 bg-[#111] shadow-panel overflow-hidden">
+        <div className="absolute z-50 top-full left-0 right-0 mt-1.5 rounded-xl border border-border-2 bg-surface-2 shadow-panel overflow-hidden">
           <div className="max-h-56 overflow-y-auto py-1">
             {SCIOLY_EVENTS.map((event) => (
               <button
@@ -50,7 +50,7 @@ export default function SciOlyDropdown({ value, onChange }: SciOlyDropdownProps)
                 className={`w-full text-left px-3 py-2 text-sm transition-colors duration-100 cursor-pointer ${
                   value?.id === event.id
                     ? "text-accent bg-accent/10"
-                    : "text-text-2 hover:text-text hover:bg-white/5"
+                    : "text-text-2 hover:text-text hover:bg-surface-3"
                 }`}
               >
                 {event.name}

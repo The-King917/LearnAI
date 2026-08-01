@@ -184,8 +184,8 @@ export default function CoachCanvas({
         onClick={() => { setSubject(s); if (s.id !== "science-olympiad") setSciOlyEvent(null); }}
         className={`px-3 py-3 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
           selected
-            ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(232,168,32,0.25)]"
-            : "border-border-2 bg-surface text-text-2 hover:border-[#484848] hover:text-text hover:bg-surface-2"
+            ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(31,59,115,0.25)]"
+            : "border-border-2 bg-surface text-text-2 hover:border-accent/40 hover:text-text hover:bg-surface-2"
         }`}
       >
         <div className="flex items-start justify-between gap-1">
@@ -239,7 +239,7 @@ export default function CoachCanvas({
                     className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all duration-100 cursor-pointer ${
                       difficulty === opt.value
                         ? "bg-accent text-background shadow-sm"
-                        : "text-text-2 hover:text-text hover:bg-white/5"
+                        : "text-text-2 hover:text-text hover:bg-surface-3"
                     }`}
                   >
                     {opt.label}
@@ -258,13 +258,13 @@ export default function CoachCanvas({
                     <button
                       key={s.id}
                       onClick={() => resumeSession(s)}
-                      className="w-full flex items-center justify-between px-4 py-3 rounded-xl border border-border-2 bg-surface hover:border-[#484848] hover:bg-surface-2 transition-all duration-100 group cursor-pointer"
+                      className="w-full flex items-center justify-between px-4 py-3 rounded-xl border border-border-2 bg-surface hover:border-accent/40 hover:bg-surface-2 transition-all duration-100 group cursor-pointer"
                     >
                       <div className="text-left">
                         <p className="text-sm text-text-2 group-hover:text-text transition-colors">{s.subjectName}</p>
-                        <p className="text-2xs text-[#666] mt-0.5">{timeAgo(s.updatedAt)}</p>
+                        <p className="text-2xs text-muted mt-0.5">{timeAgo(s.updatedAt)}</p>
                       </div>
-                      <span className="text-2xs text-[#777] group-hover:text-text-2 transition-colors">Resume →</span>
+                      <span className="text-2xs text-muted group-hover:text-text-2 transition-colors">Resume →</span>
                     </button>
                   ))}
                 </div>

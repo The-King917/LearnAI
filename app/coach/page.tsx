@@ -106,7 +106,7 @@ function CoachPageInner() {
       <div
         className="fixed inset-0 pointer-events-none z-0"
         style={{
-          backgroundImage: "radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(rgba(27,27,24,0.025) 1px, transparent 1px)",
           backgroundSize: "28px 28px",
         }}
       />

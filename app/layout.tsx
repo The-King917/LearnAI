@@ -1,18 +1,22 @@
 import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-import { Newsreader } from "next/font/google";
+import { Public_Sans, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
 import "katex/dist/katex.min.css";
 import Providers from "./providers";
 
-// Self-hosted at build time by next/font — no runtime request to Google. Used
-// sparingly (hero emphasis, section pull-quotes) as an editorial accent against
-// the Geist sans, not as a body typeface.
-const newsreader = Newsreader({
+// Self-hosted at build time by next/font — no runtime request to Google.
+const publicSans = Public_Sans({
   subsets: ["latin"],
-  style: ["normal"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-sans",
+});
+
+// Headline/editorial serif — used for h1-h4 and pull-quotes across the app.
+const sourceSerif = Source_Serif_4({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  weight: ["400", "500"],
   variable: "--font-serif",
 });
 
@@ -23,7 +27,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`h-full ${GeistSans.variable} ${GeistMono.variable} ${newsreader.variable}`}>
+    <html lang="en" className={`h-full ${publicSans.variable} ${GeistMono.variable} ${sourceSerif.variable}`}>
       <body className="h-full antialiased">
         <Providers>{children}</Providers>
       </body>

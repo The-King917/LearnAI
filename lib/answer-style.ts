@@ -1,7 +1,7 @@
 export function answerChoiceStyle(isSelected: boolean, isRight: boolean, hasSelection: boolean): string {
-  if (!hasSelection) return "border-border-2 bg-surface text-text-2 hover:border-[#484848] hover:text-text cursor-pointer";
-  if (isSelected && isRight) return "border-green-500/60 bg-green-500/10 text-green-400";
-  if (isSelected && !isRight) return "border-red-500/50 bg-red-500/10 text-red-400";
-  if (isRight) return "border-green-500/40 bg-green-500/[0.06] text-green-500/70";
-  return "border-border bg-surface text-[#444] opacity-50";
+  if (!hasSelection) return "border-border-2 bg-surface text-text-2 hover:border-accent/40 hover:text-text cursor-pointer";
+  if (isSelected && isRight) return "border-green-600/50 bg-green-50 text-green-700";
+  if (isSelected && !isRight) return "border-red-600/50 bg-red-50 text-red-700";
+  if (isRight) return "border-green-600/40 bg-green-50/70 text-green-700/80";
+  return "border-border bg-surface text-muted opacity-50";
 }

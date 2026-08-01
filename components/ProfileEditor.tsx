@@ -171,7 +171,7 @@ export default function ProfileEditor({ profile, signedIn, onClose, onSave }: Pr
                 />
               </label>
             </div>
-            {uploadError && <p className="text-xs text-red-400 mb-1.5">{uploadError}</p>}
+            {uploadError && <p className="text-xs text-red-600 mb-1.5">{uploadError}</p>}
             <textarea
               placeholder="Extracted text appears here — edit freely, or paste it in yourself"
               value={form.schoolProfile ?? ""}

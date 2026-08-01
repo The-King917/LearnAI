@@ -115,8 +115,8 @@ export default function PracticeCanvas({ signedIn }: PracticeCanvasProps) {
                   onClick={() => { setSubject(s); if (s.id !== "science-olympiad") setSciOlyEvent(null); }}
                   className={`px-3 py-3 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
                     selected
-                      ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(232,168,32,0.25)]"
-                      : "border-border-2 bg-surface text-text-2 hover:border-[#484848] hover:text-text hover:bg-surface-2"
+                      ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(31,59,115,0.25)]"
+                      : "border-border-2 bg-surface text-text-2 hover:border-accent/40 hover:text-text hover:bg-surface-2"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-1">
@@ -138,8 +138,8 @@ export default function PracticeCanvas({ signedIn }: PracticeCanvasProps) {
                   onClick={() => { setSubject(s); if (s.id !== "science-olympiad") setSciOlyEvent(null); }}
                   className={`px-3 py-3 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
                     selected
-                      ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(232,168,32,0.25)]"
-                      : "border-border-2 bg-surface text-text-2 hover:border-[#484848] hover:text-text hover:bg-surface-2"
+                      ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(31,59,115,0.25)]"
+                      : "border-border-2 bg-surface text-text-2 hover:border-accent/40 hover:text-text hover:bg-surface-2"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-1">
@@ -170,7 +170,7 @@ export default function PracticeCanvas({ signedIn }: PracticeCanvasProps) {
                 className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all duration-100 cursor-pointer ${
                   difficulty === opt.value
                     ? "bg-accent text-background shadow-sm"
-                    : "text-text-2 hover:text-text hover:bg-white/5"
+                    : "text-text-2 hover:text-text hover:bg-surface-3"
                 }`}
               >
                 {opt.label}
@@ -193,7 +193,7 @@ export default function PracticeCanvas({ signedIn }: PracticeCanvasProps) {
                 className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-all duration-150 cursor-pointer ${
                   topics.includes(t)
                     ? "border-accent bg-accent/10 text-accent"
-                    : "border-border-2 text-text-2 hover:border-[#484848] hover:text-text hover:bg-surface-2"
+                    : "border-border-2 text-text-2 hover:border-accent/40 hover:text-text hover:bg-surface-2"
                 }`}
               >
                 {t}

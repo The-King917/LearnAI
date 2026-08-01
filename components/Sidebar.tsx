@@ -104,7 +104,7 @@ export default function Sidebar({
                 onClick={() => onModeChange(m.id)}
                 className={`w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-sm transition-all duration-150 ${
                   mode === m.id
-                    ? "bg-white/80 backdrop-blur-sm text-background shadow-glow"
+                    ? "bg-ink text-ink-text shadow-glow"
                     : "text-muted hover:text-text-2 hover:bg-surface-2 border border-transparent"
                 }`}
               >
@@ -157,7 +157,7 @@ export default function Sidebar({
                 }`}
               >
                 <span className={`w-1.5 h-1.5 rounded-full shrink-0 transition-colors ${
-                  difficulty === d ? "bg-white" : "bg-subtle"
+                  difficulty === d ? "bg-accent" : "bg-subtle"
                 }`} />
                 <span className={difficulty === d ? "font-medium" : ""}>{DIFFICULTY_LABELS[d]}</span>
               </button>

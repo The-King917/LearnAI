@@ -82,7 +82,7 @@ export default function AdminProblemsPage() {
     return (
       <div className="min-h-screen bg-background text-text flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-400 mb-4">{error}</p>
+          <p className="text-red-600 mb-4">{error}</p>
           <Link href="/" className="text-sm text-muted underline">← Home</Link>
         </div>
       </div>
@@ -106,7 +106,7 @@ export default function AdminProblemsPage() {
                 <p className="text-xs font-semibold uppercase">{b.competition}</p>
                 <p className="text-lg font-semibold mt-1">{b.approved}</p>
                 <p className="text-2xs text-muted">{b.pending} pending</p>
-                {b.deficit > 0 && <p className="text-2xs text-red-400 mt-0.5">-{b.deficit} needed</p>}
+                {b.deficit > 0 && <p className="text-2xs text-red-600 mt-0.5">-{b.deficit} needed</p>}
               </div>
             ))}
           </div>
@@ -178,7 +178,7 @@ export default function AdminProblemsPage() {
                     <span className="text-2xs px-1.5 py-0.5 rounded border border-border text-subtle">{p.difficulty}</span>
                     <span className="text-2xs px-1.5 py-0.5 rounded border border-border text-subtle">{p.format}</span>
                     {p.validationScore !== null && (
-                      <span className={`text-2xs px-1.5 py-0.5 rounded border ${p.validationScore >= 0.7 ? "border-green-500/30 text-green-400" : "border-red-500/30 text-red-400"}`}>
+                      <span className={`text-2xs px-1.5 py-0.5 rounded border ${p.validationScore >= 0.7 ? "border-green-500/30 text-green-600" : "border-red-500/30 text-red-600"}`}>
                         score: {p.validationScore.toFixed(2)}
                       </span>
                     )}
@@ -200,19 +200,19 @@ export default function AdminProblemsPage() {
                     <>
                       <button
                         onClick={() => review(p.id, "approve")}
-                        className="text-xs text-green-400 hover:text-green-300 px-2 py-1 rounded border border-green-500/30"
+                        className="text-xs text-green-600 hover:text-green-700 px-2 py-1 rounded border border-green-500/30"
                       >
                         Approve
                       </button>
                       <button
                         onClick={() => review(p.id, "reject")}
-                        className="text-xs text-red-400 hover:text-red-300 px-2 py-1 rounded border border-red-500/30"
+                        className="text-xs text-red-600 hover:text-red-700 px-2 py-1 rounded border border-red-500/30"
                       >
                         Reject
                       </button>
                       <button
                         onClick={() => review(p.id, "flag")}
-                        className="text-xs text-yellow-400 hover:text-yellow-300 px-2 py-1 rounded border border-yellow-500/30"
+                        className="text-xs text-yellow-600 hover:text-yellow-700 px-2 py-1 rounded border border-yellow-500/30"
                       >
                         Flag
                       </button>

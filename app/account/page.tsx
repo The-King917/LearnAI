@@ -202,7 +202,7 @@ export default function AccountPage() {
                     {joining ? "Joining…" : "Join"}
                   </button>
                 </div>
-                {joinError && <p className="text-xs text-red-400 mt-2">{joinError}</p>}
+                {joinError && <p className="text-xs text-red-600 mt-2">{joinError}</p>}
               </div>
             )}
 
@@ -224,7 +224,7 @@ export default function AccountPage() {
                   {members.map((m) => (
                     <div key={m.id} className="flex items-center justify-between text-sm">
                       <span className="text-text-2">{m.name ?? m.email}</span>
-                      <button onClick={() => removeMember(m.id)} className="text-xs text-muted hover:text-red-400 transition-colors">
+                      <button onClick={() => removeMember(m.id)} className="text-xs text-muted hover:text-red-600 transition-colors">
                         Remove
                       </button>
                     </div>
@@ -268,7 +268,7 @@ export default function AccountPage() {
                   <div key={scope} className={`p-4 bg-surface ${danger ? "bg-red-500/3" : ""}`}>
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 min-w-0">
-                        <p className={`text-sm font-medium ${danger ? "text-red-400" : "text-text-2"}`}>{title}</p>
+                        <p className={`text-sm font-medium ${danger ? "text-red-600" : "text-text-2"}`}>{title}</p>
                         <p className="text-xs text-muted mt-0.5 leading-relaxed">{desc}</p>
                       </div>
                       <div className="shrink-0 flex items-center gap-2">
@@ -287,7 +287,7 @@ export default function AccountPage() {
                               disabled={clearing === scope}
                               className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${
                                 danger
-                                  ? "bg-red-500/15 text-red-400 hover:bg-red-500/25 border border-red-500/20"
+                                  ? "bg-red-500/15 text-red-600 hover:bg-red-500/25 border border-red-500/20"
                                   : "bg-accent-muted text-text hover:bg-accent/15 border border-accent/20"
                               } disabled:opacity-50`}
                             >
@@ -299,7 +299,7 @@ export default function AccountPage() {
                             onClick={() => setConfirming(scope)}
                             className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${
                               danger
-                                ? "border-red-500/20 text-red-400 hover:border-red-500/40"
+                                ? "border-red-500/20 text-red-600 hover:border-red-500/40"
                                 : "border-border text-muted hover:border-border-2 hover:text-text-2"
                             }`}
                           >

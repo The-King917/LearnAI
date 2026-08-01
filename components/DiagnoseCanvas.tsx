@@ -110,8 +110,8 @@ export default function DiagnoseCanvas({ signedIn, onComplete }: DiagnoseCanvasP
                       onClick={() => { setSubject(s); if (s.id !== "science-olympiad") setSciOlyEvent(null); }}
                       className={`px-3 py-3 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
                         selected
-                          ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(232,168,32,0.25)]"
-                          : "border-border-2 bg-surface text-text-2 hover:border-[#484848] hover:text-text hover:bg-surface-2"
+                          ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(31,59,115,0.25)]"
+                          : "border-border-2 bg-surface text-text-2 hover:border-accent/40 hover:text-text hover:bg-surface-2"
                       }`}
                     >
                       <div className="flex items-start justify-between gap-1">
@@ -133,8 +133,8 @@ export default function DiagnoseCanvas({ signedIn, onComplete }: DiagnoseCanvasP
                       onClick={() => { setSubject(s); if (s.id !== "science-olympiad") setSciOlyEvent(null); }}
                       className={`px-3 py-3 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
                         selected
-                          ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(232,168,32,0.25)]"
-                          : "border-border-2 bg-surface text-text-2 hover:border-[#484848] hover:text-text hover:bg-surface-2"
+                          ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(31,59,115,0.25)]"
+                          : "border-border-2 bg-surface text-text-2 hover:border-accent/40 hover:text-text hover:bg-surface-2"
                       }`}
                     >
                       <div className="flex items-start justify-between gap-1">
@@ -184,7 +184,7 @@ export default function DiagnoseCanvas({ signedIn, onComplete }: DiagnoseCanvasP
                       <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0 mt-[5px]" />
                       <div>
                         <p className="text-xs font-medium text-text-2">{f.label}</p>
-                        <p className="text-2xs text-[#777] mt-0.5">{f.desc}</p>
+                        <p className="text-2xs text-muted mt-0.5">{f.desc}</p>
                       </div>
                     </div>
                   ))}
@@ -199,7 +199,7 @@ export default function DiagnoseCanvas({ signedIn, onComplete }: DiagnoseCanvasP
                       <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0 mt-[5px]" />
                       <div>
                         <p className="text-sm text-text-2">{f.label}</p>
-                        <p className="text-2xs text-[#666] mt-0.5">{f.desc}</p>
+                        <p className="text-2xs text-muted mt-0.5">{f.desc}</p>
                       </div>
                     </div>
                   ))}

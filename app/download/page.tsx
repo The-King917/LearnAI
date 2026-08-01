@@ -31,7 +31,7 @@ const PLATFORMS = [
 export default function DownloadPage() {
   return (
     <div className="min-h-screen bg-background text-text">
-      <nav className="relative z-10 flex items-center justify-between px-8 py-5 border-b border-white/[0.06]">
+      <nav className="relative z-10 flex items-center justify-between px-8 py-5 border-b border-border">
         <Link href="/" className="flex items-center text-sm font-semibold tracking-tight">
           <span className="text-text">Poly</span><span className="text-accent">Teach</span>
         </Link>
@@ -59,20 +59,19 @@ export default function DownloadPage() {
           {PLATFORMS.map(({ name, subtitle, icon }) => (
             <div
               key={name}
-              className="relative flex flex-col items-center gap-4 p-8 rounded-2xl border border-white/[0.08] bg-surface"
-              style={{ boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}
+              className="relative flex flex-col items-center gap-4 p-8 rounded-2xl border border-border-2 bg-surface shadow-card"
             >
-              <div className="w-14 h-14 rounded-2xl border border-white/[0.08] bg-surface-2 flex items-center justify-center text-text-2">
+              <div className="w-14 h-14 rounded-2xl border border-border-2 bg-surface-2 flex items-center justify-center text-text-2">
                 {icon}
               </div>
               <div>
                 <p className="text-base font-semibold text-text mb-1">{name}</p>
-                <p className="text-xs text-[#555]">{subtitle}</p>
+                <p className="text-xs text-muted">{subtitle}</p>
               </div>
-              <div className="w-full mt-2 px-5 py-2.5 rounded-xl border border-white/[0.08] text-xs text-[#555] text-center select-none">
+              <div className="w-full mt-2 px-5 py-2.5 rounded-xl border border-border-2 text-xs text-muted text-center select-none">
                 Notify me when available
               </div>
-              <span className="absolute top-4 right-4 text-2xs text-[#444] border border-white/[0.06] rounded-full px-2 py-0.5">
+              <span className="absolute top-4 right-4 text-2xs text-muted border border-border rounded-full px-2 py-0.5">
                 Soon
               </span>
             </div>
@@ -80,7 +79,7 @@ export default function DownloadPage() {
         </div>
 
         {/* Web CTA */}
-        <div className="p-7 rounded-2xl border border-white/[0.06] bg-surface mb-8">
+        <div className="p-7 rounded-2xl border border-border bg-surface mb-8">
           <p className="text-sm font-semibold text-text mb-2">Start training now in your browser</p>
           <p className="text-xs text-text-2 leading-relaxed mb-5">
             The full coaching experience — Socratic sessions, mock tests, diagnostics, and study plans — is available right now at polyteach.app.
@@ -96,7 +95,7 @@ export default function DownloadPage() {
           </Link>
         </div>
 
-        <p className="text-xs text-[#444]">
+        <p className="text-xs text-muted">
           Want to be notified when the desktop apps launch?{" "}
           <a href="mailto:asubramanian2000@gmail.com?subject=Notify me about the desktop app" className="text-accent hover:underline">
             Email us

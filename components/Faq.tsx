@@ -49,7 +49,7 @@ function FaqRow({ q, a, delay, index }: { q: string; a: string; delay: number; i
           className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left"
         >
           <span className="flex items-baseline gap-3">
-            <span className="text-xs font-semibold text-white/[0.15] tabular-nums shrink-0">{String(index).padStart(2, "0")}</span>
+            <span className="text-xs font-semibold text-black/[0.12] tabular-nums shrink-0">{String(index).padStart(2, "0")}</span>
             <span className="text-sm font-medium text-text">
               <TypeText text={q} delay={delay} />
             </span>

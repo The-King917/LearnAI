@@ -95,7 +95,7 @@ export default function NavRail({ mode, onModeChange }: NavRailProps) {
                 )}
                 <span
                   className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ${
-                    active ? "bg-accent-muted" : "hover:bg-white/5"
+                    active ? "bg-accent-muted" : "hover:bg-surface-3"
                   }`}
                 >
                   {item.icon}
@@ -195,7 +195,7 @@ export default function NavRail({ mode, onModeChange }: NavRailProps) {
             <button
               onClick={() => setAuthOpen(true)}
               title="Sign in"
-              className="w-8 h-8 rounded-full border border-border-2 flex items-center justify-center text-text-2 hover:border-[#484848] hover:text-text transition-colors"
+              className="w-8 h-8 rounded-full border border-border-2 flex items-center justify-center text-text-2 hover:border-border-3 hover:text-text transition-colors"
             >
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />

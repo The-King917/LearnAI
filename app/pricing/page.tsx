@@ -54,7 +54,7 @@ export default function PricingPage() {
         </div>
 
         {error && (
-          <p className="text-center text-sm text-red-400 mb-6">{error}</p>
+          <p className="text-center text-sm text-red-600 mb-6">{error}</p>
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">

@@ -64,7 +64,7 @@ export default function FloatingSymbols() {
             left: `${p.x}%`,
             top: `${p.y}%`,
             fontSize: `${p.size}px`,
-            color: `rgba(232,168,32,${p.opacity})`,
+            color: `rgba(31,59,115,${p.opacity})`,
             fontFamily: "ui-monospace, monospace",
             fontWeight: 700,
             userSelect: "none",

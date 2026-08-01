@@ -86,7 +86,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
             className="w-full bg-surface-2 border border-border rounded-lg px-3.5 py-2.5 text-sm text-text placeholder-muted outline-none focus:border-accent transition-all"
           />
 
-          {error && <p className="text-xs text-red-400">{error}</p>}
+          {error && <p className="text-xs text-red-600">{error}</p>}
 
           <button
             type="submit"

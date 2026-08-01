@@ -17,7 +17,7 @@ export default function ProgressIndicator({ mastery, signedIn }: ProgressIndicat
       <span className="text-2xs text-muted uppercase tracking-[0.07em] hidden sm:inline">Mastery</span>
       <div className="w-24 h-1.5 rounded-full bg-surface-2 border border-border overflow-hidden">
         <div
-          className="h-full bg-white rounded-full transition-all duration-700 ease-out"
+          className="h-full bg-accent rounded-full transition-all duration-700 ease-out"
           style={{ width: `${pct}%` }}
         />
       </div>

@@ -167,7 +167,7 @@ export default function DiagnoseMode({ subject, onLevelFound }: DiagnoseModeProp
           ) : (
             <div key={i} className="flex gap-3 animate-in">
               <div className="w-5 h-5 rounded-lg bg-accent flex items-center justify-center shrink-0 mt-0.5">
-                <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="black" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#F7F4EE" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M1 5.5L3.5 8 9 2"/>
                 </svg>
               </div>
@@ -181,7 +181,7 @@ export default function DiagnoseMode({ subject, onLevelFound }: DiagnoseModeProp
         {loading && streamText && (
           <div className="flex gap-3 animate-in">
             <div className="w-5 h-5 rounded-lg bg-accent flex items-center justify-center shrink-0 mt-0.5">
-              <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="black" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#F7F4EE" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 5.5L3.5 8 9 2"/>
               </svg>
             </div>
@@ -194,7 +194,7 @@ export default function DiagnoseMode({ subject, onLevelFound }: DiagnoseModeProp
         {loading && !streamText && (
           <div className="flex gap-3 animate-in">
             <div className="w-5 h-5 rounded-lg bg-accent flex items-center justify-center shrink-0 mt-0.5">
-              <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="black" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#F7F4EE" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 5.5L3.5 8 9 2"/>
               </svg>
             </div>

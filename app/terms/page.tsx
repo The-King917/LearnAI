@@ -22,7 +22,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-background text-text">
-      <nav className="flex items-center justify-between px-8 py-5 border-b border-white/[0.06]">
+      <nav className="flex items-center justify-between px-8 py-5 border-b border-border">
         <Link href="/" className="flex items-center text-sm font-semibold tracking-tight">
           <span className="text-text">Poly</span><span className="text-accent">Teach</span>
         </Link>
@@ -32,7 +32,7 @@ export default function TermsPage() {
       <main className="max-w-2xl mx-auto px-8 py-20">
         <p className="text-sm font-medium text-accent mb-3">Legal</p>
         <h1 className="text-3xl font-semibold tracking-[-0.03em] mb-3">Terms of Service</h1>
-        <p className="text-sm text-[#555] mb-14">Effective date: {EFFECTIVE_DATE}</p>
+        <p className="text-sm text-muted mb-14">Effective date: {EFFECTIVE_DATE}</p>
 
         <Section title="Agreement to these terms">
           <p>By creating an account or using PolyTeach (the "Service"), you agree to these Terms of Service ("Terms"). If you do not agree, do not use the Service. We may update these Terms from time to time; continued use of the Service after changes means you accept the updated Terms.</p>

@@ -201,7 +201,7 @@ export default function MockTestPage() {
           <h1 className="text-2xl font-semibold tracking-[-0.025em] mb-2">Start a mock test</h1>
           <p className="text-sm text-text-2 mb-10">Original problems matched to real competition style. No past papers — fresh every time.</p>
 
-          {error && <p className="text-sm text-red-400 mb-6">{error}</p>}
+          {error && <p className="text-sm text-red-600 mb-6">{error}</p>}
 
           <div className="mb-8">
             <p className="text-xs font-medium text-accent uppercase tracking-wider mb-3">Competition</p>
@@ -214,15 +214,15 @@ export default function MockTestPage() {
                     onClick={() => setCompetition(c.id)}
                     className={`p-3 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
                       selected
-                        ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(232,168,32,0.25)]"
-                        : "border-border-2 bg-surface text-text-2 hover:border-[#484848] hover:text-text hover:bg-surface-2"
+                        ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(31,59,115,0.25)]"
+                        : "border-border-2 bg-surface text-text-2 hover:border-accent/40 hover:text-text hover:bg-surface-2"
                     }`}
                   >
                     <div className="flex items-start justify-between gap-1">
                       <p className="text-sm font-medium">{c.label}</p>
                       {selected && <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0 mt-[3px]" />}
                     </div>
-                    <p className={`text-xs mt-0.5 ${selected ? "text-accent/70" : "text-[#666]"}`}>{c.desc}</p>
+                    <p className={`text-xs mt-0.5 ${selected ? "text-accent/70" : "text-muted"}`}>{c.desc}</p>
                   </button>
                 );
               })}
@@ -239,7 +239,7 @@ export default function MockTestPage() {
                   className={`px-4 py-2 rounded-lg border text-sm transition-all duration-150 cursor-pointer ${
                     timed === t
                       ? "border-accent bg-accent/10 text-accent"
-                      : "border-border-2 text-text-2 hover:border-[#484848] hover:text-text hover:bg-surface-2"
+                      : "border-border-2 text-text-2 hover:border-accent/40 hover:text-text hover:bg-surface-2"
                   }`}
                 >
                   {t ? `Timed (${config?.timeLimitMins} min)` : "Untimed"}
@@ -323,12 +323,12 @@ export default function MockTestPage() {
                   <div key={p.problem.id} className="p-4 rounded-xl border border-border bg-surface">
                     <div className="flex items-start justify-between gap-4">
                       <p className="text-sm text-text-2 line-clamp-2 flex-1">
-                        <span className="text-[#666] mr-2">#{i + 1}</span>
+                        <span className="text-muted mr-2">#{i + 1}</span>
                         {p.problem.statement.slice(0, 120)}…
                       </p>
                       <Link
                         href={`/coach?debrief=${testId}&problem=${p.problem.id}&subject=${competition}`}
-                        className="shrink-0 px-3 py-1.5 rounded-lg border border-border-2 text-xs text-text-2 hover:border-[#484848] hover:text-text transition-colors"
+                        className="shrink-0 px-3 py-1.5 rounded-lg border border-border-2 text-xs text-text-2 hover:border-accent/40 hover:text-text transition-colors"
                       >
                         Debrief →
                       </Link>
@@ -342,7 +342,7 @@ export default function MockTestPage() {
           <div className="flex gap-3">
             <button
               onClick={() => { setTestStatus("setup"); setResults(null); }}
-              className="px-5 py-2.5 rounded-lg text-sm font-medium border border-border-2 text-text-2 hover:border-[#484848] hover:text-text transition-colors"
+              className="px-5 py-2.5 rounded-lg text-sm font-medium border border-border-2 text-text-2 hover:border-accent/40 hover:text-text transition-colors"
             >
               Take another test
             </button>
@@ -371,7 +371,7 @@ export default function MockTestPage() {
           {timed && remainingSecs !== null && (
             <div className="flex items-center gap-2">
               {!timerHidden && (
-                <span className={`text-sm font-semibold tabular-nums ${remainingSecs < 300 ? "text-red-400" : "text-muted"}`}>
+                <span className={`text-sm font-semibold tabular-nums ${remainingSecs < 300 ? "text-red-600" : "text-muted"}`}>
                   {formatTime(Math.max(0, remainingSecs))}
                 </span>
               )}
@@ -443,8 +443,8 @@ export default function MockTestPage() {
                     onClick={() => setAnswers((a) => ({ ...a, [currentProblem.problem.id]: letter }))}
                     className={`w-full flex items-start gap-3 p-4 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
                       answers[currentProblem.problem.id] === letter
-                        ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(232,168,32,0.25)]"
-                        : "border-border-2 bg-surface text-text-2 hover:border-[#484848] hover:text-text hover:bg-surface-2"
+                        ? "border-accent bg-accent/10 text-accent shadow-[0_0_0_1px_rgba(31,59,115,0.25)]"
+                        : "border-border-2 bg-surface text-text-2 hover:border-accent/40 hover:text-text hover:bg-surface-2"
                     }`}
                   >
                     <span className="text-sm font-semibold shrink-0 w-5">{letter}</span>
