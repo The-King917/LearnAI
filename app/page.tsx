@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import LandingDemo from "@/components/LandingDemo";
 import Reveal from "@/components/Reveal";
 import Faq from "@/components/Faq";
@@ -50,7 +50,7 @@ const OLYMPIAD_MARQUEE = [
 
 function AppWindow({ children, glow = false }: { children: React.ReactNode; glow?: boolean }) {
   return (
-    <Card accentGlow={glow} radius="2xl" className="relative">
+    <Card accentGlow={glow} radius="3xl" className="relative">
       <div className="flex items-center gap-2 px-4 py-3 bg-[#111] border-b border-white/[0.06]">
         <div className="flex gap-1.5">
           <span className="w-3 h-3 rounded-full bg-[#FF5F56]" />
@@ -561,9 +561,11 @@ const COMPARISON_ROWS: ComparisonRow[] = [
   },
 ];
 
-// Section vertical rhythm convention: py-32 is the standard section pad; hero uses
-// pt-28 pb-0 (flows straight into the AppWindow demo); bottom CTA uses py-36 (largest —
-// deliberate emphasis on the close); Faq keeps its own denser py-20.
+// Section vertical rhythm convention: py-32 is the standard section pad; the narrative
+// Problem/Why-AI sections use a slightly denser py-28 since they're connective rather
+// than primary content; hero uses pt-44 pb-0 (flows straight into the AppWindow demo);
+// bottom CTA uses py-36 (largest — deliberate emphasis on the close); Faq keeps its own
+// denser py-20.
 
 // ── Main page ────────────────────────────────────────────────────────────────
 
@@ -573,6 +575,13 @@ export default function LandingPage() {
   const [checkoutLoading, setCheckoutLoading] = useState<"pro" | "team" | null>(null);
   const [checkoutError, setCheckoutError] = useState("");
   const [scrolled, setScrolled] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const { scrollYProgress: heroScrollProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const heroParallaxY = useTransform(heroScrollProgress, [0, 1], [0, -60]);
 
   useEffect(() => {
     fetch("/api/stats")
@@ -628,16 +637,16 @@ export default function LandingPage() {
       </nav>
 
       {/* ── Hero ── */}
-      <section className="relative z-10 flex flex-col items-center text-center px-6 pt-40 pb-0">
-        {/* Ambient glow — the only one on the page besides the demo window itself */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute left-1/2 top-4 -translate-x-1/2 w-[620px] h-[280px] rounded-full bg-white/[0.03] blur-[120px]" />
+      <section ref={heroRef} className="relative z-10 flex flex-col items-center text-center px-6 pt-44 pb-0">
+        {/* Layered mesh — several soft light sources rather than one flat glow */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[720px] overflow-hidden">
+          <div className="absolute inset-0 bg-mesh-hero" />
         </div>
 
         {/* Social proof */}
         {accountCount !== null && (
           <motion.p
-            className="mb-6 text-sm text-text-2"
+            className="mb-7 text-sm text-text-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={transition(DURATION.slow)}
@@ -648,18 +657,18 @@ export default function LandingPage() {
 
         {/* Headline */}
         <motion.h1
-          className="font-sans text-[clamp(40px,6.2vw,76px)] font-medium tracking-[-0.045em] leading-[1.08] max-w-4xl text-white"
+          className="font-sans text-[clamp(42px,6.6vw,84px)] font-medium tracking-[-0.045em] leading-[1.06] max-w-4xl text-white"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={transition(DURATION.slower, 0.08)}
         >
           The #1 AI coach
           <br />
-          <span className="text-accent">for every olympiad</span>
+          <span className="font-serif font-normal tracking-[-0.015em] text-accent">for every olympiad</span>
         </motion.h1>
 
         <motion.p
-          className="mt-5 text-base text-white/80 leading-relaxed max-w-md font-sans"
+          className="mt-6 text-base text-white/80 leading-[1.7] max-w-md font-sans"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={transition(DURATION.slow, 0.18)}
@@ -669,7 +678,7 @@ export default function LandingPage() {
 
         {/* CTAs */}
         <motion.div
-          className="flex flex-wrap items-center justify-center gap-3 mt-8"
+          className="flex flex-wrap items-center justify-center gap-3 mt-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={transition(DURATION.slow, 0.28)}
@@ -678,12 +687,13 @@ export default function LandingPage() {
           <Button href="#demo" variant="secondary">See it in action ↓</Button>
         </motion.div>
 
-        {/* Hero app screenshot — the page's one glowing element */}
+        {/* Hero app screenshot — the page's one glowing element, with a subtle scroll parallax */}
         <motion.div
-          className="relative mt-12 w-full max-w-4xl mx-auto"
+          className="relative mt-16 w-full max-w-4xl mx-auto"
           initial={{ opacity: 0, y: 48, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={transition(DURATION.hero, 0.42)}
+          style={prefersReducedMotion ? undefined : { y: heroParallaxY }}
         >
           <AppWindow glow>
             <div className="p-6 bg-[#0d0d0d]">
@@ -707,12 +717,13 @@ export default function LandingPage() {
 
       {/* ── Problem ── */}
       <section className="relative z-10 px-8 py-28 border-b border-white/[0.06]">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-mesh-section" />
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 md:gap-14 items-start">
           <Reveal className="shrink-0">
             <span className="block text-[96px] leading-none font-semibold tracking-[-0.04em] text-white/[0.08] select-none">01</span>
           </Reveal>
           <Reveal y={24} delay={0.08}>
-            <h2 className="text-[clamp(24px,3.2vw,38px)] font-semibold tracking-[-0.03em] leading-[1.15] mb-5 max-w-xl">
+            <h2 className="text-[clamp(26px,3.6vw,44px)] font-semibold tracking-[-0.035em] leading-[1.15] mb-5 max-w-xl">
               Most studying plateaus because it&apos;s built around answers, not questions.
             </h2>
             <p className="text-sm text-text-2 leading-relaxed max-w-lg">
@@ -724,13 +735,14 @@ export default function LandingPage() {
 
       {/* ── Why AI alone isn't enough ── */}
       <section className="relative z-10 px-8 py-28 bg-[#0c0c0c] border-b border-white/[0.06]">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-mesh-section" />
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 md:gap-14 items-start mb-14">
             <Reveal className="shrink-0">
               <span className="block text-[96px] leading-none font-semibold tracking-[-0.04em] text-white/[0.08] select-none">02</span>
             </Reveal>
             <Reveal y={24} delay={0.08}>
-              <h2 className="text-[clamp(24px,3.2vw,38px)] font-semibold tracking-[-0.03em] leading-[1.15] mb-5 max-w-xl">
+              <h2 className="text-[clamp(26px,3.6vw,44px)] font-semibold tracking-[-0.035em] leading-[1.15] mb-5 max-w-xl">
                 A general chatbot won&apos;t fix that — it&apos;s built to be helpful, which means it just tells you.
               </h2>
               <p className="text-sm text-text-2 leading-relaxed max-w-lg">
@@ -744,14 +756,15 @@ export default function LandingPage() {
 
       {/* ── Feature bento grid ── */}
       <section className="relative z-10 px-8 pt-20 pb-32 bg-[#0c0c0c] border-b border-white/[0.06]">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-mesh-section" />
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 md:gap-14 items-start mb-14">
             <Reveal className="shrink-0">
               <span className="block text-[96px] leading-none font-semibold tracking-[-0.04em] text-white/[0.08] select-none">03</span>
             </Reveal>
             <Reveal y={24} delay={0.08}>
-              <p className="text-sm font-medium text-accent mb-3">How PolyTeach differs</p>
-              <h2 className="text-[clamp(22px,3vw,38px)] font-semibold tracking-[-0.03em] max-w-xl">Built for students serious about competitive academics</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.09em] text-accent mb-3">How PolyTeach differs</p>
+              <h2 className="text-[clamp(24px,3.4vw,44px)] font-semibold tracking-[-0.035em] leading-[1.15] max-w-xl">Built for students serious about competitive academics</h2>
             </Reveal>
           </div>
 
@@ -849,11 +862,12 @@ export default function LandingPage() {
 
       {/* ── Live Demo ── */}
       <section id="demo" className="relative z-10 px-8 py-32 scroll-mt-24">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-mesh-section" />
         <div className="max-w-5xl mx-auto">
           <Reveal>
             <div className="text-center mb-20">
-              <p className="text-sm font-medium text-accent mb-3">Live demo</p>
-              <h2 className="text-[clamp(24px,3.5vw,42px)] font-semibold tracking-[-0.03em]">What a session looks like</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.09em] text-accent mb-3">Live demo</p>
+              <h2 className="text-[clamp(26px,3.8vw,48px)] font-semibold tracking-[-0.035em]">What a session looks like</h2>
               <p className="text-sm text-text-2 mt-4 max-w-md mx-auto leading-relaxed">The coach never gives you the answer. It asks the question that makes you find it.</p>
             </div>
           </Reveal>
@@ -889,11 +903,12 @@ export default function LandingPage() {
 
       {/* ── Testimonials ── */}
       <section className="relative z-10 px-8 py-32">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-mesh-section" />
         <div className="max-w-6xl mx-auto">
           <Reveal>
             <div className="text-center mb-20">
-              <p className="text-sm font-medium text-accent mb-3">Student results</p>
-              <h2 className="text-[clamp(24px,3.5vw,42px)] font-semibold tracking-[-0.03em]">Students who qualified</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.09em] text-accent mb-3">Student results</p>
+              <h2 className="text-[clamp(26px,3.8vw,48px)] font-semibold tracking-[-0.035em]">Students who qualified</h2>
               <p className="text-sm text-text-2 mt-4">What changes once you stop looking up solutions.</p>
             </div>
           </Reveal>
@@ -919,18 +934,19 @@ export default function LandingPage() {
 
       {/* ── Stats ── */}
       <section className="relative z-10 px-8 py-32">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-mesh-section" />
         <div className="max-w-5xl mx-auto">
           <Reveal>
             <div className="text-center mb-20">
-              <p className="text-sm font-medium text-accent mb-3">The research</p>
-              <h2 className="text-[clamp(24px,3.5vw,42px)] font-semibold tracking-[-0.03em]">Why Socratic coaching produces competitors</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.09em] text-accent mb-3">The research</p>
+              <h2 className="text-[clamp(26px,3.8vw,48px)] font-semibold tracking-[-0.035em]">Why Socratic coaching produces competitors</h2>
             </div>
           </Reveal>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {STATS.map((s, i) => (
               <Reveal key={s.stat} y={32} delay={i * 0.12}>
-                <Card radius="2xl" className="p-8 h-full">
-                  <div className="text-4xl font-semibold tracking-[-0.04em] mb-4 text-accent">{s.stat}</div>
+                <Card hoverable radius="2xl" className="p-8 h-full">
+                  <div className="text-5xl font-semibold tracking-[-0.045em] mb-4 tabular-nums bg-gradient-to-br from-accent to-[#F4CD6B] bg-clip-text text-transparent">{s.stat}</div>
                   <p className="text-sm text-text-2 leading-relaxed mb-4">{s.desc}</p>
                   <p className="text-2xs text-[#555]">{s.source}</p>
                 </Card>
@@ -942,11 +958,12 @@ export default function LandingPage() {
 
       {/* ── Comparison table ── */}
       <section className="relative z-10 px-8 py-32 bg-[#0c0c0c] border-y border-white/[0.06]">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-mesh-section" />
         <div className="max-w-6xl mx-auto">
           <Reveal>
             <div className="text-center mb-16">
-              <p className="text-sm font-medium text-accent mb-3">How we compare</p>
-              <h2 className="text-[clamp(24px,3.5vw,42px)] font-semibold tracking-[-0.03em]">
+              <p className="text-xs font-semibold uppercase tracking-[0.09em] text-accent mb-3">How we compare</p>
+              <h2 className="text-[clamp(26px,3.8vw,48px)] font-semibold tracking-[-0.035em]">
                 The only platform built<br/>for every major olympiad
               </h2>
               <p className="text-sm text-text-2 mt-5 max-w-lg mx-auto leading-relaxed">
@@ -1037,11 +1054,12 @@ export default function LandingPage() {
 
       {/* ── Pricing ── */}
       <section id="pricing" className="relative z-10 px-8 py-32 scroll-mt-24">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-mesh-section" />
         <div className="max-w-5xl mx-auto">
           <Reveal>
             <div className="text-center mb-16">
-              <p className="text-sm font-medium text-accent mb-3">Pricing</p>
-              <h2 className="text-[clamp(24px,3.5vw,42px)] font-semibold tracking-[-0.03em]">Simple pricing for serious competitors</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.09em] text-accent mb-3">Pricing</p>
+              <h2 className="text-[clamp(26px,3.8vw,48px)] font-semibold tracking-[-0.035em]">Simple pricing for serious competitors</h2>
               <p className="text-sm text-text-2 mt-4 max-w-sm mx-auto leading-relaxed">
                 AIME qualification is worth $0 to a college if you can&apos;t explain how you solved the problem.
               </p>
@@ -1055,10 +1073,10 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {/* Free */}
             <Reveal y={32} delay={0.05}>
-              <Card radius="2xl" className="h-full p-7 flex flex-col">
+              <Card hoverable radius="2xl" className="h-full p-7 flex flex-col">
                 <p className="text-sm font-medium text-text-2">Free</p>
                 <div className="mt-4 mb-1">
-                  <span className="text-4xl font-semibold tracking-[-0.03em]">$0</span>
+                  <span className="text-5xl font-semibold tracking-[-0.04em] tabular-nums">$0</span>
                 </div>
                 <p className="text-xs text-text-2 mb-7">30 sessions / month</p>
                 <ul className="space-y-3 flex-1 mb-8">
@@ -1077,13 +1095,13 @@ export default function LandingPage() {
 
             {/* Pro */}
             <Reveal y={32} delay={0.12}>
-              <Card radius="2xl" border="border-accent" bg="bg-surface-2" className="relative h-full p-7 flex flex-col">
+              <Card hoverable radius="2xl" border="border-accent" bg="bg-surface-2" className="relative h-full p-7 flex flex-col">
                 <div className="flex items-center justify-between mb-0.5">
                   <p className="text-sm font-medium text-accent">Pro</p>
                   <Badge variant="neutral">Most popular</Badge>
                 </div>
                 <div className="mt-4 mb-1">
-                  <span className="text-4xl font-semibold tracking-[-0.03em]">${PRO_PRICE}</span>
+                  <span className="text-5xl font-semibold tracking-[-0.04em] tabular-nums">${PRO_PRICE}</span>
                   <span className="text-sm text-text-2 font-normal ml-1">/mo</span>
                 </div>
                 <p className="text-xs text-text-2 mb-7">Cancel anytime</p>
@@ -1106,7 +1124,7 @@ export default function LandingPage() {
               <Card radius="2xl" className="h-full p-7 flex flex-col">
                 <p className="text-sm font-medium text-text-2">Team / School</p>
                 <div className="mt-4 mb-1">
-                  <span className="text-4xl font-semibold tracking-[-0.03em]">${TEAM_SEAT_PRICE}</span>
+                  <span className="text-5xl font-semibold tracking-[-0.04em] tabular-nums">${TEAM_SEAT_PRICE}</span>
                   <span className="text-sm text-text-2 font-normal ml-1">/seat/mo</span>
                 </div>
                 <p className="text-xs text-text-2 mb-7">{TEAM_MIN_SEATS}-seat minimum</p>
@@ -1152,12 +1170,13 @@ export default function LandingPage() {
 
       {/* ── Bottom CTA ── */}
       <section className="relative z-10 px-8 py-36 text-center overflow-hidden">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-mesh-section" />
         <div className="pointer-events-none absolute left-1/2 top-10 -translate-x-1/2 text-[120px] leading-none font-semibold tracking-[-0.04em] text-white/[0.04] select-none">
           03
         </div>
         <Reveal>
           <h2 className="text-[clamp(28px,4vw,54px)] font-semibold tracking-[-0.03em] mb-5">
-            Train the way competitors train.
+            Train the way <span className="font-serif font-normal">competitors</span> train.
           </h2>
           <p className="text-base text-text-2 mb-10 max-w-sm mx-auto leading-relaxed">
             Pick your competition. Map your gaps. Work through problems until the answers come from you.

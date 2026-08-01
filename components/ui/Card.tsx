@@ -4,16 +4,17 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   elevated?: boolean;
   accentGlow?: boolean;
   hoverable?: boolean;
-  radius?: "xl" | "2xl";
+  radius?: "xl" | "2xl" | "3xl";
   /** Border-color utility, e.g. "border-accent". Defaults to the standard card border. */
   border?: string;
   /** Background utility, e.g. "bg-surface-2". Defaults to the standard card surface. */
   bg?: string;
 }
 
-const RADIUS: Record<"xl" | "2xl", string> = {
+const RADIUS: Record<"xl" | "2xl" | "3xl", string> = {
   xl: "rounded-xl",
   "2xl": "rounded-2xl",
+  "3xl": "rounded-3xl",
 };
 
 // `border`/`bg` are explicit props (not folded into `className`) because Tailwind can't
@@ -39,8 +40,9 @@ export default function Card({
         border,
         bg,
         RADIUS[radius],
-        accentGlow ? "shadow-card-accent" : elevated ? "shadow-card" : "",
-        hoverable && "hover:border-border-3 transition-colors duration-300",
+        accentGlow ? "shadow-elevated-accent" : elevated ? "shadow-elevated" : "",
+        hoverable && "transition-[transform,box-shadow,border-color] duration-300 ease-out hover:-translate-y-1 hover:shadow-elevated-hover",
+        hoverable && border === "border-border" && "hover:border-border-3",
         className
       )}
       style={style}
