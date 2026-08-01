@@ -648,14 +648,14 @@ export default function LandingPage() {
 
         {/* Headline */}
         <motion.h1
-          className="font-sans text-[clamp(40px,6.2vw,76px)] font-semibold tracking-[-0.03em] leading-[1.08] max-w-4xl text-white"
+          className="font-sans text-[clamp(40px,6.2vw,76px)] font-medium tracking-[-0.045em] leading-[1.08] max-w-4xl text-white"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={transition(DURATION.slower, 0.08)}
         >
-          Your coach that
+          The #1 AI coach
           <br />
-          <span className="text-accent">thinks like your competitor</span>
+          <span className="text-accent">for every olympiad</span>
         </motion.h1>
 
         <motion.p
