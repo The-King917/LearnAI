@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Download — PolyTeach",
@@ -30,12 +31,6 @@ const PLATFORMS = [
 export default function DownloadPage() {
   return (
     <div className="min-h-screen bg-background text-text">
-      {/* Static dot grid */}
-      <div
-        className="fixed inset-0 pointer-events-none z-0"
-        style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)", backgroundSize: "28px 28px" }}
-      />
-
       <nav className="relative z-10 flex items-center justify-between px-8 py-5 border-b border-white/[0.06]">
         <Link href="/" className="flex items-center text-sm font-semibold tracking-tight">
           <span className="text-text">Poly</span><span className="text-accent">Teach</span>
@@ -110,16 +105,7 @@ export default function DownloadPage() {
         </p>
       </main>
 
-      <footer className="relative z-10 border-t border-white/[0.06] px-8 py-6 flex items-center justify-between">
-        <Link href="/" className="flex items-center text-sm font-semibold tracking-tight">
-          <span className="text-text">Poly</span><span className="text-accent">Teach</span>
-        </Link>
-        <div className="flex items-center gap-6">
-          <Link href="/privacy" className="text-xs text-[#555] hover:text-text transition-colors">Privacy</Link>
-          <Link href="/terms" className="text-xs text-[#555] hover:text-text transition-colors">Terms</Link>
-          <span className="text-xs text-[#3a3a3a]">© 2026 PolyTeach</span>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

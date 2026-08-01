@@ -5,12 +5,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import LandingDemo from "@/components/LandingDemo";
 import Reveal from "@/components/Reveal";
 import Faq from "@/components/Faq";
-import FloatingSymbols from "@/components/FloatingSymbols";
+import ContrastDemo from "@/components/ContrastDemo";
 import Logomark from "@/components/Logomark";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
-import { CheckIcon } from "@/components/icons";
+import { CheckIcon, CellCheckIcon, CellCrossIcon, CellPartialIcon } from "@/components/icons";
 import { DURATION, transition } from "@/lib/motion";
 import { answerChoiceStyle } from "@/lib/answer-style";
 import { TEAM_MIN_SEATS, TEAM_SEAT_PRICE, PRO_PRICE } from "@/lib/billing";
@@ -22,19 +22,16 @@ const TESTIMONIALS = [
     quote: "I qualified for AIME this year after two years of trying. The difference was having to derive every answer myself instead of watching solutions.",
     name: "Marcus T.",
     role: "AMC 12 → AIME qualifier",
-    initials: "MT",
   },
   {
     quote: "I went from barely knowing what USACO was to a Silver finish in one prep season. The Socratic sessions on graph algorithms were brutal — but they stuck.",
     name: "Priya K.",
     role: "USACO Silver",
-    initials: "PK",
   },
   {
     quote: "My F=ma score jumped 18 points. Having an AI that refuses to give you the answer is annoying at first, then it becomes the only thing that works.",
     name: "Daniel R.",
     role: "USAPhO semifinalist",
-    initials: "DR",
   },
 ];
 
@@ -51,9 +48,9 @@ const OLYMPIAD_MARQUEE = [
 
 // ── Sub-components ───────────────────────────────────────────────────────────
 
-function AppWindow({ children }: { children: React.ReactNode }) {
+function AppWindow({ children, glow = false }: { children: React.ReactNode; glow?: boolean }) {
   return (
-    <Card accentGlow radius="2xl" className="relative">
+    <Card accentGlow={glow} radius="2xl" className="relative">
       <div className="flex items-center gap-2 px-4 py-3 bg-[#111] border-b border-white/[0.06]">
         <div className="flex gap-1.5">
           <span className="w-3 h-3 rounded-full bg-[#FF5F56]" />
@@ -227,7 +224,7 @@ function InteractiveMockTest() {
   };
 
   return (
-    <Card accentGlow radius="2xl" bg="bg-[#0d0d0d]" style={{ boxShadow: "0 8px 60px rgba(0,0,0,0.6)" }}>
+    <Card radius="2xl" bg="bg-[#0d0d0d]">
       {/* Test header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07] bg-surface">
         <div className="flex items-center gap-4">
@@ -373,7 +370,7 @@ function InteractiveDiagnostic() {
   };
 
   return (
-    <Card accentGlow radius="2xl" bg="bg-[#0d0d0d]" style={{ boxShadow: "0 8px 60px rgba(0,0,0,0.6)" }}>
+    <Card radius="2xl" bg="bg-[#0d0d0d]">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.07] bg-surface">
         <div className="flex items-center gap-3">
@@ -575,12 +572,20 @@ export default function LandingPage() {
   const [seats, setSeats] = useState(TEAM_MIN_SEATS);
   const [checkoutLoading, setCheckoutLoading] = useState<"pro" | "team" | null>(null);
   const [checkoutError, setCheckoutError] = useState("");
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     fetch("/api/stats")
       .then((r) => r.json())
       .then((d) => setAccountCount(d.totalAccounts))
       .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 16);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const subscribe = async (kind: "pro" | "team") => {
@@ -604,15 +609,13 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-background text-text overflow-x-hidden">
-      {/* Static dot grid */}
-      <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
-      {/* Fine grain texture */}
-      <div className="fixed inset-0 pointer-events-none z-0 bg-grain" style={{ backgroundSize: "3px 3px" }} />
-      <FloatingSymbols />
-
       {/* ── Nav ── */}
-      <nav className="fixed top-4 inset-x-4 md:inset-x-8 z-[60]">
-        <div className="max-w-6xl mx-auto flex items-center justify-between px-5 py-2.5 rounded-full border border-white/[0.08] backdrop-blur-md bg-background/70">
+      <nav
+        className={`fixed top-0 inset-x-0 z-[60] transition-colors duration-300 ${
+          scrolled ? "border-b border-white/[0.07] bg-background/90 backdrop-blur-sm" : "border-b border-transparent"
+        }`}
+      >
+        <div className="max-w-6xl mx-auto flex items-center justify-between px-6 md:px-8 py-4">
           <span className="flex items-center gap-2 text-sm font-semibold tracking-tight">
             <Logomark size={24} />
             <span><span className="text-text">Poly</span><span className="text-accent">Teach</span></span>
@@ -625,10 +628,10 @@ export default function LandingPage() {
       </nav>
 
       {/* ── Hero ── */}
-      <section className="relative z-10 flex flex-col items-center text-center px-6 pt-36 pb-0">
-        {/* Ambient glow */}
+      <section className="relative z-10 flex flex-col items-center text-center px-6 pt-40 pb-0">
+        {/* Ambient glow — the only one on the page besides the demo window itself */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute left-1/2 top-8 -translate-x-1/2 w-[900px] h-[440px] rounded-full bg-white/[0.035] blur-[140px]" />
+          <div className="absolute left-1/2 top-4 -translate-x-1/2 w-[620px] h-[280px] rounded-full bg-white/[0.03] blur-[120px]" />
         </div>
 
         {/* Social proof */}
@@ -656,12 +659,12 @@ export default function LandingPage() {
         </motion.h1>
 
         <motion.p
-          className="mt-5 text-base text-white/80 leading-relaxed max-w-lg font-sans"
+          className="mt-5 text-base text-white/80 leading-relaxed max-w-md font-sans"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={transition(DURATION.slow, 0.18)}
         >
-          Socratic AI coaching for AMC · AIME · USAMO · USACO · USAPhO · USNCO · USABO · Science Olympiad
+          Socratic AI coaching for every major math, CS, and science olympiad — it never hands you the answer.
         </motion.p>
 
         {/* CTAs */}
@@ -675,14 +678,14 @@ export default function LandingPage() {
           <Button href="#demo" variant="secondary">See it in action ↓</Button>
         </motion.div>
 
-        {/* Hero app screenshot */}
+        {/* Hero app screenshot — the page's one glowing element */}
         <motion.div
           className="relative mt-12 w-full max-w-4xl mx-auto"
           initial={{ opacity: 0, y: 48, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={transition(DURATION.hero, 0.42)}
         >
-          <AppWindow>
+          <AppWindow glow>
             <div className="p-6 bg-[#0d0d0d]">
               <LandingDemo />
             </div>
@@ -690,26 +693,67 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* ── Competition marquee ── */}
-      <div className="relative z-10 overflow-hidden border-y border-white/[0.06] py-4 mt-4">
-        <div className="flex gap-3 marquee-track">
-          {[...OLYMPIAD_MARQUEE, ...OLYMPIAD_MARQUEE].map((s, i) => (
-            <Badge key={i} variant="neutral" className="shrink-0 whitespace-nowrap">
+      {/* ── Competitions covered — static, editorial, no ticker ── */}
+      <div className="relative z-10 border-y border-white/[0.06] py-5 mt-4">
+        <div className="max-w-4xl mx-auto px-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
+          {OLYMPIAD_MARQUEE.map((s, i) => (
+            <span key={s} className="flex items-center gap-3 text-2xs text-text-2 tracking-wide">
               {s}
-            </Badge>
+              {i < OLYMPIAD_MARQUEE.length - 1 && <span className="text-[#333]">·</span>}
+            </span>
           ))}
         </div>
       </div>
 
+      {/* ── Problem ── */}
+      <section className="relative z-10 px-8 py-28 border-b border-white/[0.06]">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 md:gap-14 items-start">
+          <Reveal className="shrink-0">
+            <span className="block text-[96px] leading-none font-semibold tracking-[-0.04em] text-white/[0.08] select-none">01</span>
+          </Reveal>
+          <Reveal y={24} delay={0.08}>
+            <h2 className="text-[clamp(24px,3.2vw,38px)] font-semibold tracking-[-0.03em] leading-[1.15] mb-5 max-w-xl">
+              Most studying plateaus because it&apos;s built around answers, not questions.
+            </h2>
+            <p className="text-sm text-text-2 leading-relaxed max-w-lg">
+              Watching a worked solution feels like progress. It isn&apos;t. The skill that actually shows up on test day — noticing which idea to reach for, on a problem you&apos;ve never seen — only develops when you&apos;re forced to find it yourself. Most prep resources skip straight to the answer key.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── Why AI alone isn't enough ── */}
+      <section className="relative z-10 px-8 py-28 bg-[#0c0c0c] border-b border-white/[0.06]">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 md:gap-14 items-start mb-14">
+            <Reveal className="shrink-0">
+              <span className="block text-[96px] leading-none font-semibold tracking-[-0.04em] text-white/[0.08] select-none">02</span>
+            </Reveal>
+            <Reveal y={24} delay={0.08}>
+              <h2 className="text-[clamp(24px,3.2vw,38px)] font-semibold tracking-[-0.03em] leading-[1.15] mb-5 max-w-xl">
+                A general chatbot won&apos;t fix that — it&apos;s built to be helpful, which means it just tells you.
+              </h2>
+              <p className="text-sm text-text-2 leading-relaxed max-w-lg">
+                Ask a generic AI for help and it optimizes for the fastest correct answer. PolyTeach is built around one constraint instead: never tell, always ask.
+              </p>
+            </Reveal>
+          </div>
+          <ContrastDemo />
+        </div>
+      </section>
+
       {/* ── Feature bento grid ── */}
       <section className="relative z-10 px-8 pt-20 pb-32 bg-[#0c0c0c] border-b border-white/[0.06]">
         <div className="max-w-6xl mx-auto">
-          <Reveal>
-            <div className="text-center mb-14">
-              <p className="text-sm font-medium text-accent mb-3">What you get</p>
-              <h2 className="text-[clamp(22px,3vw,38px)] font-semibold tracking-[-0.03em]">Built for students serious<br/>about competitive academics</h2>
-            </div>
-          </Reveal>
+          <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 md:gap-14 items-start mb-14">
+            <Reveal className="shrink-0">
+              <span className="block text-[96px] leading-none font-semibold tracking-[-0.04em] text-white/[0.08] select-none">03</span>
+            </Reveal>
+            <Reveal y={24} delay={0.08}>
+              <p className="text-sm font-medium text-accent mb-3">How PolyTeach differs</p>
+              <h2 className="text-[clamp(22px,3vw,38px)] font-semibold tracking-[-0.03em] max-w-xl">Built for students serious about competitive academics</h2>
+            </Reveal>
+          </div>
 
           <div className="grid grid-cols-12 gap-6">
             {/* Coaching — large */}
@@ -858,16 +902,13 @@ export default function LandingPage() {
             {TESTIMONIALS.map((t, i) => (
               <Reveal key={t.name} y={40} delay={i * 0.12}>
                 <Card hoverable radius="2xl" className="relative flex flex-col h-full p-8">
-                  <div className="text-6xl text-accent/40 font-serif leading-none mb-5 select-none">&ldquo;</div>
+                  <span className="text-3xl font-semibold tracking-[-0.04em] text-white/[0.1] select-none mb-4 tabular-nums">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
                   <p className="text-base text-text leading-relaxed flex-1 mb-8">{t.quote}</p>
-                  <div className="flex items-center gap-3 pt-5 border-t border-white/[0.07]">
-                    <div className="w-9 h-9 rounded-full border border-accent/25 flex items-center justify-center text-xs font-semibold text-accent shrink-0" style={{ backgroundColor: "rgba(232,168,32,0.12)" }}>
-                      {t.initials}
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-text">{t.name}</p>
-                      <p className="text-xs text-text-2">{t.role}</p>
-                    </div>
+                  <div className="pt-5 border-t border-white/[0.07]">
+                    <p className="text-sm font-semibold text-text">{t.name}</p>
+                    <p className="text-xs text-text-2">{t.role}</p>
                   </div>
                 </Card>
               </Reveal>
@@ -915,50 +956,34 @@ export default function LandingPage() {
           </Reveal>
 
           <Reveal y={32} delay={0.1}>
-            <Card accentGlow radius="2xl">
-              {/* Table header strip */}
-              <div className="px-8 pt-8 pb-6 border-b border-white/[0.06]">
-                <div className="grid gap-4" style={{ gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr" }}>
-                  <div />
-                  {COMPETITORS.map((c) => (
-                    <div key={c.name} className={`text-center ${c.highlight ? "" : ""}`}>
-                      {c.highlight ? (
-                        <div className="inline-flex flex-col items-center gap-1.5">
-                          <Badge variant="accent">PolyTeach</Badge>
+            <Card radius="2xl">
+              <div className="overflow-x-auto">
+                <div className="min-w-[720px]">
+                  {/* Table header strip */}
+                  <div className="px-8 pt-8 pb-6 border-b border-white/[0.06]">
+                    <div className="grid gap-4" style={{ gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr" }}>
+                      <div />
+                      {COMPETITORS.map((c) => (
+                        <div key={c.name} className={`text-center ${c.highlight ? "" : ""}`}>
+                          {c.highlight ? (
+                            <div className="inline-flex flex-col items-center gap-1.5">
+                              <Badge variant="accent">PolyTeach</Badge>
+                            </div>
+                          ) : (
+                            <span className="text-xs text-[#555] font-medium">{c.name}</span>
+                          )}
                         </div>
-                      ) : (
-                        <span className="text-xs text-[#555] font-medium">{c.name}</span>
-                      )}
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </div>
+                  </div>
 
-              {/* Rows */}
-              <div className="px-8 pb-6">
-                {COMPARISON_ROWS.map((row, i) => {
-                  const Check = () => (
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="mx-auto">
-                      <circle cx="10" cy="10" r="9.5" fill="rgba(34,197,94,0.1)" stroke="rgba(34,197,94,0.3)" />
-                      <path d="M5.5 10.5L8 13L14.5 7" stroke="#4ade80" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  );
-                  const Cross = () => (
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="mx-auto">
-                      <circle cx="10" cy="10" r="9.5" fill="rgba(239,68,68,0.06)" stroke="rgba(239,68,68,0.15)" />
-                      <path d="M7 7L13 13M13 7L7 13" stroke="#ef4444" strokeOpacity="0.5" strokeWidth="1.6" strokeLinecap="round"/>
-                    </svg>
-                  );
-                  const Partial = () => (
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="mx-auto">
-                      <circle cx="10" cy="10" r="9.5" fill="rgba(234,179,8,0.08)" stroke="rgba(234,179,8,0.25)" />
-                      <path d="M6 10H14" stroke="#facc15" strokeOpacity="0.7" strokeWidth="1.6" strokeLinecap="round"/>
-                    </svg>
-                  );
+                  {/* Rows */}
+                  <div className="px-8 pb-6">
+                    {COMPARISON_ROWS.map((row, i) => {
                   const renderCell = (val: CellValue) => {
-                    if (val === true) return <Check />;
-                    if (val === false) return <Cross />;
-                    return <Partial />;
+                    if (val === true) return <CellCheckIcon className="mx-auto" />;
+                    if (val === false) return <CellCrossIcon className="mx-auto" />;
+                    return <CellPartialIcon className="mx-auto" />;
                   };
 
                   return (
@@ -983,22 +1008,24 @@ export default function LandingPage() {
                         </div>
                       ))}
                     </div>
-                  );
-                })}
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
 
               {/* Footer legend */}
               <div className="px-8 py-5 border-t border-white/[0.06] bg-surface-2 flex flex-wrap items-center gap-6">
                 <div className="flex items-center gap-2">
-                  <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9.5" fill="rgba(34,197,94,0.1)" stroke="rgba(34,197,94,0.3)"/><path d="M5.5 10.5L8 13L14.5 7" stroke="#4ade80" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <CellCheckIcon size={14} />
                   <span className="text-2xs text-[#555]">Full support</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9.5" fill="rgba(234,179,8,0.08)" stroke="rgba(234,179,8,0.25)"/><path d="M6 10H14" stroke="#facc15" strokeOpacity="0.7" strokeWidth="1.6" strokeLinecap="round"/></svg>
+                  <CellPartialIcon size={14} />
                   <span className="text-2xs text-[#555]">Partial / limited</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9.5" fill="rgba(239,68,68,0.06)" stroke="rgba(239,68,68,0.15)"/><path d="M7 7L13 13M13 7L7 13" stroke="#ef4444" strokeOpacity="0.5" strokeWidth="1.6" strokeLinecap="round"/></svg>
+                  <CellCrossIcon size={14} />
                   <span className="text-2xs text-[#555]">Not available</span>
                 </div>
                 <p className="text-2xs text-[#444] ml-auto">Competitor features based on publicly available information as of 2026.</p>
@@ -1050,7 +1077,7 @@ export default function LandingPage() {
 
             {/* Pro */}
             <Reveal y={32} delay={0.12}>
-              <Card accentGlow radius="2xl" border="border-accent" bg="bg-surface-2" className="relative h-full p-7 flex flex-col">
+              <Card radius="2xl" border="border-accent" bg="bg-surface-2" className="relative h-full p-7 flex flex-col">
                 <div className="flex items-center justify-between mb-0.5">
                   <p className="text-sm font-medium text-accent">Pro</p>
                   <Badge variant="neutral">Most popular</Badge>
@@ -1125,8 +1152,8 @@ export default function LandingPage() {
 
       {/* ── Bottom CTA ── */}
       <section className="relative z-10 px-8 py-36 text-center overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] rounded-full bg-accent/[0.06] blur-[140px]" />
+        <div className="pointer-events-none absolute left-1/2 top-10 -translate-x-1/2 text-[120px] leading-none font-semibold tracking-[-0.04em] text-white/[0.04] select-none">
+          03
         </div>
         <Reveal>
           <h2 className="text-[clamp(28px,4vw,54px)] font-semibold tracking-[-0.03em] mb-5">

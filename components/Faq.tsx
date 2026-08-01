@@ -20,6 +20,10 @@ const FAQ_ITEMS = [
     a: "60+ subjects: AMC/AIME/USAMO, MATHCOUNTS, USACO, Science Olympiad, all 38 AP courses, DECA, FBLA, Policy and LD debate, Model UN, and more.",
   },
   {
+    q: "How does it know what difficulty to give me?",
+    a: "The diagnostic maps your knowledge concept-by-concept, not just subject-by-subject — so hints and practice problems are calibrated to exactly where you're stuck, not a generic grade level.",
+  },
+  {
     q: "Is there a free plan?",
     a: "Yes. The Free plan includes Socratic coaching, practice problems, and the level diagnostic with 30 messages a month. Pro adds unlimited messages and progress tracking.",
   },
@@ -33,7 +37,7 @@ const FAQ_ITEMS = [
   },
 ];
 
-function FaqRow({ q, a, delay }: { q: string; a: string; delay: number }) {
+function FaqRow({ q, a, delay, index }: { q: string; a: string; delay: number; index: number }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -44,8 +48,11 @@ function FaqRow({ q, a, delay }: { q: string; a: string; delay: number }) {
           aria-expanded={open}
           className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left"
         >
-          <span className="text-sm font-medium text-text">
-            <TypeText text={q} delay={delay} />
+          <span className="flex items-baseline gap-3">
+            <span className="text-xs font-semibold text-white/[0.15] tabular-nums shrink-0">{String(index).padStart(2, "0")}</span>
+            <span className="text-sm font-medium text-text">
+              <TypeText text={q} delay={delay} />
+            </span>
           </span>
           <svg
             width="14"
@@ -88,7 +95,7 @@ export default function Faq() {
         </Reveal>
         <div className="space-y-3">
           {FAQ_ITEMS.map((item, i) => (
-            <FaqRow key={item.q} q={item.q} a={item.a} delay={i * 0.04} />
+            <FaqRow key={item.q} q={item.q} a={item.a} delay={i * 0.04} index={i + 1} />
           ))}
         </div>
       </div>

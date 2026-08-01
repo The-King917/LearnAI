@@ -27,8 +27,26 @@ export default function LandingDemo() {
   const [visibleCount, setVisibleCount] = useState(0);
   const [typedLen, setTypedLen] = useState(0);
   const [thinking, setThinking] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  useEffect(() => {
+    if (reducedMotion) {
+      setVisibleCount(SCRIPT.length);
+      setTypedLen(0);
+      setThinking(false);
+    }
+  }, [reducedMotion]);
+
+  useEffect(() => {
+    if (reducedMotion) return;
     let timer: ReturnType<typeof setTimeout>;
 
     if (visibleCount >= SCRIPT.length) {
@@ -59,7 +77,7 @@ export default function LandingDemo() {
       if (next?.role === "assistant") setThinking(true);
     }, PAUSE_AFTER_MS);
     return () => clearTimeout(timer);
-  }, [visibleCount, typedLen, thinking]);
+  }, [visibleCount, typedLen, thinking, reducedMotion]);
 
   const current = SCRIPT[visibleCount];
 
